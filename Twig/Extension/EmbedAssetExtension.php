@@ -130,45 +130,29 @@ class EmbedAssetExtension extends \Twig_Extension
     {
         $output = ob_get_contents();
 
-        $output = str_replace($this->embedJavascriptsPosition(), $this->renderEmbedJavascripts(), $output);
-        $output = str_replace($this->embedStylesheetsPosition(), $this->renderEmbedStylesheets(), $output);
+        $output = str_replace($this->embedJavascriptsPosition(), $this->doRenderEmbedAssets('javascripts'), $output);
+        $output = str_replace($this->embedStylesheetsPosition(), $this->doRenderEmbedAssets('stylesheets'), $output);
 
         ob_clean();
         echo $output;
     }
 
     /**
-     * Render all global embed javascripts.
+     * Execution of render all global embed assets.
+     *
+     * @param string $type The asset type
      *
      * @return string
      */
-    protected function renderEmbedJavascripts()
+    protected function doRenderEmbedAssets($type)
     {
         $output = '';
 
-        foreach ($this->javascripts as $js) {
-            $output .= $this->renderEmbedAsset($js['callable'], $js['context'], $js['blocks']);
+        foreach ($this->$type as $asset) {
+            $output .= $this->renderEmbedAsset($asset['callable'], $asset['context'], $asset['blocks']);
         }
 
-        $this->javascripts = array();
-
-        return $output;
-    }
-
-    /**
-     * Render all global embed stylesheets.
-     *
-     * @return string
-     */
-    protected function renderEmbedStylesheets()
-    {
-        $output = '';
-
-        foreach ($this->stylesheets as $css) {
-            $output .= $this->renderEmbedAsset($css['callable'], $css['context'], $css['blocks']);
-        }
-
-        $this->stylesheets = array();
+        $this->$type = array();
 
         return $output;
     }
