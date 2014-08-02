@@ -1,0 +1,30 @@
+{
+    "name": "fxp/require-asset-bundle",
+    "type": "symfony-bundle",
+    "description": "Manage required assets compatible with RequireJS in Symfony2",
+    "keywords": ["asset", "requirejs", "twig", "assetic", "javascript", "stylesheet", "user interface", "ui"],
+    "homepage": "https://github.com/francoispluchino/FxpRequireAssetBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "François Pluchino",
+            "email": "francois.pluchino@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": "~2.4",
+        "symfony/twig-bundle": "~2.4"
+    },
+    "suggest": {
+        "fxp/composer-asset-plugin": "For manage NPM/Bower dependencies with Composer"
+    },
+    "autoload": {
+        "psr-4": { "Fxp\\Bundle\\RequireAssetBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
