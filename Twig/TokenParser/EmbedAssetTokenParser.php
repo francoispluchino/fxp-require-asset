@@ -53,29 +53,7 @@ class EmbedAssetTokenParser extends \Twig_TokenParser
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
-        $options = $this->defaultAttributes;
-
-        if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
-            do {
-                $this->validateCurrentToken($stream, 'value');
-                $attr = $stream->getCurrent()->getValue();
-                $stream->next();
-
-                if (!in_array($attr, array_keys($options))) {
-                    throw new \Twig_Error_Syntax(sprintf('The attribute "%s" does not exist. Only attributes "%s" exists', $attr, implode('", ', array_keys($options))), $stream->getCurrent()->getLine(), $stream->getFilename());
-                }
-
-                if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
-                    throw new \Twig_Error_Syntax("The attribute must be followed by '=' operator", $stream->getCurrent()->getLine(), $stream->getFilename());
-                }
-
-                $stream->next();
-                $this->validateCurrentToken($stream, 'value');
-
-                $options[$attr] = $this->parser->getExpressionParser()->parseExpression()->getAttribute('value');
-
-            } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
-        }
+        $options = $this->getTagOptions();
 
         $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
@@ -120,6 +98,44 @@ class EmbedAssetTokenParser extends \Twig_TokenParser
     public function getTag()
     {
         return 'embed_' . $this->type;
+    }
+
+    /**
+     * Gets the options of the twig tag.
+     *
+     * @return array The tag options
+     *
+     * @throws \Twig_Error_Syntax When the attribute does not exist
+     * @throws \Twig_Error_Syntax When the attribute is not followed by "=" operator
+     */
+    protected function getTagOptions()
+    {
+        $stream = $this->parser->getStream();
+        $options = $this->defaultAttributes;
+
+        if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
+            do {
+                $this->validateCurrentToken($stream, 'value');
+                $attr = $stream->getCurrent()->getValue();
+                $stream->next();
+
+                if (!in_array($attr, array_keys($options))) {
+                    throw new \Twig_Error_Syntax(sprintf('The attribute "%s" does not exist. Only attributes "%s" exists', $attr, implode('", ', array_keys($options))), $stream->getCurrent()->getLine(), $stream->getFilename());
+                }
+
+                if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
+                    throw new \Twig_Error_Syntax("The attribute must be followed by '=' operator", $stream->getCurrent()->getLine(), $stream->getFilename());
+                }
+
+                $stream->next();
+                $this->validateCurrentToken($stream, 'value');
+
+                $options[$attr] = $this->parser->getExpressionParser()->parseExpression()->getAttribute('value');
+
+            } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
+        }
+
+        return $options;
     }
 
     /**
