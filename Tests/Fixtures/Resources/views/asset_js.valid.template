@@ -1,0 +1,10 @@
+<html>
+<body>
+<div id="myblock">Hello world</div>
+<script type="text/javascript">
+console.log("Twig var: foo: bar");
+
+</script>
+</body>
+</html>
+
