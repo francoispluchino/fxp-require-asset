@@ -57,11 +57,7 @@ class EmbedAssetTokenParser extends \Twig_TokenParser
 
         if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
             do {
-                if (!$stream->test(\Twig_Token::NAME_TYPE)
-                        && !$stream->test(\Twig_Token::STRING_TYPE)) {
-                    throw new \Twig_Error_Syntax(sprintf('The attribute name "%s" must be an STRING or CONSTANT', $stream->getCurrent()->getValue()), $stream->getCurrent()->getLine(), $stream->getFilename());
-                }
-
+                $this->validateCurrentToken($stream, 'value');
                 $attr = $stream->getCurrent()->getValue();
                 $stream->next();
 
@@ -74,11 +70,7 @@ class EmbedAssetTokenParser extends \Twig_TokenParser
                 }
 
                 $stream->next();
-
-                if (!$stream->test(\Twig_Token::NAME_TYPE)
-                        && !$stream->test(\Twig_Token::STRING_TYPE)) {
-                    throw new \Twig_Error_Syntax(sprintf('The value name "%s" must be an STRING or CONSTANT', $stream->getCurrent()->getValue()), $stream->getCurrent()->getLine(), $stream->getFilename());
-                }
+                $this->validateCurrentToken($stream, 'value');
 
                 $options[$attr] = $this->parser->getExpressionParser()->parseExpression()->getAttribute('value');
 
@@ -162,5 +154,21 @@ class EmbedAssetTokenParser extends \Twig_TokenParser
         }
 
         return $body;
+    }
+
+    /**
+     * Validates the current token.
+     *
+     * @param \Twig_TokenStream $stream The token stream
+     * @param string            $type   The token type name
+     *
+     * @throws \Twig_Error_Syntax When the token type is not valid
+     */
+    protected function validateCurrentToken(\Twig_TokenStream $stream, $type)
+    {
+        if (!$stream->test(\Twig_Token::NAME_TYPE)
+            && !$stream->test(\Twig_Token::STRING_TYPE)) {
+            throw new \Twig_Error_Syntax(sprintf('The %s name "%s" must be an STRING or CONSTANT', $type, $stream->getCurrent()->getValue()), $stream->getCurrent()->getLine(), $stream->getFilename());
+        }
     }
 }
