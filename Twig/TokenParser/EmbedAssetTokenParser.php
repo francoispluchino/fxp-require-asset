@@ -136,24 +136,25 @@ class EmbedAssetTokenParser extends \Twig_TokenParser
             $body = new \Twig_Node(array($body), array(), $lineno);
         }
 
-        $start = 0;
-        $end = count($body) - 1;
-
-        if ($body->getNode($start) instanceof \Twig_Node_Text) {
-            $startBody = $body->getNode($start)->getAttribute('data');
-            $startBody = preg_replace('/(|\ \\t|\\n|\\n\ \\t)<[a-zA-Z\=\'\"\ \/]+>(\\n|\\r)/', '', $startBody);
-
-            $body->getNode($start)->setAttribute('data', $startBody);
-        }
-
-        if ($body->getNode($end) instanceof \Twig_Node_Text) {
-            $endBody = $body->getNode($end)->getAttribute('data');
-            $endBody = preg_replace('/(|\ \\t|\\n|\\n\ \\t|\\n)<\/[a-zA-Z]+>/', '', $endBody);
-
-            $body->getNode($end)->setAttribute('data', $endBody);
-        }
+        $this->removeTagContent($body, 0, '/(|\ \\t|\\n|\\n\ \\t)<[a-zA-Z\=\'\"\ \/]+>(\\n|\\r)/');
+        $this->removeTagContent($body, count($body) - 1, '/(|\ \\t|\\n|\\n\ \\t|\\n)<\/[a-zA-Z]+>/');
 
         return $body;
+    }
+
+    /**
+     * @param \Twig_Node $body
+     * @param int        $position
+     * @param string     $pattern
+     */
+    protected function removeTagContent(\Twig_Node $body, $position, $pattern)
+    {
+        if ($body->getNode($position) instanceof \Twig_Node_Text) {
+            $positionBody = $body->getNode($position)->getAttribute('data');
+            $positionBody = preg_replace($pattern, '', $positionBody);
+
+            $body->getNode($position)->setAttribute('data', $positionBody);
+        }
     }
 
     /**
