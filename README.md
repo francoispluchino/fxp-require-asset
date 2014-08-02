@@ -1,6 +1,9 @@
 Fxp RequireAssetBundle
 ======================
 
+[![Latest Stable Version](https://poser.pugx.org/fxp/require-asset-bundle/v/stable.svg)](https://packagist.org/packages/fxp/require-asset-bundle)
+[![Latest Unstable Version](https://poser.pugx.org/fxp/require-asset-bundle/v/unstable.svg)](https://packagist.org/packages/fxp/require-asset-bundle)
+
 The Fxp RequireAssetBundle allows you to manage required assets compatible with RequireJS
 in a Symfony2 project.
 
