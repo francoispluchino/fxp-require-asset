@@ -62,3 +62,7 @@ $ php app/console config:dump-reference FxpRequireAssetBundle
 
 Now that you have completed the basic installation and configuration of the
 Fxp RequireAssetBundle, you are ready to learn about usages of the bundle.
+
+The following documents are available:
+
+- [Embed asset usage](usage_embed_asset.md)
