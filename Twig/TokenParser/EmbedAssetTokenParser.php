@@ -143,6 +143,8 @@ class EmbedAssetTokenParser extends \Twig_TokenParser
     }
 
     /**
+     * Removes html tag defined by pattern.
+     *
      * @param \Twig_Node $body
      * @param int        $position
      * @param string     $pattern
