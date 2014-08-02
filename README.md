@@ -6,6 +6,7 @@ Fxp RequireAssetBundle
 [![Build Status](https://travis-ci.org/francoispluchino/FxpRequireAssetBundle.svg)](https://travis-ci.org/francoispluchino/FxpRequireAssetBundle)
 [![Coverage Status](https://coveralls.io/repos/francoispluchino/FxpRequireAssetBundle/badge.png)](https://coveralls.io/r/francoispluchino/FxpRequireAssetBundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/francoispluchino/FxpRequireAssetBundle/badges/quality-score.png)](https://scrutinizer-ci.com/g/francoispluchino/FxpRequireAssetBundle)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/6819d453-7c5c-447f-ba5d-58e25409ac2d/mini.png)](https://insight.sensiolabs.com/projects/6819d453-7c5c-447f-ba5d-58e25409ac2d)
 
 The Fxp RequireAssetBundle allows you to manage required assets compatible with RequireJS
 in a Symfony2 project.
