@@ -1,0 +1,166 @@
+<?php
+
+/*
+ * This file is part of the Fxp RequireAssetBundle package.
+ *
+ * (c) François Pluchino <francois.pluchino@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Fxp\Bundle\RequireAssetBundle\Twig\TokenParser;
+
+use Fxp\Bundle\RequireAssetBundle\Twig\Node\EmbedAssetReference;
+
+/**
+ * Token Parser for the 'asset' tag.
+ *
+ * @author François Pluchino <francois.pluchino@gmail.com>
+ */
+class EmbedAssetTokenParser extends \Twig_TokenParser
+{
+    /**
+     * @var string
+     */
+    protected $type;
+
+    protected $defaultAttributes = array('keep_tag' => false);
+
+    /**
+     * Constructor.
+     *
+     * @param string $type The asset type
+     */
+    public function __construct($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Parses a token and returns a node.
+     *
+     * @param \Twig_Token $token A Twig_Token instance
+     *
+     * @return \Twig_NodeInterface A Twig_NodeInterface instance
+     *
+     * @throws \Twig_Error_Syntax When attribute name is not a string or constant
+     * @throws \Twig_Error_Syntax When attribute does not exist
+     * @throws \Twig_Error_Syntax When attribute is not followed by "=" operator
+     * @throws \Twig_Error_Syntax When the value name is not a string or constant
+     */
+    public function parse(\Twig_Token $token)
+    {
+        $lineno = $token->getLine();
+        $stream = $this->parser->getStream();
+        $options = $this->defaultAttributes;
+
+        if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
+            do {
+                if (!$stream->test(\Twig_Token::NAME_TYPE)
+                        && !$stream->test(\Twig_Token::STRING_TYPE)) {
+                    throw new \Twig_Error_Syntax(sprintf('The attribute name "%s" must be an STRING or CONSTANT', $stream->getCurrent()->getValue()), $stream->getCurrent()->getLine(), $stream->getFilename());
+                }
+
+                $attr = $stream->getCurrent()->getValue();
+                $stream->next();
+
+                if (!in_array($attr, array_keys($options))) {
+                    throw new \Twig_Error_Syntax(sprintf('The attribute "%s" does not exist. Only attributes "%s" exists', $attr, implode('", ', array_keys($options))), $stream->getCurrent()->getLine(), $stream->getFilename());
+                }
+
+                if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
+                    throw new \Twig_Error_Syntax("The attribute must be followed by '=' operator", $stream->getCurrent()->getLine(), $stream->getFilename());
+                }
+
+                $stream->next();
+
+                if (!$stream->test(\Twig_Token::NAME_TYPE)
+                        && !$stream->test(\Twig_Token::STRING_TYPE)) {
+                    throw new \Twig_Error_Syntax(sprintf('The value name "%s" must be an STRING or CONSTANT', $stream->getCurrent()->getValue()), $stream->getCurrent()->getLine(), $stream->getFilename());
+                }
+
+                $options[$attr] = $this->parser->getExpressionParser()->parseExpression()->getAttribute('value');
+
+            } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
+        }
+
+        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+
+        $name = uniqid($this->type);
+        $body = $this->parser->subparse(array($this, 'decideBlockEnd'), true);
+
+        if (!$options['keep_tag']) {
+            $this->removeTag($body, $lineno);
+        }
+
+        $body = new \Twig_Node_Block($name, $body, $lineno);
+
+        $this->parser->setBlock($name, $body);
+        $this->parser->pushLocalScope();
+        $this->parser->pushBlockStack($name);
+
+        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+
+        $this->parser->popBlockStack();
+        $this->parser->popLocalScope();
+
+        return new EmbedAssetReference($name, $this->type, $lineno);
+    }
+
+    /**
+     * Decide block end.
+     *
+     * @param \Twig_Token $token
+     *
+     * @return boolean
+     */
+    public function decideBlockEnd(\Twig_Token $token)
+    {
+        return $token->test('end' . $this->getTag());
+    }
+
+    /**
+     * Gets the tag name associated with this token parser.
+     *
+     * @return string The tag name
+     */
+    public function getTag()
+    {
+        return 'embed_' . $this->type;
+    }
+
+    /**
+     * Removes tag.
+     *
+     * @param \Twig_Node $body
+     * @param int        $lineno
+     *
+     * @return \Twig_Node
+     */
+    protected function removeTag(\Twig_Node $body, $lineno)
+    {
+        if (0 === count($body)) {
+            $body = new \Twig_Node(array($body), array(), $lineno);
+        }
+
+        $start = 0;
+        $end = count($body) - 1;
+
+        if ($body->getNode($start) instanceof \Twig_Node_Text) {
+            $startBody = $body->getNode($start)->getAttribute('data');
+            $startBody = preg_replace('/(|\ \\t|\\n|\\n\ \\t)<[a-zA-Z\=\'\"\ \/]+>(\\n|\\r)/', '', $startBody);
+
+            $body->getNode($start)->setAttribute('data', $startBody);
+        }
+
+        if ($body->getNode($end) instanceof \Twig_Node_Text) {
+            $endBody = $body->getNode($end)->getAttribute('data');
+            $endBody = preg_replace('/(|\ \\t|\\n|\\n\ \\t|\\n)<\/[a-zA-Z]+>/', '', $endBody);
+
+            $body->getNode($end)->setAttribute('data', $endBody);
+        }
+
+        return $body;
+    }
+}
