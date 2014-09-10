@@ -1,8 +1,8 @@
 {
     "name": "fxp/require-asset-bundle",
     "type": "symfony-bundle",
-    "description": "Manage required assets compatible with RequireJS in Symfony2",
-    "keywords": ["asset", "requirejs", "twig", "assetic", "javascript", "stylesheet", "user interface", "ui"],
+    "description": "Required assets manager for Twig and Assetic",
+    "keywords": ["asset", "require", "twig", "assetic", "javascript", "stylesheet", "user interface", "ui"],
     "homepage": "https://github.com/francoispluchino/FxpRequireAssetBundle",
     "license": "MIT",
     "authors": [
