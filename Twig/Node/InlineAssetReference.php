@@ -12,11 +12,11 @@
 namespace Fxp\Bundle\RequireAssetBundle\Twig\Node;
 
 /**
- * Represents a embed asset node.
+ * Represents a inline asset node.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class EmbedAssetReference extends \Twig_Node
+class InlineAssetReference extends \Twig_Node
 {
     /**
      * Constructor.
@@ -40,7 +40,7 @@ class EmbedAssetReference extends \Twig_Node
     {
         $compiler
             ->addDebugInfo($this)
-            ->write(sprintf("\$this->env->getExtension('%s')->addAsset('%s', array(\$this, '%s'), \$context, \$blocks);\n", 'fxp_require_asset_embed_asset', $this->getAttribute('type'), $this->getAttribute('name')))
+            ->write(sprintf("\$this->env->getExtension('%s')->addAsset('%s', array(\$this, '%s'), \$context, \$blocks);\n", 'fxp_require_asset_inline_asset', $this->getAttribute('type'), $this->getAttribute('name')))
         ;
     }
 }

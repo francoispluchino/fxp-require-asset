@@ -1,15 +1,15 @@
-Embed asset usage
-=================
+Inline asset usage
+==================
 
 For rendering automatically all javascripts and stylesheets of all block, you must
 used the twig functions:
 
-- `embedStylesheetsPosition()` in global html stylesheet template
-- `embedJavascriptsPosition()` in global html javascript template
-- `renderEmbedAssets()` in the end of tempalte
+- `inlineStylesheetsPosition()` in global html stylesheet template
+- `inlineJavascriptsPosition()` in global html javascript template
+- `renderInlineAssets()` in the end of tempalte
 
-The `renderEmbedAssets()` can replace the tag position of assets
-(`embedStylesheetsPosition()` and `embedJavascriptsPosition()`) by the contents
+The `renderInlineAssets()` can replace the tag position of assets
+(`inlineStylesheetsPosition()` and `inlineJavascriptsPosition()`) by the contents
 of each asset. This is for this reason that it must be executed last.
 
 **Twig example:**
@@ -18,24 +18,24 @@ of each asset. This is for this reason that it must be executed last.
 <html>
     <head>
         <style type="text/css">
-        {{ embedStylesheetsPosition() }}
+        {{ inlineStylesheetsPosition() }}
         </style>
     </head>
     <body>
         {% set foo: 'bar' %}
 
-        {% embed_javascript %}
+        {% inline_javascript %}
             <script>
             alert("Foo: {{ foo }}");
             </script>
-        {% endembed_javascript %}
+        {% endinline_javascript %}
 
         <script type="text/javascript">
             $( document ).ready( function() {
-                {{ embedJavascriptsPosition() }}
+                {{ inlineJavascriptsPosition() }}
             });
         </script>
     </body>
 <html>
-{{ renderEmbedAssets() }}
+{{ renderInlineAssets() }}
 ```

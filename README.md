@@ -17,8 +17,8 @@ and adds automatically the assets in the Assetic manager.
 
 ##### Features include:
 
-- Automatically move all embed javascript in the same place defined in the twig base template
-- Automatically move all embed stylesheet in the same place defined in the twig base template
+- Automatically move all inline javascript in the same place defined in the twig base template
+- Automatically move all inline stylesheet in the same place defined in the twig base template
 
 Documentation
 -------------

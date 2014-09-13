@@ -8,9 +8,9 @@
 {% endblock %}
 
 {% if true %}
-{% embed_javascript keep_tag = false %}
+{% inline_javascript keep_tag = false %}
 <script type="text/javascript">
 console.log("Twig var: {{ myvar }}");
 </script>
-{% endembed_javascript %}
+{% endinline_javascript %}
 {% endif %}

@@ -11,14 +11,14 @@
 
 namespace Fxp\Bundle\RequireAssetBundle\Twig\TokenParser;
 
-use Fxp\Bundle\RequireAssetBundle\Twig\Node\EmbedAssetReference;
+use Fxp\Bundle\RequireAssetBundle\Twig\Node\InlineAssetReference;
 
 /**
  * Token Parser for the 'asset' tag.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class EmbedAssetTokenParser extends \Twig_TokenParser
+class InlineAssetTokenParser extends \Twig_TokenParser
 {
     /**
      * @var string
@@ -75,7 +75,7 @@ class EmbedAssetTokenParser extends \Twig_TokenParser
         $this->parser->popBlockStack();
         $this->parser->popLocalScope();
 
-        return new EmbedAssetReference($name, $this->type, $lineno);
+        return new InlineAssetReference($name, $this->type, $lineno);
     }
 
     /**
@@ -97,7 +97,7 @@ class EmbedAssetTokenParser extends \Twig_TokenParser
      */
     public function getTag()
     {
-        return 'embed_' . $this->type;
+        return 'inline_' . $this->type;
     }
 
     /**

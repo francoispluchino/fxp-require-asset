@@ -11,14 +11,14 @@
 
 namespace Fxp\Bundle\RequireAssetBundle\Twig\Extension;
 
-use Fxp\Bundle\RequireAssetBundle\Twig\TokenParser\EmbedAssetTokenParser;
+use Fxp\Bundle\RequireAssetBundle\Twig\TokenParser\InlineAssetTokenParser;
 
 /**
- * EmbedAssetExtension extends Twig with global assets rendering capabilities.
+ * InlineAssetExtension extends Twig with global assets rendering capabilities.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class EmbedAssetExtension extends \Twig_Extension
+class InlineAssetExtension extends \Twig_Extension
 {
     /**
      * @var array
@@ -45,9 +45,9 @@ class EmbedAssetExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('embedJavascriptsPosition', array($this, 'embedJavascriptsPosition'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('embedStylesheetsPosition', array($this, 'embedStylesheetsPosition'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('renderEmbedAssets',        array($this, 'renderEmbedAssets'),        array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('inlineJavascriptsPosition', array($this, 'inlineJavascriptsPosition'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('inlineStylesheetsPosition', array($this, 'inlineStylesheetsPosition'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('renderInlineAssets',        array($this, 'renderInlineAssets'),        array('is_safe' => array('html'))),
         );
     }
 
@@ -57,8 +57,8 @@ class EmbedAssetExtension extends \Twig_Extension
     public function getTokenParsers()
     {
         $tokens = array(
-            new EmbedAssetTokenParser('javascript'),
-            new EmbedAssetTokenParser('stylesheet'),
+            new InlineAssetTokenParser('javascript'),
+            new InlineAssetTokenParser('stylesheet'),
         );
 
         return $tokens;
@@ -69,11 +69,11 @@ class EmbedAssetExtension extends \Twig_Extension
      */
     public function getName()
     {
-        return 'fxp_require_asset_embed_asset';
+        return 'fxp_require_asset_inline_asset';
     }
 
     /**
-     * Adds embed asset.
+     * Adds inline asset.
      *
      * @param string $type
      * @param array  $callable
@@ -102,54 +102,54 @@ class EmbedAssetExtension extends \Twig_Extension
     }
 
     /**
-     * Tag the embed javascripts position.
+     * Tag the inline javascripts position.
      *
      * @return string
      */
-    public function embedJavascriptsPosition()
+    public function inlineJavascriptsPosition()
     {
         return $this->getTagPosition('javascripts');
     }
 
     /**
-     * Tag the embed stylesheets position.
+     * Tag the inline stylesheets position.
      *
      * @return string
      */
-    public function embedStylesheetsPosition()
+    public function inlineStylesheetsPosition()
     {
         return $this->getTagPosition('stylesheets');
     }
 
     /**
-     * Render embed assets.
+     * Render inline assets.
      *
      * Replaces the current buffer with the new edited buffer content.
      */
-    public function renderEmbedAssets()
+    public function renderInlineAssets()
     {
         $output = ob_get_contents();
 
-        $output = str_replace($this->embedJavascriptsPosition(), $this->doRenderEmbedAssets('javascripts'), $output);
-        $output = str_replace($this->embedStylesheetsPosition(), $this->doRenderEmbedAssets('stylesheets'), $output);
+        $output = str_replace($this->inlineJavascriptsPosition(), $this->doRenderInlineAssets('javascripts'), $output);
+        $output = str_replace($this->inlineStylesheetsPosition(), $this->doRenderInlineAssets('stylesheets'), $output);
 
         ob_clean();
         echo $output;
     }
 
     /**
-     * Execution of render all global embed assets.
+     * Execution of render all global inline assets.
      *
      * @param string $type The asset type
      *
      * @return string
      */
-    protected function doRenderEmbedAssets($type)
+    protected function doRenderInlineAssets($type)
     {
         $output = '';
 
         foreach ($this->$type as $asset) {
-            $output .= $this->renderEmbedAsset($asset['callable'], $asset['context'], $asset['blocks']);
+            $output .= $this->renderInlineAsset($asset['callable'], $asset['context'], $asset['blocks']);
         }
 
         $this->$type = array();
@@ -158,7 +158,7 @@ class EmbedAssetExtension extends \Twig_Extension
     }
 
     /**
-     * Render embed asset.
+     * Render inline asset.
      *
      * @param array $callable
      * @param array $context
@@ -168,7 +168,7 @@ class EmbedAssetExtension extends \Twig_Extension
      *
      * @throws \Twig_Error_Runtime When the callable argument is not an array with Twig_Tempate instance of the block
      */
-    protected function renderEmbedAsset(array $callable, array $context, array $blocks)
+    protected function renderInlineAsset(array $callable, array $context, array $blocks)
     {
         if (2 !== count($callable) || !$callable[0] instanceof \Twig_Template || !is_string($callable[1])) {
             throw new \Twig_Error_Runtime('The callable argument must be an array with Twig_Template instance and name function of the block to rendering');
@@ -178,7 +178,7 @@ class EmbedAssetExtension extends \Twig_Extension
     }
 
     /**
-     * Gets the tag position of embed asset.
+     * Gets the tag position of inline asset.
      *
      * @param string $type The asset type
      *

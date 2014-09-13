@@ -11,14 +11,14 @@
 
 namespace Fxp\Bundle\RequireAssetBundle\Tests\Twig\Extension;
 
-use Fxp\Bundle\RequireAssetBundle\Twig\Extension\EmbedAssetExtension;
+use Fxp\Bundle\RequireAssetBundle\Twig\Extension\InlineAssetExtension;
 
 /**
- * Embed Asset Extension Tests.
+ * Inline Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class EmbedAssetExtensionTest extends \PHPUnit_Framework_TestCase
+class InlineAssetExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param $file
@@ -29,7 +29,7 @@ class EmbedAssetExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../Fixtures/Resources/views');
         $twig = new \Twig_Environment($loader, array('debug' => true, 'cache' => false));
-        $twig->addExtension(new EmbedAssetExtension());
+        $twig->addExtension(new InlineAssetExtension());
 
         return $twig->loadTemplate($file);
     }
@@ -56,7 +56,7 @@ class EmbedAssetExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidAssetType()
     {
-        $ext = new EmbedAssetExtension();
+        $ext = new InlineAssetExtension();
 
         $this->setExpectedException('Twig_Error_Runtime');
         $ext->addAsset('invalid', array(), array(), array());
@@ -64,12 +64,12 @@ class EmbedAssetExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testWrongAssetCallable()
     {
-        $ext = new EmbedAssetExtension();
+        $ext = new InlineAssetExtension();
 
         $ext->addAsset('javascript', array(), array(), array());
 
         $this->setExpectedException('Twig_Error_Runtime');
-        $ext->renderEmbedAssets();
+        $ext->renderInlineAssets();
     }
 
     public function testEmptyBody()

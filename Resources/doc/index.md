@@ -65,4 +65,4 @@ Fxp RequireAssetBundle, you are ready to learn about usages of the bundle.
 
 The following documents are available:
 
-- [Embed asset usage](usage_embed_asset.md)
+- [Inline asset usage](usage_inline_asset.md)
