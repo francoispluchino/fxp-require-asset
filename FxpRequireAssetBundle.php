@@ -11,6 +11,12 @@
 
 namespace Fxp\Bundle\RequireAssetBundle;
 
+use Fxp\Bundle\RequireAssetBundle\DependencyInjection\Compiler\BundleAssetsPass;
+use Fxp\Bundle\RequireAssetBundle\DependencyInjection\Compiler\CompilerAssetsPass;
+use Fxp\Bundle\RequireAssetBundle\DependencyInjection\Compiler\ComposerAssetsPass;
+use Fxp\Bundle\RequireAssetBundle\DependencyInjection\Compiler\ConfigurationCompilerPass;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -18,4 +24,16 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class FxpRequireAssetBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new ComposerAssetsPass());
+        $container->addCompilerPass(new BundleAssetsPass());
+        $container->addCompilerPass(new ConfigurationCompilerPass(), PassConfig::TYPE_OPTIMIZE);
+        $container->addCompilerPass(new CompilerAssetsPass(), PassConfig::TYPE_AFTER_REMOVING);
+    }
 }

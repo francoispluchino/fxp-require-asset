@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="fxp_require_asset.assetic.config.file_extension_manager.class">Fxp\Bundle\RequireAssetBundle\Assetic\Config\FileExtensionManager</parameter>
+        <parameter key="fxp_require_asset.assetic.config.pattern_manager.class">Fxp\Bundle\RequireAssetBundle\Assetic\Config\PatternManager</parameter>
+        <parameter key="fxp_require_asset.assetic.config.package_manager.class">Fxp\Bundle\RequireAssetBundle\Assetic\Config\PackageManager</parameter>
+        <parameter key="fxp_require_asset.assetic.cache.asset_cache.class">Fxp\Bundle\RequireAssetBundle\Assetic\Cache\AssetCache</parameter>
+        <parameter key="fxp_require_asset.assetic.asset_manager.class">Fxp\Bundle\RequireAssetBundle\Assetic\AssetManager</parameter>
+
+        <parameter key="fxp_require_asset.assetic.require_asset_loader.class">Fxp\Bundle\RequireAssetBundle\Assetic\Factory\Loader\RequireAssetLoader</parameter>
+        <parameter key="fxp_require_asset.assetic.require_asset_resource.class">Fxp\Bundle\RequireAssetBundle\Assetic\Factory\Resource\RequireAssetResource</parameter>
+    </parameters>
+
+    <services>
+        <!-- Assetic Config File Extension Manager -->
+        <service id="fxp_require_asset.assetic.config.file_extension_manager" class="%fxp_require_asset.assetic.config.file_extension_manager.class%" public="false" />
+
+        <!-- Assetic Config Pattern Manager -->
+        <service id="fxp_require_asset.assetic.config.pattern_manager" class="%fxp_require_asset.assetic.config.pattern_manager.class%" public="false" />
+
+        <!-- Assetic Config Package Manager -->
+        <service id="fxp_require_asset.assetic.config.package_manager" class="%fxp_require_asset.assetic.config.package_manager.class%" public="false">
+            <argument type="service" id="fxp_require_asset.assetic.config.file_extension_manager" />
+            <argument type="service" id="fxp_require_asset.assetic.config.pattern_manager" />
+        </service>
+
+        <!-- Asset Cache -->
+        <service id="fxp_require_asset.assetic.cache.asset_cache" class="%fxp_require_asset.assetic.cache.asset_cache.class%" public="false">
+            <argument>%kernel.cache_dir%/fxp_require_asset/assets</argument>
+        </service>
+
+        <!-- Assetic Asset Manager -->
+        <service id="fxp_require_asset.assetic.asset_manager" class="%fxp_require_asset.assetic.asset_manager.class%">
+            <argument type="service" id="fxp_require_asset.assetic.config.package_manager" />
+            <argument type="service" id="fxp_require_asset.assetic.cache.asset_cache" />
+            <argument>%fxp_require_asset.output_prefix%</argument>
+            <argument>%assetic.debug%</argument>
+        </service>
+
+        <!-- Assetic Require Asset Loader -->
+        <service id="fxp_require_asset.assetic.require_asset_loader" class="%fxp_require_asset.assetic.require_asset_loader.class%" public="false">
+            <tag name="assetic.formula_loader" alias="fxp_require_asset_loader" />
+            <argument type="service" id="fxp_require_asset.assetic.asset_manager" />
+        </service>
+
+        <!-- Assetic Require Asset Resource -->
+        <service id="fxp_require_asset.assetic.require_asset_resource" class="%fxp_require_asset.assetic.require_asset_resource.class%" public="false">
+            <tag name="assetic.formula_resource" loader="fxp_require_asset_loader" />
+        </service>
+    </services>
+</container>
