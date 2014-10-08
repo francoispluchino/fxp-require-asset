@@ -40,6 +40,13 @@ interface FileExtensionInterface
     public function getFilters();
 
     /**
+     * Gets the output extensions.
+     *
+     * @return string
+     */
+    public function getOutputExtension();
+
+    /**
      * Check if is debug mode.
      *
      * @return bool

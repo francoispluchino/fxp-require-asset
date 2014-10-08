@@ -34,6 +34,11 @@ class FileExtension implements FileExtensionInterface
     protected $filters;
 
     /**
+     * @var string|null
+     */
+    protected $outputExtension;
+
+    /**
      * @var bool
      */
     protected $debug;
@@ -46,17 +51,19 @@ class FileExtension implements FileExtensionInterface
     /**
      * Constructor.
      *
-     * @param string $name    The file extension name
-     * @param array  $options The assetic formulae options
-     * @param array  $filters The assetic formulae filters
-     * @param bool   $debug   The debug mode
-     * @param bool   $exclude This extension must be exclude or not
+     * @param string      $name            The file extension name
+     * @param array       $options         The assetic formulae options
+     * @param array       $filters         The assetic formulae filters
+     * @param string|null $outputExtension The output format of extension
+     * @param bool        $debug           The debug mode
+     * @param bool        $exclude         This extension must be exclude or not
      */
-    public function __construct($name, array $options = array(), array $filters = array(), $debug = false, $exclude = false)
+    public function __construct($name, array $options = array(), array $filters = array(), $outputExtension = null, $debug = false, $exclude = false)
     {
         $this->name = $name;
         $this->options = $options;
         $this->filters = $filters;
+        $this->outputExtension = $outputExtension;
         $this->debug = $debug;
         $this->exclude = $exclude;
     }
@@ -83,6 +90,14 @@ class FileExtension implements FileExtensionInterface
     public function getFilters()
     {
         return $this->filters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOutputExtension()
+    {
+        return null !== $this->outputExtension ? $this->outputExtension : $this->name;
     }
 
     /**

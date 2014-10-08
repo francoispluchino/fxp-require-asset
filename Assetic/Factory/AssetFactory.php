@@ -13,6 +13,7 @@ namespace Fxp\Bundle\RequireAssetBundle\Assetic\Factory;
 
 use Fxp\Bundle\RequireAssetBundle\Assetic\Asset;
 use Fxp\Bundle\RequireAssetBundle\Assetic\AssetInterface;
+use Fxp\Bundle\RequireAssetBundle\Assetic\Config\FileExtensionInterface;
 use Fxp\Bundle\RequireAssetBundle\Assetic\Config\PackageInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\SplFileInfo;
@@ -48,11 +49,29 @@ abstract class AssetFactory
         $output = trim($outputPrefix, '/') . '/' . $output;
 
         if ($package->hasExtension($ext)) {
-            $extt = $package->getExtension($ext);
-            $options = $extt->getOptions();
-            $filters = $extt->getFilters();
+            $pExt = $package->getExtension($ext);
+            $options = $pExt->getOptions();
+            $filters = $pExt->getFilters();
+            $output = static::replaceExtension($output, $pExt);
         }
 
         return new Asset($name, $options, $filters, $target, $output);
+    }
+
+    /**
+     * Replace the file extension in output path.
+     *
+     * @param string                 $output The output path
+     * @param FileExtensionInterface $ext    The config of file extension
+     *
+     * @return string
+     */
+    protected static function replaceExtension($output, FileExtensionInterface $ext)
+    {
+        if (false !== $pos = strrpos($output, '.')) {
+            $output = substr($output, 0, $pos) . '.' . $ext->getOutputExtension();
+        }
+
+        return $output;
     }
 }

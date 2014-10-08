@@ -40,10 +40,11 @@ abstract class FileExtensionFactory
         $name = $config['name'];
         $options = array_key_exists('options', $config) ? $config['options'] : array();
         $filters = array_key_exists('filters', $config) ? $config['filters'] : array();
+        $outputExt = array_key_exists('extension', $config) ? $config['extension'] : null;
         $debug = array_key_exists('debug', $config) ? $config['debug'] : false;
         $exclude = array_key_exists('exclude', $config) ? $config['exclude'] : false;
 
-        return new FileExtension($name, $options, $filters, $debug, $exclude);
+        return new FileExtension($name, $options, $filters, $outputExt, $debug, $exclude);
     }
 
     /**
@@ -66,6 +67,10 @@ abstract class FileExtensionFactory
 
         if ($allFields || count($extension->getFilters()) > 0) {
             $value['filters'] = $extension->getFilters();
+        }
+
+        if ($allFields || $extension->getName() !== $extension->getOutputExtension()) {
+            $value['extension'] = $extension->isDebug();
         }
 
         if ($allFields || false !== $extension->isDebug()) {
