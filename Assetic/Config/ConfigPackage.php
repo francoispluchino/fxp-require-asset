@@ -36,13 +36,15 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     /**
      * Constructor.
      *
-     * @param string $name       The asset package name
-     * @param string $sourcePath The source path of the package
+     * @param string      $name       The asset package name
+     * @param string      $sourcePath The source path of the package
+     * @param string|null $sourceBase The custom source base using for the output path
      */
-    public function __construct($name, $sourcePath)
+    public function __construct($name, $sourcePath, $sourceBase = null)
     {
         $this->name = $name;
         $this->sourcePath = $sourcePath;
+        $this->sourceBase = $sourceBase;
         $this->unresolvedExts = array();
         $this->extensions = array();
         $this->patterns = array();
@@ -111,6 +113,18 @@ class ConfigPackage extends Package implements ConfigPackageInterface
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSourceBase()
+    {
+        if (null !== $this->sourceBase) {
+            return $this->sourceBase;
+        }
+
+        return basename($this->getSourcePath());
     }
 
     /**

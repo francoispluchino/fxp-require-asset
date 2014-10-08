@@ -31,6 +31,11 @@ class Package implements PackageInterface
     protected $sourcePath;
 
     /**
+     * @var string
+     */
+    protected $sourceBase;
+
+    /**
      * @var array
      */
     protected $extensions;
@@ -49,6 +54,7 @@ class Package implements PackageInterface
     {
         $this->name = $config->getName();
         $this->sourcePath = $config->getSourcePath();
+        $this->sourceBase = $config->getSourceBase();
         $this->extensions = $config->getExtensions();
         $this->patterns = $config->getPatterns();
     }
@@ -77,6 +83,14 @@ class Package implements PackageInterface
     public function getSourcePath()
     {
         return $this->sourcePath;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSourceBase()
+    {
+        return $this->sourceBase;
     }
 
     /**

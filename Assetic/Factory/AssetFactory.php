@@ -44,7 +44,7 @@ abstract class AssetFactory
         $options = array();
         $filters = array();
         $ext = $file->getExtension();
-        $output = basename($source) . '/' . $output;
+        $output = $package->getSourceBase() . '/' . $output;
         $output = trim($outputPrefix, '/') . '/' . $output;
 
         if ($package->hasExtension($ext)) {

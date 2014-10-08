@@ -116,6 +116,7 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('source_path')->defaultNull()->end()
+                    ->scalarNode('source_base')->defaultNull()->end()
                     ->booleanNode('replace_default_extensions')->defaultFalse()->end()
                     ->booleanNode('replace_default_patterns')->defaultFalse()->end()
                     ->arrayNode('extensions')

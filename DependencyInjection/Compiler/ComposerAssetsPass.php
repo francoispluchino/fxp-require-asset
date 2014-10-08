@@ -123,6 +123,7 @@ class ComposerAssetsPass implements CompilerPassInterface
             $package = array(
                 'name'        => $name,
                 'source_path' => $path,
+                'source_base' => null,
             );
             $packageManagerDef->addMethodCall('addPackage', array($package));
         }

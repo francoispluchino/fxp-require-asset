@@ -44,7 +44,8 @@ abstract class PackageFactory
             throw new InvalidArgumentException(sprintf('The key "source_path" of package "%s" config must be present', $config['name']));
         }
 
-        $configPackage = new ConfigPackage($config['name'], $config['source_path']);
+        $sourceBase = isset($config['source_base']) ? $config['source_base'] : null;
+        $configPackage = new ConfigPackage($config['name'], $config['source_path'], $sourceBase);
 
         if (!self::fieldIsTrue('replace_default_extensions', $config)) {
             foreach ($defaultExts as $extension) {

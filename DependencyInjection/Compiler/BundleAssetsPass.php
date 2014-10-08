@@ -32,15 +32,42 @@ class BundleAssetsPass implements CompilerPassInterface
 
         foreach ($bundles as $name => $class) {
             $ref = new \ReflectionClass($class);
-            $path = realpath(dirname($ref->getFileName()) . '/Resources/assets');
+            $path = realpath(dirname($ref->getFileName()) . '/Resources');
 
             if ($path) {
-                $package = array(
-                    'name'        => Container::underscore($name),
-                    'source_path' => $path,
-                );
+                $package = $this->createPackageConfig($name, $path);
                 $packageManagerDef->addMethodCall('addPackage', array($package));
             }
         }
+    }
+
+    /**
+     * Create the package config of bundle.
+     *
+     * @param string $name The bundle name
+     * @param string $path The real path of bundle
+     *
+     * @return array
+     */
+    protected function createPackageConfig($name, $path)
+    {
+        $id = Container::underscore($name);
+        $sourceBase = substr($id, 0, strrpos($id, '_bundle'));
+        $sourceBase = str_replace('_', '', $sourceBase);
+
+        return array(
+            'name'        => $id,
+            'source_path' => $path,
+            'source_base' => $sourceBase,
+            'patterns'    => array(
+                '!config/*',
+                '!doc/*',
+                '!license/*',
+                '!licenses/*',
+                '!meta/*',
+                '!public/*',
+                '!skeleton/*',
+            ),
+        );
     }
 }

@@ -35,6 +35,14 @@ interface PackageInterface
     public function getSourcePath();
 
     /**
+     * Gets the source base.
+     * The dirname of source path or custom name.
+     *
+     * @return string|null
+     */
+    public function getSourceBase();
+
+    /**
      * Check if the config of extension exist.
      *
      * @param string $name
