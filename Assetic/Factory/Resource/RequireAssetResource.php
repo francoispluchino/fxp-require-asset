@@ -12,6 +12,7 @@
 namespace Fxp\Bundle\RequireAssetBundle\Assetic\Factory\Resource;
 
 use Assetic\Factory\Resource\ResourceInterface;
+use Fxp\Bundle\RequireAssetBundle\Assetic\Util\Utils;
 
 /**
  * Require asset resource.
@@ -20,6 +21,55 @@ use Assetic\Factory\Resource\ResourceInterface;
  */
 class RequireAssetResource implements ResourceInterface
 {
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $formulaeName;
+
+    /**
+     * @var string
+     */
+    protected $sourcePath;
+
+    /**
+     * @var string
+     */
+    protected $targetPath;
+
+    /**
+     * @var array
+     */
+    protected $filters;
+
+    /**
+     * @var array
+     */
+    protected $options;
+
+    /**
+     * Constructor.
+     *
+     * @param string $name       The asset name
+     * @param string $sourcePath The asset source path
+     * @param string $targetPath The asset target path
+     * @param array  $filters    The asset filters
+     * @param array  $options    The asset filters
+     */
+    public function __construct($name, $sourcePath, $targetPath, array $filters = array(), array $options = array())
+    {
+        $this->name = $name;
+        $this->formulaeName = Utils::formatName($name);
+        $this->sourcePath = $sourcePath;
+        $this->targetPath = $targetPath;
+        $this->filters = $filters;
+        $this->options = $options;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +83,19 @@ class RequireAssetResource implements ResourceInterface
      */
     public function getContent()
     {
-        return '';
+        return array(
+            $this->formulaeName => array(
+                // inputs
+                array($this->sourcePath),
+                // filters
+                $this->filters,
+                // options
+                array_merge($this->options, array(
+                    'output' => $this->targetPath,
+                    'debug'  => false,
+                )),
+            ),
+        );
     }
 
     /**
@@ -41,6 +103,6 @@ class RequireAssetResource implements ResourceInterface
      */
     public function __toString()
     {
-        return 'require_asset_resource';
+        return 'require_asset_resource_'.$this->formulaeName;
     }
 }

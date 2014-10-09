@@ -21,7 +21,7 @@ abstract class Utils
     /**
      * @var array
      */
-    protected static $formulaeFilters = array(
+    protected static $nameFilters = array(
         '.',
         '/',
         '\\',
@@ -36,18 +36,18 @@ abstract class Utils
     );
 
     /**
-     * Gets the assetic formulae name of the asset.
+     * Gets the assetic name of the asset.
      *
      * @param string $name
      *
      * @return string
      */
-    public static function getFormulaeName($name)
+    public static function formatName($name)
     {
-        $formulae = ltrim($name, '@');
-        $formulae = str_replace(self::$formulaeFilters, '_', $formulae);
+        $asseticName = ltrim($name, '@');
+        $asseticName = str_replace(self::$nameFilters, '_', $asseticName);
 
-        return $formulae;
+        return $asseticName;
     }
 
     /**

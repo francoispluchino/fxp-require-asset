@@ -34,6 +34,6 @@ class FxpRequireAssetBundle extends Bundle
         $container->addCompilerPass(new ComposerAssetsPass());
         $container->addCompilerPass(new BundleAssetsPass());
         $container->addCompilerPass(new ConfigurationCompilerPass(), PassConfig::TYPE_OPTIMIZE);
-        $container->addCompilerPass(new CompilerAssetsPass(), PassConfig::TYPE_AFTER_REMOVING);
+        $container->addCompilerPass(new CompilerAssetsPass(), PassConfig::TYPE_BEFORE_REMOVING);
     }
 }

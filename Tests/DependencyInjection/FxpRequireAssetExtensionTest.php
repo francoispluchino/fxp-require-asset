@@ -14,6 +14,7 @@ namespace Fxp\Bundle\RequireAssetBundle\Tests\DependencyInjection;
 use Fxp\Bundle\RequireAssetBundle\DependencyInjection\FxpRequireAssetExtension;
 use Fxp\Bundle\RequireAssetBundle\FxpRequireAssetBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -63,6 +64,10 @@ class FxpRequireAssetExtensionTest extends \PHPUnit_Framework_TestCase
             'assetic.debug'      => false,
             'kernel.bundles'     => array(),
         )));
+
+        $asseticManager = new Definition('Assetic\Factory\LazyAssetManager');
+        $container->setDefinition('assetic.asset_manager', $asseticManager);
+
         $bundle = new FxpRequireAssetBundle();
         $bundle->build($container); // Attach all default factories
 

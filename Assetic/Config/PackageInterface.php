@@ -12,6 +12,7 @@
 namespace Fxp\Bundle\RequireAssetBundle\Assetic\Config;
 
 use Fxp\Bundle\RequireAssetBundle\Exception\InvalidConfigurationException;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Interface of compiled config asset package.
@@ -84,4 +85,13 @@ interface PackageInterface
      * @return string[]
      */
     public function getPatterns();
+
+    /**
+     * Get the files of package.
+     *
+     * @param bool $debug The debug mode
+     *
+     * @return SplFileInfo[]
+     */
+    public function getFiles($debug = false);
 }
