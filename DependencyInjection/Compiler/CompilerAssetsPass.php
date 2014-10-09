@@ -51,8 +51,8 @@ class CompilerAssetsPass implements CompilerPassInterface
         $manager = $container->get($idManager);
         $assetManagerDef = $container->getDefinition('assetic.asset_manager');
         $this->filesystem = new Filesystem();
-        $this->debug = $container->getParameter('assetic.debug');
-        $this->outputPrefix = $container->getParameter('fxp_require_asset.output_prefix');
+        $this->debug = (bool) $container->getParameter('assetic.debug');
+        $this->outputPrefix = (string) $container->getParameter('fxp_require_asset.output_prefix');
 
         foreach ($manager->getPackages() as $package) {
             $this->addPackageAssets($assetManagerDef, $package);
