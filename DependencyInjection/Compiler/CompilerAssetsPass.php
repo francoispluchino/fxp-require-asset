@@ -12,6 +12,7 @@
 namespace Fxp\Bundle\RequireAssetBundle\DependencyInjection\Compiler;
 
 use Fxp\Bundle\RequireAssetBundle\Assetic\Config\FileExtensionInterface;
+use Fxp\Bundle\RequireAssetBundle\Assetic\Config\OutputManagerInterface;
 use Fxp\Bundle\RequireAssetBundle\Assetic\Config\PackageInterface;
 use Fxp\Bundle\RequireAssetBundle\Assetic\Util\Utils;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -33,14 +34,14 @@ class CompilerAssetsPass implements CompilerPassInterface
     protected $filesystem;
 
     /**
+     * @var OutputManagerInterface
+     */
+    protected $outputManager;
+
+    /**
      * @var bool
      */
     protected $debug;
-
-    /**
-     * @var string
-     */
-    protected $outputPrefix;
 
     /**
      * {@inheritdoc}
@@ -48,11 +49,12 @@ class CompilerAssetsPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $idManager = 'fxp_require_asset.assetic.config.package_manager';
+        $idOutputManager = 'fxp_require_asset.assetic.config.output_manager';
         $manager = $container->get($idManager);
+        $this->outputManager = $container->get($idOutputManager);
         $assetManagerDef = $container->getDefinition('assetic.asset_manager');
         $this->filesystem = new Filesystem();
         $this->debug = (bool) $container->getParameter('assetic.debug');
-        $this->outputPrefix = (string) $container->getParameter('fxp_require_asset.output_prefix');
 
         foreach ($manager->getPackages() as $package) {
             $this->addPackageAssets($assetManagerDef, $package);
@@ -90,13 +92,12 @@ class CompilerAssetsPass implements CompilerPassInterface
         $options = array();
         $ext = $file->getExtension();
         $output = $package->getSourceBase() . '/' . $output;
-        $output = trim($this->outputPrefix, '/') . '/' . $output;
 
         if ($package->hasExtension($ext)) {
             $pExt = $package->getExtension($ext);
             $filters = $pExt->getFilters();
             $options = $pExt->getOptions();
-            $output = static::replaceExtension($output, $pExt);
+            $output = $this->replaceExtension($output, $pExt);
         }
 
         $definition = new Definition();
@@ -105,7 +106,7 @@ class CompilerAssetsPass implements CompilerPassInterface
             ->setPublic(true)
             ->addArgument($name)
             ->addArgument($file->getLinkTarget())
-            ->addArgument($output)
+            ->addArgument($this->outputManager->convertOutput($output))
             ->addArgument($filters)
             ->addArgument($options)
         ;

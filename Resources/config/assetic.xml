@@ -11,6 +11,11 @@
         <!-- Assetic Config Pattern Manager (only used during the container compilation) -->
         <service id="fxp_require_asset.assetic.config.pattern_manager" class="Fxp\Bundle\RequireAssetBundle\Assetic\Config\PatternManager" public="false" />
 
+        <!-- Assetic Config Output Manager (only used during the container compilation) -->
+        <service id="fxp_require_asset.assetic.config.output_manager" class="Fxp\Bundle\RequireAssetBundle\Assetic\Config\OutputManager" public="false">
+            <argument type="string">%fxp_require_asset.output_prefix%</argument>
+        </service>
+
         <!-- Assetic Config Package Manager (only used during the container compilation) -->
         <service id="fxp_require_asset.assetic.config.package_manager" class="Fxp\Bundle\RequireAssetBundle\Assetic\Config\PackageManager" public="false">
             <argument type="service" id="fxp_require_asset.assetic.config.file_extension_manager" />

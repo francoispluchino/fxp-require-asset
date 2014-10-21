@@ -32,6 +32,7 @@ class ConfigurationCompilerPass implements CompilerPassInterface
 
         $this->configureFileExtensionManager($container, $pb);
         $this->configurePatternManager($container, $pb);
+        $this->configureOutputManager($container, $pb);
         $this->configurePackageManager($container, $pb);
     }
 
@@ -63,6 +64,21 @@ class ConfigurationCompilerPass implements CompilerPassInterface
 
         $def->addMethodCall('addDefaultPatterns', array($patterns));
         $pb->remove('fxp_require_asset.assetic.config.patterns');
+    }
+
+    /**
+     * Configure the output rewrite section.
+     *
+     * @param ContainerBuilder $container
+     * @param ParameterBag     $pb
+     */
+    protected function configureOutputManager(ContainerBuilder $container, ParameterBag $pb)
+    {
+        $def = $container->getDefinition('fxp_require_asset.assetic.config.output_manager');
+        $patterns = $container->getParameter('fxp_require_asset.assetic.config.output_rewrites');
+
+        $def->addMethodCall('addOutputPatterns', array($patterns));
+        $pb->remove('fxp_require_asset.assetic.config.output_rewrites');
     }
 
     /**

@@ -41,6 +41,7 @@ class FxpRequireAssetExtension extends Extension
         $default = $config['default'];
         $container->setParameter('fxp_require_asset.assetic.config.file_extensions', $default['extensions']);
         $container->setParameter('fxp_require_asset.assetic.config.patterns', $default['patterns']);
+        $container->setParameter('fxp_require_asset.assetic.config.output_rewrites', $config['output_rewrites']);
         $container->setParameter('fxp_require_asset.assetic.config.packages', $config['packages']);
     }
 
@@ -53,12 +54,12 @@ class FxpRequireAssetExtension extends Extension
      * @param string           $composerInstalled
      * @param string           $baseDir
      */
-    protected function configureAssetic(ContainerBuilder $container, $output,$outputDebug, $composerInstalled, $baseDir)
+    protected function configureAssetic(ContainerBuilder $container, $output, $outputDebug, $composerInstalled, $baseDir)
     {
         $debug = $container->getParameter('assetic.debug');
         $output = $debug ? $outputDebug : $output;
 
-        $container->setParameter('fxp_require_asset.output_prefix', $output);
+        $container->setParameter('fxp_require_asset.output_prefix', (string) $output);
         $container->setParameter('fxp_require_asset.composer_installed_path', $composerInstalled);
         $container->setParameter('fxp_require_asset.base_dir', $baseDir);
     }

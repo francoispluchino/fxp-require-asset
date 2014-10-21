@@ -55,6 +55,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('base_dir')->defaultValue($this->rootDir . '/..')->end()
             ->end()
             ->append($this->getDefaultForPackageNode())
+            ->append($this->getOutputRewritesNode())
             ->append($this->getPackagesNode())
         ;
 
@@ -77,6 +78,7 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('replace_extensions')->defaultFalse()->end()
                 ->arrayNode('extensions')
                     ->useAttributeAsKey('name')
+                    ->normalizeKeys(false)
                     ->prototype('array')
                         ->children()
                             ->arrayNode('filters')
@@ -84,6 +86,7 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->arrayNode('options')
                                 ->useAttributeAsKey('name')
+                                ->normalizeKeys(false)
                                 ->prototype('variable')->end()
                             ->end()
                             ->scalarNode('extension')->defaultNull()->end()
@@ -106,6 +109,25 @@ class Configuration implements ConfigurationInterface
      *
      * @return NodeDefinition
      */
+    private function getOutputRewritesNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('output_rewrites');
+
+        $node
+            ->useAttributeAsKey('name')
+            ->normalizeKeys(false)
+            ->prototype('variable')->end()
+        ;
+
+        return $node;
+    }
+
+    /**
+     * Get packages config node.
+     *
+     * @return NodeDefinition
+     */
     private function getPackagesNode()
     {
         $treeBuilder = new TreeBuilder();
@@ -113,6 +135,7 @@ class Configuration implements ConfigurationInterface
 
         $node
             ->useAttributeAsKey('name')
+            ->normalizeKeys(false)
             ->prototype('array')
                 ->addDefaultsIfNotSet()
                 ->children()
@@ -122,6 +145,7 @@ class Configuration implements ConfigurationInterface
                     ->booleanNode('replace_default_patterns')->defaultFalse()->end()
                     ->arrayNode('extensions')
                         ->useAttributeAsKey('name')
+                        ->normalizeKeys(false)
                         ->prototype('array')
                             ->children()
                                 ->arrayNode('filters')
@@ -129,6 +153,7 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->arrayNode('options')
                                 ->useAttributeAsKey('name')
+                                ->normalizeKeys(false)
                                 ->prototype('variable')->end()
                                 ->end()
                             ->end()
