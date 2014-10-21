@@ -65,5 +65,6 @@ Fxp RequireAssetBundle, you are ready to learn about usages of the bundle.
 
 The following documents are available:
 
+- [Custom configuration](configuration.md)
 - [Basic usage](usage_basic.md)
-- [Inline asset usage](usage_inline_asset.md)
+- [Inline asset usage in Twig](usage_twig_inline_asset.md)
