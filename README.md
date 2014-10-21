@@ -17,18 +17,23 @@ and adds automatically the assets in the Assetic manager.
 
 ##### Features include:
 
-- Automatically copy all assets of NPM/Bower packages in the assetic public directory
-- Automatically copy all assets defined in resources section of a Symfony2 Bundle
+- Automatically copy all assets:
+  - of NPM/Bower packages in the assetic public directory
+  - defined in resources section of a Symfony2 Bundle (except `config`, `doc`, `license(s)`, `meta`, `public`, `skeleton`, `views`)
 - Compiling the final list of asset in cache for increase performance
-- Updating the list of assets when the source files requires a cache refresh (dev mode)
-- Native support of the assetic manager (command assetic:dump and controller)
-- Filter the assets of packages by file extensions (and debug mode)
-- Filter the assets of packages by glob patterns
-- Configure the assetic filters of asset package by the extensions in global config or container compiler pass
-- Configure the default filters for all asset packages in global config or container compiler pass
-- Configure the custom asset package in global config or container compiler pass
-- Automatically move all inline javascript in the same place defined in the twig base template
-- Automatically move all inline stylesheet in the same place defined in the twig base template
+- Updating the list of assets when the source files requires a cache refresh (`dev` mode)
+- Native support of the assetic manager (command `assetic:dump` and controller)
+- Filter the assets of packages by:
+  - file extensions (and debug mode)
+  - glob patterns
+- Configure (in global config or in container compiler pass):
+  - the assetic filters of asset package by the extensions
+  - the assetic filters for all asset packages
+  - the custom asset package
+  - the rewrite output path of asset
+- Automatically move all inline:
+  - javascript in the same place defined in the twig base template
+  - stylesheet in the same place defined in the twig base template
 
 Documentation
 -------------
