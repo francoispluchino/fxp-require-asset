@@ -99,6 +99,26 @@ class RequireAssetResource implements ResourceInterface
     }
 
     /**
+     * Get the name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get the source path.
+     *
+     * @return string
+     */
+    public function getSourcePath()
+    {
+        return $this->sourcePath;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function __toString()
