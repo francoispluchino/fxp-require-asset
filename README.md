@@ -31,6 +31,8 @@ and adds automatically the assets in the Assetic manager.
   - the assetic filters for all asset packages
   - the custom asset package
   - the rewrite output path of asset
+- Assetic filters:
+  - `requirecssrewrite`: for rewrite the url of another require asset in css file
 - Automatically move all inline:
   - javascript in the same place defined in the twig base template
   - stylesheet in the same place defined in the twig base template
