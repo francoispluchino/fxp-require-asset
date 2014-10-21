@@ -20,12 +20,12 @@ and adds automatically the assets in the Assetic manager.
 - Automatically copy all assets:
   - of NPM/Bower packages in the assetic public directory
   - defined in resources section of a Symfony2 Bundle (except `config`, `doc`, `license(s)`, `meta`, `public`, `skeleton`, `views`)
+- Filter the copy of the assets of each packages by:
+  - file extensions (and debug mode)
+  - glob patterns
 - Compiling the final list of asset in cache for increase performance
 - Updating the list of assets when the source files requires a cache refresh (`dev` mode)
 - Native support of the assetic manager (command `assetic:dump` and controller)
-- Filter the assets of packages by:
-  - file extensions (and debug mode)
-  - glob patterns
 - Configure (in global config or in container compiler pass):
   - the assetic filters of asset package by the extensions
   - the assetic filters for all asset packages
