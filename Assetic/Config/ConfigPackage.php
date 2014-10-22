@@ -156,7 +156,7 @@ class ConfigPackage extends Package implements ConfigPackageInterface
      * @param bool        $debug     The debug mode
      * @param bool        $exclude   Exclude or not the file extension
      *
-     * @return self
+     * @return FileExtensionInterface
      */
     protected function createFileExtension($name, array $options, array $filters, $extension, $debug, $exclude)
     {
