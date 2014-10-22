@@ -108,7 +108,7 @@ class OutputManager implements OutputManagerInterface
      *
      * @param string $output        The output path
      * @param string $pattern       The pattern
-     * @param array  $outputPattern The new output pattern
+     * @param string $outputPattern The new output pattern
      *
      * @return string The converted output path
      */
@@ -130,7 +130,7 @@ class OutputManager implements OutputManagerInterface
      *
      * @param string $output        The output path
      * @param string $pattern       The pattern
-     * @param array  $outputPattern The new output pattern
+     * @param string $outputPattern The new output pattern
      *
      * @return string
      */
@@ -153,7 +153,7 @@ class OutputManager implements OutputManagerInterface
      *
      * @param array  $matches       The matches
      * @param string $output        Theoutput path
-     * @param array  $outputPattern The new output pattern
+     * @param string $outputPattern The new output pattern
      *
      * @return string
      */
