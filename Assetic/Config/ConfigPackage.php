@@ -12,7 +12,6 @@
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\FileExtensionFactory;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
 
 /**
@@ -53,35 +52,23 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     /**
      * {@inheritdoc}
      */
-    public function addExtension(FileExtensionInterface $extension)
+    public function hasExtension($name)
     {
-        if ($this->locked) {
-            throw new BadMethodCallException('ConfigPackage methods cannot be accessed when the manager is locked');
-        }
-
-        $config = FileExtensionFactory::convertToArray($extension, false);
-        $this->unresolvedExts[$extension->getName()][] = $config;
-
-        return $this;
+        return isset($this->unresolvedExts[$name]) || parent::hasExtension($name);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function addConfigExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false)
+    public function addExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false)
     {
-        if ($this->locked) {
-            throw new BadMethodCallException('ConfigPackage methods cannot be accessed when the manager is locked');
+        $this->validate();
+
+        if (!$name instanceof FileExtensionInterface) {
+            $name = $this->createFileExtension($name, $options, $filters, $extension, $debug, $exclude);
         }
 
-        $this->unresolvedExts[$name][] = array(
-            'name'      => $name,
-            'options'   => $options,
-            'filters'   => $filters,
-            'extension' => $extension === $name ? null : $extension,
-            'debug'     => $debug,
-            'exclude'   => $exclude,
-        );
+        $this->unresolvedExts[$name->getName()][] = $name;
 
         return $this;
     }
@@ -91,10 +78,7 @@ class ConfigPackage extends Package implements ConfigPackageInterface
      */
     public function removeExtension($name)
     {
-        if ($this->locked) {
-            throw new BadMethodCallException('ConfigPackage methods cannot be accessed when the manager is locked');
-        }
-
+        $this->validate();
         unset($this->unresolvedExts[$name]);
 
         return $this;
@@ -105,9 +89,7 @@ class ConfigPackage extends Package implements ConfigPackageInterface
      */
     public function addPattern($pattern)
     {
-        if ($this->locked) {
-            throw new BadMethodCallException('ConfigPackage methods cannot be accessed when the manager is locked');
-        }
+        $this->validate();
 
         if (!$this->hasPattern($pattern)) {
             $this->patterns[] = $pattern;
@@ -121,9 +103,7 @@ class ConfigPackage extends Package implements ConfigPackageInterface
      */
     public function removePattern($pattern)
     {
-        if ($this->locked) {
-            throw new BadMethodCallException('ConfigPackage methods cannot be accessed when the manager is locked');
-        }
+        $this->validate();
 
         if (false !== $pos = array_search($pattern, $this->patterns)) {
             array_splice($this->patterns, $pos, 1);
@@ -151,10 +131,9 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     {
         $this->locked = true;
 
+        /* @var FileExtensionInterface[] $configs */
         foreach ($this->unresolvedExts as $configs) {
-            $conf = Utils::mergeConfigs($configs);
-            $ext = FileExtensionFactory::create($conf);
-
+            $ext = FileExtensionFactory::merge($configs);
             $this->extensions[$ext->getName()] = $ext;
         }
 
@@ -165,5 +144,41 @@ class ConfigPackage extends Package implements ConfigPackageInterface
         }
 
         return new Package($this);
+    }
+
+    /**
+     * Create the config of extension.
+     *
+     * @param string      $name      The name of extension or the file extension instance
+     * @param array       $options   The assetic formulae options
+     * @param array       $filters   The assetic formulae filters
+     * @param string|null $extension The output extension
+     * @param bool        $debug     The debug mode
+     * @param bool        $exclude   Exclude or not the file extension
+     *
+     * @return self
+     */
+    protected function createFileExtension($name, array $options, array $filters, $extension, $debug, $exclude)
+    {
+        return FileExtensionFactory::create(array(
+                'name'      => $name,
+                'options'   => $options,
+                'filters'   => $filters,
+                'extension' => $extension === $name ? null : $extension,
+                'debug'     => $debug,
+                'exclude'   => $exclude,
+            ));
+    }
+
+    /**
+     * Validate the instance.
+     *
+     * @throws BadMethodCallException When the config package is locked
+     */
+    protected function validate()
+    {
+        if ($this->locked) {
+            throw new BadMethodCallException('ConfigPackage methods cannot be accessed when the manager is locked');
+        }
     }
 }

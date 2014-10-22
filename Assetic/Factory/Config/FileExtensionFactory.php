@@ -13,6 +13,7 @@ namespace Fxp\Component\RequireAsset\Assetic\Factory\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtension;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionInterface;
+use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 
 /**
@@ -45,6 +46,24 @@ abstract class FileExtensionFactory
         $exclude = array_key_exists('exclude', $config) ? $config['exclude'] : false;
 
         return new FileExtension($name, $options, $filters, $outputExt, $debug, $exclude);
+    }
+
+    /**
+     * Merge the multiple configuration of a same file extension.
+     *
+     * @param FileExtensionInterface[] $extensions
+     *
+     * @return FileExtensionInterface The new instance with merged config
+     */
+    public static function merge(array $extensions)
+    {
+        $configs = array();
+
+        foreach ($extensions as $extension) {
+            $configs[] = static::convertToArray($extension);
+        }
+
+        return static::create(Utils::mergeConfigs($configs));
     }
 
     /**
