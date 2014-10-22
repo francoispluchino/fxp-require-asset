@@ -34,19 +34,24 @@ interface FileExtensionManagerInterface
     /**
      * Adds the config of default file extension.
      *
-     * @param array $config The config of file extension
+     * @param string|array|FileExtensionInterface $name      The name of extension or config or instance
+     * @param array                               $options   The assetic formulae options
+     * @param array                               $filters   The assetic formulae filters
+     * @param string|null                         $extension The output extension
+     * @param bool                                $debug     The debug mode
+     * @param bool                                $exclude   Exclude or not the file extension
      *
      * @return self
      *
      * @throws BadMethodCallException   When the manager is resolved
      * @throws InvalidArgumentException When the "name" key does not exist
      */
-    public function addDefaultExtension(array $config);
+    public function addDefaultExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false);
 
     /**
      * Adds the configs of default file extension.
      *
-     * @param array $configs The list of config of the file extension
+     * @param array $configs The list of config of the file extension (config array or file extension instance)
      *
      * @return self
      *

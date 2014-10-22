@@ -12,9 +12,8 @@
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\FileExtensionFactory;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils;
 use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
-use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 use Fxp\Component\RequireAsset\Exception\InvalidConfigurationException;
 
 /**
@@ -60,17 +59,15 @@ class FileExtensionManager implements FileExtensionManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function addDefaultExtension(array $config)
+    public function addDefaultExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false)
     {
-        if ($this->locked) {
-            throw new BadMethodCallException('FileExtensionManager methods cannot be accessed when the manager is locked');
+        $this->validate();
+
+        if (!$name instanceof FileExtensionInterface) {
+            $name = FileExtensionUtils::createByConfig($name, $options, $filters, $extension, $debug, $exclude);
         }
 
-        if (!isset($config['name'])) {
-            throw new InvalidArgumentException('The "name" key of file extention config must be present');
-        }
-
-        $this->unresolvedDefaults[$config['name']][] = $config;
+        $this->unresolvedDefaults[$name->getName()][] = $name;
 
         return $this;
     }
@@ -81,7 +78,7 @@ class FileExtensionManager implements FileExtensionManagerInterface
     public function addDefaultExtensions(array $configs)
     {
         foreach ($configs as $key => $config) {
-            if (!isset($config['name'])) {
+            if (is_array($config) && !isset($config['name'])) {
                 $config['name'] = $key;
             }
 
@@ -96,10 +93,7 @@ class FileExtensionManager implements FileExtensionManagerInterface
      */
     public function removeDefaultExtension($name)
     {
-        if ($this->locked) {
-            throw new BadMethodCallException('FileExtensionManager methods cannot be accessed when the manager is locked');
-        }
-
+        $this->validate();
         unset($this->defaults[$name]);
 
         return $this;
@@ -136,13 +130,24 @@ class FileExtensionManager implements FileExtensionManagerInterface
     {
         $this->locked = true;
 
+        /* @var FileExtensionInterface[] $configs */
         foreach ($this->unresolvedDefaults as $configs) {
-            $conf = Utils::mergeConfigs($configs);
-            $ext = FileExtensionFactory::create($conf);
-
+            $ext = FileExtensionFactory::merge($configs);
             $this->defaults[$ext->getName()] = $ext;
         }
 
         $this->unresolvedDefaults = array();
+    }
+
+    /**
+     * Validate the instance.
+     *
+     * @throws BadMethodCallException When the config package is locked
+     */
+    protected function validate()
+    {
+        if ($this->locked) {
+            throw new BadMethodCallException('FileExtensionManager methods cannot be accessed when the manager is locked');
+        }
     }
 }

@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\FileExtensionFactory;
+use Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils;
 use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
 
 /**
@@ -65,7 +66,7 @@ class ConfigPackage extends Package implements ConfigPackageInterface
         $this->validate();
 
         if (!$name instanceof FileExtensionInterface) {
-            $name = $this->createFileExtension($name, $options, $filters, $extension, $debug, $exclude);
+            $name = FileExtensionUtils::createByConfig($name, $options, $filters, $extension, $debug, $exclude);
         }
 
         $this->unresolvedExts[$name->getName()][] = $name;
@@ -144,34 +145,6 @@ class ConfigPackage extends Package implements ConfigPackageInterface
         }
 
         return new Package($this);
-    }
-
-    /**
-     * Create the config of extension.
-     *
-     * @param string|array $name      The name of extension or config
-     * @param array        $options   The assetic formulae options
-     * @param array        $filters   The assetic formulae filters
-     * @param string|null  $extension The output extension
-     * @param bool         $debug     The debug mode
-     * @param bool         $exclude   Exclude or not the file extension
-     *
-     * @return FileExtensionInterface
-     */
-    protected function createFileExtension($name, array $options, array $filters, $extension, $debug, $exclude)
-    {
-        $config = is_array($name) ? $name
-            : array(
-                'name'      => $name,
-                'options'   => $options,
-                'filters'   => $filters,
-                'extension' => $extension === $name ? null : $extension,
-                'debug'     => $debug,
-                'exclude'   => $exclude,
-            )
-        ;
-
-        return FileExtensionFactory::create($config);
     }
 
     /**
