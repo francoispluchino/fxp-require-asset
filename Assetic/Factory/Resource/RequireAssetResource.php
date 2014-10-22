@@ -83,6 +83,16 @@ class RequireAssetResource implements ResourceInterface
      */
     public function getContent()
     {
+        return '';
+    }
+
+    /**
+     * Get the config of assetic formulae.
+     *
+     * @return array
+     */
+    public function getFormulae()
+    {
         return array(
             $this->formulaeName => array(
                 // inputs

@@ -27,6 +27,6 @@ class RequireAssetLoader implements FormulaLoaderInterface
      */
     public function load(ResourceInterface $resource)
     {
-        return $resource instanceof RequireAssetResource ? $resource->getContent() : array();
+        return $resource instanceof RequireAssetResource ? $resource->getFormulae() : array();
     }
 }
