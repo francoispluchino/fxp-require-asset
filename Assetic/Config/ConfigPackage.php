@@ -149,25 +149,29 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     /**
      * Create the config of extension.
      *
-     * @param string      $name      The name of extension or the file extension instance
-     * @param array       $options   The assetic formulae options
-     * @param array       $filters   The assetic formulae filters
-     * @param string|null $extension The output extension
-     * @param bool        $debug     The debug mode
-     * @param bool        $exclude   Exclude or not the file extension
+     * @param string|array $name      The name of extension or config
+     * @param array        $options   The assetic formulae options
+     * @param array        $filters   The assetic formulae filters
+     * @param string|null  $extension The output extension
+     * @param bool         $debug     The debug mode
+     * @param bool         $exclude   Exclude or not the file extension
      *
      * @return FileExtensionInterface
      */
     protected function createFileExtension($name, array $options, array $filters, $extension, $debug, $exclude)
     {
-        return FileExtensionFactory::create(array(
-            'name'      => $name,
-            'options'   => $options,
-            'filters'   => $filters,
-            'extension' => $extension === $name ? null : $extension,
-            'debug'     => $debug,
-            'exclude'   => $exclude,
-        ));
+        $config = is_array($name) ? $name
+            : array(
+                'name'      => $name,
+                'options'   => $options,
+                'filters'   => $filters,
+                'extension' => $extension === $name ? null : $extension,
+                'debug'     => $debug,
+                'exclude'   => $exclude,
+            )
+        ;
+
+        return FileExtensionFactory::create($config);
     }
 
     /**
