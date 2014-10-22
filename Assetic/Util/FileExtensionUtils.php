@@ -48,4 +48,33 @@ abstract class FileExtensionUtils
 
         return FileExtensionFactory::create($config);
     }
+
+    /**
+     * Get the default config of file extensions.
+     *
+     * @return array
+     */
+    public static function getDefaultConfigs()
+    {
+        return array(
+            'map'  => array('debug' => true),
+            'js'   => array(),
+            'css'  => array(),
+            'eot'  => array(),
+            'svg'  => array(),
+            'ttf'  => array(),
+            'woff' => array(),
+            'jpg'  => array(),
+            'jpeg' => array(),
+            'png'  => array(),
+            'webp' => array(),
+            'mp3'  => array(),
+            'aac'  => array(),
+            'wav'  => array(),
+            'ogg'  => array(),
+            'webm' => array(),
+            'mp4'  => array(),
+            'ogv'  => array(),
+        );
+    }
 }
