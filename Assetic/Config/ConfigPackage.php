@@ -14,7 +14,6 @@ namespace Fxp\Component\RequireAsset\Assetic\Config;
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\FileExtensionFactory;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
-use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 
 /**
  * Config asset package.
@@ -54,17 +53,34 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     /**
      * {@inheritdoc}
      */
-    public function addExtension(array $config)
+    public function addExtension(FileExtensionInterface $extension)
     {
         if ($this->locked) {
             throw new BadMethodCallException('ConfigPackage methods cannot be accessed when the manager is locked');
         }
 
-        if (!isset($config['name'])) {
-            throw new InvalidArgumentException('The "name" key of package file extention config must be present');
+        $config = FileExtensionFactory::convertToArray($extension, false);
+        $this->unresolvedExts[$extension->getName()][] = $config;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addConfigExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false)
+    {
+        if ($this->locked) {
+            throw new BadMethodCallException('ConfigPackage methods cannot be accessed when the manager is locked');
         }
 
-        $this->unresolvedExts[$config['name']][] = $config;
+        $this->unresolvedExts[$name][] = array(
+            'options'   => $options,
+            'filters'   => $filters,
+            'extension' => $extension === $name ? null : $extension,
+            'debug'     => $debug,
+            'exclude'   => $exclude,
+        );
 
         return $this;
     }

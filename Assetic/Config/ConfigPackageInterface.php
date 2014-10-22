@@ -19,13 +19,27 @@ namespace Fxp\Component\RequireAsset\Assetic\Config;
 interface ConfigPackageInterface extends PackageInterface
 {
     /**
-     * Adds the config of extension.
+     * Adds the config of extension by instance.
      *
-     * @param array $config The config of file extension
+     * @param FileExtensionInterface $extension The file extension instance
      *
      * @return self
      */
-    public function addExtension(array $config);
+    public function addExtension(FileExtensionInterface $extension);
+
+    /**
+     * Adds the config of extension by array.
+     *
+     * @param string      $name
+     * @param array       $options
+     * @param array       $filters
+     * @param string|null $extension
+     * @param bool        $debug
+     * @param bool        $exclude
+     *
+     * @return self
+     */
+    public function addConfigExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false);
 
     /**
      * Removes the config of extension.

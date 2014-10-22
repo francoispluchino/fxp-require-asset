@@ -49,7 +49,6 @@ abstract class PackageFactory
 
         if (!self::fieldIsTrue('replace_default_extensions', $config)) {
             foreach ($defaultExts as $extension) {
-                $extension = FileExtensionFactory::convertToArray($extension, false);
                 $configPackage->addExtension($extension);
             }
         }
@@ -57,6 +56,7 @@ abstract class PackageFactory
         if (array_key_exists('extensions', $config)) {
             foreach ($config['extensions'] as $extName => $confExt) {
                 $confExt['name'] = $extName;
+                $confExt = FileExtensionFactory::create($confExt);
                 $configPackage->addExtension($confExt);
             }
         }
