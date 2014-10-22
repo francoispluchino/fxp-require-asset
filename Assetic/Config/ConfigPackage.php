@@ -95,7 +95,7 @@ class ConfigPackage extends Package implements ConfigPackageInterface
             throw new BadMethodCallException('ConfigPackage methods cannot be accessed when the manager is locked');
         }
 
-        unset($this->extensions[$name]);
+        unset($this->unresolvedExts[$name]);
 
         return $this;
     }
