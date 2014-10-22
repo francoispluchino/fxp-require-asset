@@ -161,13 +161,13 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     protected function createFileExtension($name, array $options, array $filters, $extension, $debug, $exclude)
     {
         return FileExtensionFactory::create(array(
-                'name'      => $name,
-                'options'   => $options,
-                'filters'   => $filters,
-                'extension' => $extension === $name ? null : $extension,
-                'debug'     => $debug,
-                'exclude'   => $exclude,
-            ));
+            'name'      => $name,
+            'options'   => $options,
+            'filters'   => $filters,
+            'extension' => $extension === $name ? null : $extension,
+            'debug'     => $debug,
+            'exclude'   => $exclude,
+        ));
     }
 
     /**
