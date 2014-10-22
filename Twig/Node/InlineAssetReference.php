@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Fxp RequireAssetBundle package.
+ * This file is part of the Fxp Require Asset package.
  *
  * (c) François Pluchino <francois.pluchino@gmail.com>
  *
@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Bundle\RequireAssetBundle\Twig\Node;
+namespace Fxp\Component\RequireAsset\Twig\Node;
 
 /**
  * Represents a inline asset node.

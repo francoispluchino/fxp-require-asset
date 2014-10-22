@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Fxp RequireAssetBundle package.
+ * This file is part of the Fxp Require Asset package.
  *
  * (c) François Pluchino <francois.pluchino@gmail.com>
  *
@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Bundle\RequireAssetBundle\Assetic\Factory\Resource;
+namespace Fxp\Component\RequireAsset\Assetic\Factory\Resource;
 
 use Assetic\Factory\Resource\ResourceInterface;
-use Fxp\Bundle\RequireAssetBundle\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 
 /**
  * Require asset resource.

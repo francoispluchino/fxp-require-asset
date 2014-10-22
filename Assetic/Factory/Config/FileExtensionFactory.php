@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Fxp RequireAssetBundle package.
+ * This file is part of the Fxp Require Asset package.
  *
  * (c) François Pluchino <francois.pluchino@gmail.com>
  *
@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Bundle\RequireAssetBundle\Assetic\Factory\Config;
+namespace Fxp\Component\RequireAsset\Assetic\Factory\Config;
 
-use Fxp\Bundle\RequireAssetBundle\Assetic\Config\FileExtension;
-use Fxp\Bundle\RequireAssetBundle\Assetic\Config\FileExtensionInterface;
-use Fxp\Bundle\RequireAssetBundle\Exception\InvalidArgumentException;
+use Fxp\Component\RequireAsset\Assetic\Config\FileExtension;
+use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionInterface;
+use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 
 /**
  * Factory of assetic file extension config.

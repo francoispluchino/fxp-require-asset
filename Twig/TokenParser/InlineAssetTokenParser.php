@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Fxp RequireAssetBundle package.
+ * This file is part of the Fxp Require Asset package.
  *
  * (c) François Pluchino <francois.pluchino@gmail.com>
  *
@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Bundle\RequireAssetBundle\Twig\TokenParser;
+namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
-use Fxp\Bundle\RequireAssetBundle\Twig\Node\InlineAssetReference;
+use Fxp\Component\RequireAsset\Twig\Node\InlineAssetReference;
 
 /**
  * Token Parser for the 'asset' tag.

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Fxp RequireAssetBundle package.
+ * This file is part of the Fxp Require Asset package.
  *
  * (c) François Pluchino <francois.pluchino@gmail.com>
  *
@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Bundle\RequireAssetBundle\Assetic\Filter;
+namespace Fxp\Component\RequireAsset\Assetic\Filter;
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\Filter\FilterInterface;
 use Assetic\Util\CssUtils;
-use Fxp\Bundle\RequireAssetBundle\Assetic\Factory\Resource\RequireAssetResource;
-use Fxp\Bundle\RequireAssetBundle\Assetic\Util\FilterUtils;
+use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource;
+use Fxp\Component\RequireAsset\Assetic\Util\FilterUtils;
 
 /**
  * Fixes relative CSS urls with require output rewrite.
