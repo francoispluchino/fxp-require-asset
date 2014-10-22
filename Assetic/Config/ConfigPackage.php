@@ -75,6 +75,7 @@ class ConfigPackage extends Package implements ConfigPackageInterface
         }
 
         $this->unresolvedExts[$name][] = array(
+            'name'      => $name,
             'options'   => $options,
             'filters'   => $filters,
             'extension' => $extension === $name ? null : $extension,
