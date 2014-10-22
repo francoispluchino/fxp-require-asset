@@ -70,7 +70,7 @@ abstract class FileExtensionFactory
         }
 
         if ($allFields || $extension->getName() !== $extension->getOutputExtension()) {
-            $value['extension'] = $extension->isDebug();
+            $value['extension'] = $extension->getOutputExtension();
         }
 
         if ($allFields || false !== $extension->isDebug()) {
