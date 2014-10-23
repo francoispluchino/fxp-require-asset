@@ -83,9 +83,8 @@ abstract class ResourceUtils
      */
     public static function createConfigResource(PackageInterface $package, SplFileInfo $file, OutputManagerInterface $outputManager)
     {
-        $name = ResourceUtils::getAsseticName($package, $file);
-
-        $output = ResourceUtils::getPathRelative($package, $file);
+        $name = static::getAsseticName($package, $file);
+        $output = static::getPathRelative($package, $file);
         $filters = array();
         $options = array();
         $ext = $file->getExtension();
@@ -95,7 +94,7 @@ abstract class ResourceUtils
             $pExt = $package->getExtension($ext);
             $filters = $pExt->getFilters();
             $options = $pExt->getOptions();
-            $output = ResourceUtils::replaceExtension($output, $pExt);
+            $output = static::replaceExtension($output, $pExt);
         }
 
         $output = $outputManager->convertOutput($output);
