@@ -35,7 +35,7 @@ class OutputManager implements OutputManagerInterface
      *
      * @param string $prefix The assetic output prefix
      */
-    public function __construct($prefix = '')
+    public function __construct($prefix = 'assets')
     {
         $this->prefix = trim($prefix, '/');
         $this->patterns = array();
