@@ -15,6 +15,7 @@
         "php": ">=5.3.3",
         "symfony/filesystem": "~2.4",
         "symfony/finder": "~2.4",
+        "symfony/config": "~2.4",
         "kriswallsmith/assetic": "~1.2",
         "twig/twig": "~1.12"
     },
