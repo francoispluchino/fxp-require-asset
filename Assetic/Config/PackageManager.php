@@ -169,15 +169,15 @@ class PackageManager implements PackageManagerInterface
     /**
      * Adds the config of asset package.
      *
-     * @param string|array|ConfigPackageInterface $name                   The name of package or config or instance
-     * @param string|null                         $sourcePath             The package source path
-     * @param FileExtensionInterface[]|array      $extensions             The file extensions
-     * @param string[]                            $patterns               The patterns
-     * @param bool                                $replaceDefaultExts     Replace the default file extensions or add new file extensions
-     * @param bool                                $replaceDefaultPatterns Replace the default patterns or add new patterns
-     * @param string|null                         $sourceBase             The package source base
+     * @param string|array                   $name                   The name of package or config or instance
+     * @param string|null                    $sourcePath             The package source path
+     * @param FileExtensionInterface[]|array $extensions             The file extensions
+     * @param string[]                       $patterns               The patterns
+     * @param bool                           $replaceDefaultExts     Replace the default file extensions or add new file extensions
+     * @param bool                           $replaceDefaultPatterns Replace the default patterns or add new patterns
+     * @param string|null                    $sourceBase             The package source base
      *
-     * @return self
+     * @return ConfigPackageInterface
      */
     protected function createByConfig($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
     {
