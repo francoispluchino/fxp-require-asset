@@ -100,7 +100,7 @@ abstract class FilterUtils
      *
      * @return string
      */
-    protected function cleanPath($path, $key = '?')
+    protected static function cleanPath($path, $key = '?')
     {
         $pos = strpos($path, $key);
 
