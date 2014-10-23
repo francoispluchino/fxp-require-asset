@@ -52,6 +52,8 @@ class Package implements PackageInterface
      * Constructor.
      *
      * @param ConfigPackageInterface $config The config of this package
+     *
+     * @throws InvalidArgumentException When the source path of config package is not present
      */
     public function __construct(ConfigPackageInterface $config)
     {
@@ -60,6 +62,10 @@ class Package implements PackageInterface
         $this->sourceBase = $config->getSourceBase();
         $this->extensions = $config->getExtensions();
         $this->patterns = $config->getPatterns();
+
+        if (empty($this->sourcePath)) {
+            throw new InvalidArgumentException(sprintf('The "source path" of package "%s" config must be present', $config->getName()));
+        }
     }
 
     /**
@@ -93,7 +99,11 @@ class Package implements PackageInterface
      */
     public function getSourceBase()
     {
-        return $this->sourceBase;
+        if (null !== $this->sourceBase) {
+            return $this->sourceBase;
+        }
+
+        return basename($this->getSourcePath());
     }
 
     /**

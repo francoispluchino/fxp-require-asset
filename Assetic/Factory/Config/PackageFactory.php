@@ -12,8 +12,11 @@
 namespace Fxp\Component\RequireAsset\Assetic\Factory\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
+use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackageInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageInterface;
+use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Config\PackageConfiguration;
 use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 
 /**
@@ -24,7 +27,7 @@ use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 abstract class PackageFactory
 {
     /**
-     * Creates the config of asset package.
+     * Creates the asset package.
      *
      * @param array                    $config          The config of package
      * @param FileExtensionInterface[] $defaultExts     The list of default file extensions
@@ -36,18 +39,35 @@ abstract class PackageFactory
      */
     public static function create(array $config = array(), array $defaultExts = array(), array $defaultPatterns = array())
     {
+        $configPackage = static::createConfig($config, $defaultExts, $defaultPatterns);
+
+        return $configPackage->getPackage();
+    }
+
+    /**
+     * Creates the config of asset package.
+     *
+     * @param array                    $config          The config of package
+     * @param FileExtensionInterface[] $defaultExts     The list of default file extensions
+     * @param string[]                 $defaultPatterns The list of default patterns
+     *
+     * @return ConfigPackageInterface
+     *
+     * @throws InvalidArgumentException When the "name" key does not exist
+     */
+    public static function createConfig(array $config = array(), array $defaultExts = array(), array $defaultPatterns = array())
+    {
         if (!isset($config['name'])) {
             throw new InvalidArgumentException('The key "name" of package config must be present');
         }
 
-        if (!isset($config['source_path'])) {
-            throw new InvalidArgumentException(sprintf('The key "source_path" of package "%s" config must be present', $config['name']));
-        }
-
+        $sourcePath = isset($config['source_path']) ? $config['source_path'] : null;
         $sourceBase = isset($config['source_base']) ? $config['source_base'] : null;
-        $configPackage = new ConfigPackage($config['name'], $config['source_path'], $sourceBase);
+        $configPackage = new ConfigPackage($config['name'], $sourcePath, $sourceBase);
+        $configPackage->setReplaceDefaultExtensions(self::fieldIsTrue('replace_default_extensions', $config));
+        $configPackage->setReplaceDefaultPatterns(self::fieldIsTrue('replace_default_patterns', $config));
 
-        if (!self::fieldIsTrue('replace_default_extensions', $config)) {
+        if (!$configPackage->replaceDefaultExtensions()) {
             foreach ($defaultExts as $extension) {
                 $configPackage->addExtension($extension);
             }
@@ -61,7 +81,7 @@ abstract class PackageFactory
             }
         }
 
-        if (!self::fieldIsTrue('replace_default_patterns', $config)) {
+        if (!$configPackage->replaceDefaultPatterns()) {
             foreach ($defaultPatterns as $pattern) {
                 $configPackage->addPattern($pattern);
             }
@@ -73,7 +93,76 @@ abstract class PackageFactory
             }
         }
 
-        return $configPackage->getPackage();
+        return $configPackage;
+    }
+
+    /**
+     * Merge the multiple configuration of a same config package.
+     *
+     * @param ConfigPackageInterface[] $packages
+     * @param FileExtensionInterface[] $defaultExts     The list of default file extensions
+     * @param string[]                 $defaultPatterns The list of default patterns
+     *
+     * @return ConfigPackageInterface The new instance with merged config
+     */
+    public static function merge(array $packages, array $defaultExts = array(), array $defaultPatterns = array())
+    {
+        $configuration = new PackageConfiguration();
+        $configs = array();
+
+        foreach ($packages as $package) {
+            $configs[] = array($package->getName() => static::convertToArray($package));
+        }
+
+        $config = Utils::mergeConfigs($configuration, $configs);
+
+        return static::createConfig($config, $defaultExts, $defaultPatterns);
+    }
+
+    /**
+     * Converts config package instance to array.
+     *
+     * @param ConfigPackageInterface $package   The config package
+     * @param bool                   $allFields Include or not all the fields
+     *
+     * @return array The config of file extension
+     */
+    public static function convertToArray(ConfigPackageInterface $package, $allFields = false)
+    {
+        $value = array(
+            'name' => $package->getName(),
+        );
+
+        if ($allFields || null !== $package->getSourcePath()) {
+            $value['source_path'] = $package->getSourcePath();
+        }
+
+        if ($allFields || null !== $package->getSourceBase()) {
+            $value['source_base'] = $package->getSourceBase();
+        }
+
+        if ($allFields || false !== $package->replaceDefaultExtensions()) {
+            $value['replace_default_extensions'] = $package->replaceDefaultExtensions();
+        }
+
+        if ($allFields || false !== $package->replaceDefaultPatterns()) {
+            $value['replace_default_patterns'] = $package->replaceDefaultPatterns();
+        }
+
+        if ($allFields || count($package->getExtensions()) > 0) {
+            $value['extensions'] = array();
+
+            foreach ($package->getExtensions() as $extension) {
+                $extConfig = FileExtensionFactory::convertToArray($extension);
+                $value['extensions'][$extension->getName()] = $extConfig;
+            }
+        }
+
+        if ($allFields || count($package->getPatterns()) > 0) {
+            $value['patterns'] = $package->getPatterns();
+        }
+
+        return $value;
     }
 
     /**

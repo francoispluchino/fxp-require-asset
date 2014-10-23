@@ -14,6 +14,7 @@ namespace Fxp\Component\RequireAsset\Assetic\Factory\Config;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtension;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionInterface;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Config\FileExtensionConfiguration;
 use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 
 /**
@@ -57,13 +58,14 @@ abstract class FileExtensionFactory
      */
     public static function merge(array $extensions)
     {
+        $configuration = new FileExtensionConfiguration();
         $configs = array();
 
         foreach ($extensions as $extension) {
-            $configs[] = static::convertToArray($extension);
+            $configs[] = array($extension->getName() => static::convertToArray($extension));
         }
 
-        return static::create(Utils::mergeConfigs($configs));
+        return static::create(Utils::mergeConfigs($configuration, $configs));
     }
 
     /**
@@ -74,7 +76,7 @@ abstract class FileExtensionFactory
      *
      * @return array The config of file extension
      */
-    public static function convertToArray(FileExtensionInterface $extension, $allFields = true)
+    public static function convertToArray(FileExtensionInterface $extension, $allFields = false)
     {
         $value = array(
             'name' => $extension->getName(),
@@ -88,8 +90,9 @@ abstract class FileExtensionFactory
             $value['filters'] = $extension->getFilters();
         }
 
-        if ($allFields || $extension->getName() !== $extension->getOutputExtension()) {
-            $value['extension'] = $extension->getOutputExtension();
+        $outExt = $extension->getName() !== $extension->getOutputExtension();
+        if ($allFields || $outExt) {
+            $value['extension'] = $outExt ? $extension->getOutputExtension() : null;
         }
 
         if ($allFields || false !== $extension->isDebug()) {

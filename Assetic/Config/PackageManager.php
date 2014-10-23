@@ -12,9 +12,7 @@
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\PackageFactory;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
-use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 use Fxp\Component\RequireAsset\Exception\InvalidConfigurationException;
 
 /**
@@ -75,17 +73,15 @@ class PackageManager implements PackageManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function addPackage(array $config)
+    public function addPackage($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
     {
-        if ($this->locked) {
-            throw new BadMethodCallException('PackageManager methods cannot be accessed when the manager is locked');
+        $this->validate();
+
+        if (!$name instanceof ConfigPackageInterface) {
+            $name = $this->createByConfig($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase);
         }
 
-        if (!isset($config['name'])) {
-            throw new InvalidArgumentException('The "name" key of package config must be present');
-        }
-
-        $this->configPackages[$config['name']][] = $config;
+        $this->configPackages[$name->getName()][] = $name;
 
         return $this;
     }
@@ -96,7 +92,7 @@ class PackageManager implements PackageManagerInterface
     public function addPackages(array $configs)
     {
         foreach ($configs as $key => $config) {
-            if (!isset($config['name'])) {
+            if (is_array($config) && !isset($config['name'])) {
                 $config['name'] = $key;
             }
 
@@ -111,10 +107,7 @@ class PackageManager implements PackageManagerInterface
      */
     public function removePackage($name)
     {
-        if ($this->locked) {
-            throw new BadMethodCallException('PackageManager methods cannot be accessed when the manager is locked');
-        }
-
+        $this->validate();
         unset($this->configPackages[$name]);
 
         return $this;
@@ -154,12 +147,52 @@ class PackageManager implements PackageManagerInterface
         $defaultPatterns = $this->patternManager->getDefaultPatterns();
 
         foreach ($this->configPackages as $configs) {
-            $conf = Utils::mergeConfigs($configs);
-            $package = PackageFactory::create($conf, $defaultExts, $defaultPatterns);
-
-            $this->packages[$package->getName()] = $package;
+            $package = PackageFactory::merge($configs, $defaultExts, $defaultPatterns);
+            $this->packages[$package->getName()] = $package->getPackage();
         }
 
         $this->configPackages = array();
+    }
+
+    /**
+     * Validate the instance.
+     *
+     * @throws BadMethodCallException When the config package is locked
+     */
+    protected function validate()
+    {
+        if ($this->locked) {
+            throw new BadMethodCallException('PackageManager methods cannot be accessed when the manager is locked');
+        }
+    }
+
+    /**
+     * Adds the config of asset package.
+     *
+     * @param string|array|ConfigPackageInterface $name                   The name of package or config or instance
+     * @param string|null                         $sourcePath             The package source path
+     * @param FileExtensionInterface[]|array      $extensions             The file extensions
+     * @param string[]                            $patterns               The patterns
+     * @param bool                                $replaceDefaultExts     Replace the default file extensions or add new file extensions
+     * @param bool                                $replaceDefaultPatterns Replace the default patterns or add new patterns
+     * @param string|null                         $sourceBase             The package source base
+     *
+     * @return self
+     */
+    protected function createByConfig($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
+    {
+        $config = is_array($name) ? $name
+            : array(
+                'name'                       => $name,
+                'source_path'                => $sourcePath,
+                'extensions'                 => $extensions,
+                'patterns'                   => $patterns,
+                'replace_default_extensions' => $replaceDefaultExts,
+                'replace_default_patterns'   => $replaceDefaultPatterns,
+                'source_base'                => $sourceBase,
+            )
+        ;
+
+        return PackageFactory::createConfig($config);
     }
 }

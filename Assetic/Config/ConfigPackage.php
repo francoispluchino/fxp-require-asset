@@ -23,9 +23,14 @@ use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
 class ConfigPackage extends Package implements ConfigPackageInterface
 {
     /**
-     * @var array
+     * @var bool
      */
-    protected $unresolvedExts;
+    protected $replaceDefaultExtensions;
+
+    /**
+     * @var bool
+     */
+    protected $replaceDefaultPatterns;
 
     /**
      * @var bool
@@ -36,26 +41,19 @@ class ConfigPackage extends Package implements ConfigPackageInterface
      * Constructor.
      *
      * @param string      $name       The asset package name
-     * @param string      $sourcePath The source path of the package
+     * @param string|null $sourcePath The source path of the package
      * @param string|null $sourceBase The custom source base using for the output path
      */
-    public function __construct($name, $sourcePath, $sourceBase = null)
+    public function __construct($name, $sourcePath = null, $sourceBase = null)
     {
         $this->name = $name;
         $this->sourcePath = $sourcePath;
         $this->sourceBase = $sourceBase;
-        $this->unresolvedExts = array();
         $this->extensions = array();
         $this->patterns = array();
+        $this->replaceDefaultExtensions = false;
+        $this->replaceDefaultPatterns = false;
         $this->locked = false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasExtension($name)
-    {
-        return isset($this->unresolvedExts[$name]) || parent::hasExtension($name);
     }
 
     /**
@@ -69,7 +67,11 @@ class ConfigPackage extends Package implements ConfigPackageInterface
             $name = FileExtensionUtils::createByConfig($name, $options, $filters, $extension, $debug, $exclude);
         }
 
-        $this->unresolvedExts[$name->getName()][] = $name;
+        if ($this->hasExtension($name->getName())) {
+            $name = FileExtensionFactory::merge(array($this->extensions[$name->getName()], $name));
+        }
+
+        $this->extensions[$name->getName()] = $name;
 
         return $this;
     }
@@ -80,9 +82,27 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     public function removeExtension($name)
     {
         $this->validate();
-        unset($this->unresolvedExts[$name]);
+        unset($this->extensions[$name]);
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setReplaceDefaultExtensions($replace)
+    {
+        $this->replaceDefaultExtensions = (bool) $replace;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function replaceDefaultExtensions()
+    {
+        return $this->replaceDefaultExtensions;
     }
 
     /**
@@ -116,13 +136,27 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     /**
      * {@inheritdoc}
      */
+    public function setReplaceDefaultPatterns($replace)
+    {
+        $this->replaceDefaultPatterns = (bool) $replace;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function replaceDefaultPatterns()
+    {
+        return $this->replaceDefaultPatterns;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSourceBase()
     {
-        if (null !== $this->sourceBase) {
-            return $this->sourceBase;
-        }
-
-        return basename($this->getSourcePath());
+        return $this->sourceBase;
     }
 
     /**
@@ -131,14 +165,6 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     public function getPackage()
     {
         $this->locked = true;
-
-        /* @var FileExtensionInterface[] $configs */
-        foreach ($this->unresolvedExts as $configs) {
-            $ext = FileExtensionFactory::merge($configs);
-            $this->extensions[$ext->getName()] = $ext;
-        }
-
-        $this->unresolvedExts = array();
 
         if (0 === count($this->patterns)) {
             $this->patterns[] = '*';

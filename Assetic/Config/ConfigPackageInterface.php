@@ -42,6 +42,22 @@ interface ConfigPackageInterface extends PackageInterface
     public function removeExtension($name);
 
     /**
+     * Set replace the default file extensions by the file extensions in package.
+     *
+     * @param bool $replace
+     *
+     * @return self
+     */
+    public function setReplaceDefaultExtensions($replace);
+
+    /**
+     * Replace the default file extensions by the file extensions in package.
+     *
+     * @return bool
+     */
+    public function replaceDefaultExtensions();
+
+    /**
      * Adds the config of pattern.
      *
      * @param string $pattern The pattern
@@ -58,6 +74,22 @@ interface ConfigPackageInterface extends PackageInterface
      * @return self
      */
     public function removePattern($pattern);
+
+    /**
+     * Set replace the default patterns by the patterns in package.
+     *
+     * @param bool $replace
+     *
+     * @return self
+     */
+    public function setReplaceDefaultPatterns($replace);
+
+    /**
+     * Replace the default patterns by the patterns in package.
+     *
+     * @return bool
+     */
+    public function replaceDefaultPatterns();
 
     /**
      * Gets the package instance.

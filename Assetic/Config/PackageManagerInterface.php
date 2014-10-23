@@ -34,19 +34,25 @@ interface PackageManagerInterface
     /**
      * Adds the config of asset package.
      *
-     * @param array $config The asset config package instance
+     * @param string|array|ConfigPackageInterface $name                   The name of package or config or instance
+     * @param string|null                         $sourcePath             The package source path
+     * @param FileExtensionInterface[]|array      $extensions             The file extensions
+     * @param string[]                            $patterns               The patterns
+     * @param bool                                $replaceDefaultExts     Replace the default file extensions or add new file extensions
+     * @param bool                                $replaceDefaultPatterns Replace the default patterns or add new patterns
+     * @param string|null                         $sourceBase             The package source base
      *
      * @return self
      *
      * @throws BadMethodCallException   When the manager is resolved
-     * @throws InvalidArgumentException When the "name" key does not exist
+     * @throws InvalidArgumentException When the "name" argument is a string and the "sourcePath" argument is empty
      */
-    public function addPackage(array $config);
+    public function addPackage($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null);
 
     /**
      * Adds the configs of package.
      *
-     * @param array $configs The list of config of package
+     * @param array $configs The list of config of package (config array or file config package instance)
      *
      * @return self
      *

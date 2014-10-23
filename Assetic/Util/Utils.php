@@ -11,6 +11,9 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Util;
 
+use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Processor;
+
 /**
  * Assetic Utils.
  *
@@ -53,29 +56,16 @@ abstract class Utils
     /**
      * Merges the configs of asset config.
      *
-     * @param array $configs The list of config of asset config.
+     * @param ConfigurationInterface $configuration The config tree
+     * @param array                  $configs       The list of config of asset config.
      *
      * @return array The merged config
      */
-    public static function mergeConfigs(array $configs)
+    public static function mergeConfigs(ConfigurationInterface $configuration, array $configs)
     {
-        $new = array();
+        $processor = new Processor();
+        $config = $processor->processConfiguration($configuration, $configs);
 
-        foreach ($configs as $config) {
-            foreach (array_keys($config) as $key) {
-                $value = $config[$key];
-
-                if (is_array($value) && array_key_exists($key, $new)) {
-                    $value = array_merge($new[$key], $value);
-                    array_unique($value);
-                }
-
-                if (null !== $value || !array_key_exists($key, $new)) {
-                    $new[$key] = $value;
-                }
-            }
-        }
-
-        return $new;
+        return current($config);
     }
 }
