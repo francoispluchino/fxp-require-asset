@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Assetic;
 
 use Assetic\Factory\LazyAssetManager;
+use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManager;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManager;
@@ -52,6 +53,11 @@ class RequireAssetManager implements RequireAssetManagerInterface
      * @var PackageManagerInterface
      */
     protected $packageManager;
+
+    /**
+     * @var RequireAssetCacheInterface
+     */
+    protected $cache;
 
     /**
      * Constructor.
@@ -103,12 +109,70 @@ class RequireAssetManager implements RequireAssetManagerInterface
     /**
      * {@inheritdoc}
      */
+    public function setCache(RequireAssetCacheInterface $cache)
+    {
+        $this->cache = $cache;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCache()
+    {
+        return $this->cache;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addAssetResources(LazyAssetManager $assetManager)
     {
         $assetManager->setLoader('fxp_require_asset_loader', new RequireAssetLoader());
 
+        if ($this->loadAssetsInCache($assetManager)) {
+            return;
+        }
+
+        $this->findAssets($assetManager);
+    }
+
+    /**
+     * Loads the asset resources since the cache.
+     *
+     * @param LazyAssetManager $assetManager
+     *
+     * @return bool
+     */
+    protected function loadAssetsInCache(LazyAssetManager $assetManager)
+    {
+        if (null !== $this->cache && $this->cache->hasResources()) {
+            foreach ($this->cache->getResources() as $resource) {
+                $assetManager->addResource($resource, 'fxp_require_asset_loader');
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Find the require assets.
+     *
+     * @param LazyAssetManager $assetManager
+     */
+    protected function findAssets(LazyAssetManager $assetManager)
+    {
+        $resources = array();
+
         foreach ($this->packageManager->getPackages() as $package) {
-            $this->addPackageAssets($assetManager, $package);
+            $resources = array_merge($resources, $this->addPackageAssets($assetManager, $package));
+        }
+
+        if (null !== $this->cache) {
+            $this->cache->setResources($resources);
         }
     }
 
@@ -117,13 +181,20 @@ class RequireAssetManager implements RequireAssetManagerInterface
      *
      * @param LazyAssetManager $assetManager The asset manager
      * @param PackageInterface $package      The asset package instance
+     *
+     * @return RequireAssetResource[]
      */
     protected function addPackageAssets(LazyAssetManager $assetManager, PackageInterface $package)
     {
+        $resources = array();
+
         foreach ($package->getFiles($assetManager->isDebug()) as $file) {
             $resource = $this->createAssetResource($package, $file);
+            $resources[] = $resource;
             $assetManager->addResource($resource, 'fxp_require_asset_loader');
         }
+
+        return $resources;
     }
 
     /**

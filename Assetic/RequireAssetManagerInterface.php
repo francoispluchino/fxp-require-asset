@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Assetic;
 
 use Assetic\Factory\LazyAssetManager;
+use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface;
@@ -51,6 +52,22 @@ interface RequireAssetManagerInterface
      * @return PackageManagerInterface
      */
     public function getPackageManager();
+
+    /**
+     * Set the require asset cache.
+     *
+     * @param RequireAssetCacheInterface $cache
+     *
+     * @return self
+     */
+    public function setCache(RequireAssetCacheInterface $cache);
+
+    /**
+     * Get the require asset cache.
+     *
+     * @return RequireAssetCacheInterface
+     */
+    public function getCache();
 
     /**
      * Add all require asset resources in assetic lazy asset manager.
