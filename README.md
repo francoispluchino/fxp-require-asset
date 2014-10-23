@@ -23,6 +23,7 @@ duplicates.
   - the assetic filters for all asset packages
   - the custom asset package
   - the rewrite output path of asset
+- Compiling the final list of asset in cache for increase performance
 - Assetic filters:
   - `requirecssrewrite`: for rewrite the url of another require asset in css file
 - Twig extension for Automatically move all inline:
