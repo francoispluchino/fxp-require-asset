@@ -94,7 +94,7 @@ class FileExtensionManager implements FileExtensionManagerInterface
     public function removeDefaultExtension($name)
     {
         $this->validate();
-        unset($this->defaults[$name]);
+        unset($this->unresolvedDefaults[$name]);
 
         return $this;
     }
