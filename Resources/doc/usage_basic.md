@@ -205,7 +205,7 @@ $ram = new RequireAssetManager();
 $configPackage = new ConfigPackage('foo_bar', __DIR__ . '/vendor/assets/foobar');
 $configPackage
     ->addExtension('js', array(), array('?yui_js'))
-    ->addExtension('less', array(), array(''), 'css');
+    ->addExtension('less', array(), array('lessphp'), 'css');
 
 $ram->getPackageManager()->addPackage($configPackage);
 ```
