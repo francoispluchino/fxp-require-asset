@@ -107,7 +107,7 @@ class FileExtensionManager implements FileExtensionManagerInterface
         $this->resolve();
 
         if (!$this->hasDefaultExtension($name)) {
-            throw new InvalidConfigurationException(sprintf('The "%s" default file extension does not exist'));
+            throw new InvalidConfigurationException(sprintf('The "%s" default file extension does not exist', $name));
         }
 
         return $this->defaults[$name];
