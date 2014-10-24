@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Tests\Assetic\Factory\Resource;
+namespace Fxp\Component\RequireAsset\Tests\Assetic\Factory\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackageInterface;
