@@ -123,7 +123,7 @@ class Package implements PackageInterface
             return $this->extensions[$name];
         }
 
-        throw new InvalidConfigurationException(sprintf('The "%s" package file extension does not exist'));
+        throw new InvalidConfigurationException(sprintf('The "%s" package file extension does not exist', $name));
     }
 
     /**
