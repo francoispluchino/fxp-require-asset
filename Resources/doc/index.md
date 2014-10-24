@@ -23,4 +23,5 @@ Composer will install the bundle to your project's `vendor/fxp` directory.
 
 ## Usage
 
+- [Basic usage](usage_basic.md)
 - [Inline asset usage in Twig](usage_twig_inline_asset.md)
