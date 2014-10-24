@@ -21,9 +21,9 @@ class PatternConfiguration extends AbstractConfiguration
     /**
      * {@inheritdoc}
      */
-    public static function getConfigNode($treeBuilder = null)
+    public static function getNodeDefinition()
     {
-        $node = static::createRoot('patterns', $treeBuilder)
+        $node = static::createRoot('patterns')
             ->prototype('scalar')->end()
         ;
 

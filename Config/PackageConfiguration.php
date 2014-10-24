@@ -21,9 +21,9 @@ class PackageConfiguration extends AbstractConfiguration
     /**
      * {@inheritdoc}
      */
-    public static function getConfigNode($treeBuilder = null)
+    public static function getNodeDefinition()
     {
-        $node = static::createRoot('packages', $treeBuilder)
+        $node = static::createRoot('packages')
             ->useAttributeAsKey('name', false)
             ->normalizeKeys(false)
             ->prototype('array')
@@ -34,8 +34,8 @@ class PackageConfiguration extends AbstractConfiguration
                     ->scalarNode('source_base')->defaultNull()->end()
                     ->booleanNode('replace_default_extensions')->defaultFalse()->end()
                     ->booleanNode('replace_default_patterns')->defaultFalse()->end()
-                    ->append(FileExtensionConfiguration::getConfigNode())
-                    ->append(PatternConfiguration::getConfigNode())
+                    ->append(FileExtensionConfiguration::getNodeDefinition())
+                    ->append(PatternConfiguration::getNodeDefinition())
                 ->end()
             ->end()
         ;

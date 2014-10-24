@@ -24,25 +24,21 @@ abstract class AbstractConfiguration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public static function getNode()
     {
-        $treeBuilder = new TreeBuilder();
-        static::getConfigNode($treeBuilder);
-
-        return $treeBuilder;
+        return static::getNodeDefinition()->getNode(true);
     }
 
     /**
      * Create the root node.
      *
-     * @param string           $name        The node name
-     * @param TreeBuilder|null $treeBuilder The tree builder
+     * @param string $name The node name
      *
      * @return ArrayNodeDefinition
      */
-    protected static function createRoot($name, $treeBuilder = null)
+    protected static function createRoot($name)
     {
-        $treeBuilder = $treeBuilder ?: new TreeBuilder();
+        $treeBuilder = new TreeBuilder();
         /* @var ArrayNodeDefinition $node */
         $node = $treeBuilder->root($name);
 

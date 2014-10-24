@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Util;
 
-use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\NodeInterface;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
@@ -56,15 +56,15 @@ abstract class Utils
     /**
      * Merges the configs of asset config.
      *
-     * @param ConfigurationInterface $configuration The config tree
-     * @param array                  $configs       The list of config of asset config.
+     * @param NodeInterface $nodeConfiguration The node definition of configuration
+     * @param array         $configs           The list of config of asset config.
      *
      * @return array The merged config
      */
-    public static function mergeConfigs(ConfigurationInterface $configuration, array $configs)
+    public static function mergeConfigs(NodeInterface $nodeConfiguration, array $configs)
     {
         $processor = new Processor();
-        $config = $processor->processConfiguration($configuration, $configs);
+        $config = $processor->process($nodeConfiguration, $configs);
 
         return current($config);
     }

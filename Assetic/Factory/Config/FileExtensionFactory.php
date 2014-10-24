@@ -58,14 +58,14 @@ abstract class FileExtensionFactory
      */
     public static function merge(array $extensions)
     {
-        $configuration = new FileExtensionConfiguration();
+        $nodeConfig = FileExtensionConfiguration::getNode();
         $configs = array();
 
         foreach ($extensions as $extension) {
             $configs[] = array($extension->getName() => static::convertToArray($extension));
         }
 
-        return static::create(Utils::mergeConfigs($configuration, $configs));
+        return static::create(Utils::mergeConfigs($nodeConfig, $configs));
     }
 
     /**

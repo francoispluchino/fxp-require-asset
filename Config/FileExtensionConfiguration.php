@@ -21,9 +21,9 @@ class FileExtensionConfiguration extends AbstractConfiguration
     /**
      * {@inheritdoc}
      */
-    public static function getConfigNode($treeBuilder = null)
+    public static function getNodeDefinition()
     {
-        $node = static::createRoot('extensions', $treeBuilder)
+        $node = static::createRoot('extensions')
             ->useAttributeAsKey('name', false)
             ->normalizeKeys(false)
             ->prototype('array')

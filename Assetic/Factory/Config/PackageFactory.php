@@ -107,14 +107,14 @@ abstract class PackageFactory
      */
     public static function merge(array $packages, array $defaultExts = array(), array $defaultPatterns = array())
     {
-        $configuration = new PackageConfiguration();
+        $nodeConfig = PackageConfiguration::getNode();
         $configs = array();
 
         foreach ($packages as $package) {
             $configs[] = array($package->getName() => static::convertToArray($package));
         }
 
-        $config = Utils::mergeConfigs($configuration, $configs);
+        $config = Utils::mergeConfigs($nodeConfig, $configs);
 
         return static::createConfig($config, $defaultExts, $defaultPatterns);
     }

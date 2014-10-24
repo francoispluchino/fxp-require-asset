@@ -12,22 +12,26 @@
 namespace Fxp\Component\RequireAsset\Config;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface as BaseConfigurationInterface;
+use Symfony\Component\Config\Definition\NodeInterface;
 
 /**
  * Interface of asset config.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-interface ConfigurationInterface extends BaseConfigurationInterface
+interface ConfigurationInterface
 {
     /**
-     * Get the config node.
+     * Get the node.
      *
-     * @param TreeBuilder|null $treeBuilder The tree builder
+     * @return NodeInterface
+     */
+    public static function getNode();
+
+    /**
+     * Get the node definition.
      *
      * @return ArrayNodeDefinition
      */
-    public static function getConfigNode($treeBuilder = null);
+    public static function getNodeDefinition();
 }
