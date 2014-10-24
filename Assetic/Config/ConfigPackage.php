@@ -92,6 +92,7 @@ class ConfigPackage extends Package implements ConfigPackageInterface
      */
     public function setReplaceDefaultExtensions($replace)
     {
+        $this->validate();
         $this->replaceDefaultExtensions = (bool) $replace;
 
         return $this;
@@ -138,6 +139,7 @@ class ConfigPackage extends Package implements ConfigPackageInterface
      */
     public function setReplaceDefaultPatterns($replace)
     {
+        $this->validate();
         $this->replaceDefaultPatterns = (bool) $replace;
 
         return $this;
