@@ -130,7 +130,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
 
         /* @var SplFileInfo $file */
         foreach ($pkg->getFiles($debug) as $file) {
-            $files[] = rtrim($fs->makePathRelative($file->getLinkTarget(), $base), '/');
+            $files[] = rtrim($fs->makePathRelative($file->getRealpath(), $base), '/');
         }
 
         $valid = array(
