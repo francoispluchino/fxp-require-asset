@@ -4,7 +4,7 @@ Fxp Require Asset
 [![Latest Stable Version](https://poser.pugx.org/fxp/require-asset/v/stable.svg)](https://packagist.org/packages/fxp/require-asset)
 [![Latest Unstable Version](https://poser.pugx.org/fxp/require-asset/v/unstable.svg)](https://packagist.org/packages/fxp/require-asset)
 [![Build Status](https://travis-ci.org/francoispluchino/fxp-require-asset.svg)](https://travis-ci.org/francoispluchino/fxp-require-asset)
-[![Coverage Status](https://coveralls.io/repos/francoispluchino/fxp-require-asset/badge.png)](https://coveralls.io/r/francoispluchino/fxp-require-asset)
+[![Coverage Status](https://img.shields.io/coveralls/francoispluchino/fxp-require-asset.svg)](https://coveralls.io/r/francoispluchino/fxp-require-asset?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/francoispluchino/fxp-require-asset/badges/quality-score.png)](https://scrutinizer-ci.com/g/francoispluchino/fxp-require-asset)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/43b207f9-6d4c-4d99-927d-e7bbd710d6ee/mini.png)](https://insight.sensiolabs.com/projects/43b207f9-6d4c-4d99-927d-e7bbd710d6ee)
 
