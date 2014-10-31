@@ -121,7 +121,7 @@ class PackageManager implements PackageManagerInterface
         $this->resolve();
 
         if (!$this->hasPackage($name)) {
-            throw new InvalidConfigurationException(sprintf('The "%s" package does not exist'));
+            throw new InvalidConfigurationException(sprintf('The "%s" package does not exist', $name));
         }
 
         return $this->packages[$name];
