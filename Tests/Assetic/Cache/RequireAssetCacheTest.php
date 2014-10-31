@@ -40,7 +40,7 @@ class RequireAssetCacheTest extends \PHPUnit_Framework_TestCase
 
     protected function getCacheDir()
     {
-        return sys_get_temp_dir() . 'fxp_require_asset-cache-test';
+        return sys_get_temp_dir() . '/fxp_require_asset-cache-test';
     }
 
     protected function getCacheName()
