@@ -90,6 +90,7 @@ class RequireAssetCache implements RequireAssetCacheInterface
      */
     public function invalidate()
     {
+        $this->cacheData = null;
         $this->fs->remove($this->filename);
 
         return $this;
