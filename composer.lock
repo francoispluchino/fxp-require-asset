@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2c9fe69850958d5720bc2d61ab2f44ed",
+    "hash": "5dbb6b49b1d7646f4e05b3a7a94b6772",
     "packages": [
         {
             "name": "kriswallsmith/assetic",
@@ -268,7 +268,9 @@
             "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
             "time": "2014-10-01 05:50:18"
-        },
+        }
+    ],
+    "packages-dev": [
         {
             "name": "twig/twig",
             "version": "v1.16.2",
@@ -327,7 +329,6 @@
             "time": "2014-10-17 12:53:44"
         }
     ],
-    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
