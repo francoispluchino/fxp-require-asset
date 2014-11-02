@@ -1,7 +1,7 @@
 {
     "name": "fxp/require-asset",
     "type": "library",
-    "description": "Required assets manager for Twig and Assetic",
+    "description": "Required assets helper for assetic manager and twig",
     "keywords": ["asset", "require", "twig", "assetic", "javascript", "stylesheet", "user interface", "ui"],
     "homepage": "https://github.com/francoispluchino/fxp-require-asset",
     "license": "MIT",
