@@ -53,16 +53,14 @@ class RequireCssRewriteFilter implements FilterInterface
      */
     public function filterDump(AssetInterface $asset)
     {
-        $sourceBase = $asset->getSourceRoot();
-        $sourcePath = $asset->getSourcePath();
-        $sourceFile = realpath($sourceBase . DIRECTORY_SEPARATOR . $asset->getSourcePath());
+        $sourceFile = FilterUtils::fixRealPath($asset->getSourceRoot() . '/' . $asset->getSourcePath());
         $paths = $this->getResourcePaths();
 
         if (!isset($paths[$sourceFile])) {
             return;
         }
 
-        $content = $this->getContent($asset, $paths, $sourceBase, $sourcePath, $sourceFile);
+        $content = $this->getContent($asset, $paths, dirname($sourceFile), $sourceFile);
         $asset->setContent($content);
     }
 
@@ -72,15 +70,14 @@ class RequireCssRewriteFilter implements FilterInterface
      * @param AssetInterface $asset
      * @param array          $paths      The resource paths
      * @param string         $sourceBase The source base
-     * @param string         $sourcePath The source path
      * @param string         $sourceFile The source filename
      *
      * @return string The asset content
      */
-    protected function getContent(AssetInterface $asset, array $paths, $sourceBase, $sourcePath, $sourceFile)
+    protected function getContent(AssetInterface $asset, array $paths, $sourceBase, $sourceFile)
     {
         $manager = $this->manager;
-        $host = $this->getHost($sourceBase, $sourcePath);
+        $host = $this->getHost($sourceFile);
         $targetBase = dirname($manager->get($paths[$sourceFile])->getTargetPath());
 
         return CssUtils::filterReferences($asset->getContent(), function ($matches) use ($manager, $paths, $sourceBase, $targetBase, $host) {
@@ -99,7 +96,7 @@ class RequireCssRewriteFilter implements FilterInterface
 
         foreach ($this->manager->getResources() as $resource) {
             if ($resource instanceof RequireAssetResource) {
-                $resources[realpath($resource->getSourcePath())] = $resource->getName();
+                $resources[FilterUtils::fixRealPath($resource->getSourcePath())] = $resource->getName();
             }
         }
 
@@ -109,16 +106,15 @@ class RequireCssRewriteFilter implements FilterInterface
     /**
      * Get the host.
      *
-     * @param string $sourceBase The source base
-     * @param string $sourcePath The source path
+     * @param string $sourceFile The source file
      *
      * @return string
      */
-    protected function getHost($sourceBase, $sourcePath)
+    protected function getHost($sourceFile)
     {
         // learn how to get from the target back to the source
-        if (false !== strpos($sourceBase, '://')) {
-            list($scheme, $url) = explode('://', $sourceBase.'/'.$sourcePath, 2);
+        if (false !== strpos($sourceFile, '://')) {
+            list($scheme, $url) = explode('://', $sourceFile, 2);
             list($host,) = explode('/', $url, 2);
 
             return $scheme.'://'.$host.'/';

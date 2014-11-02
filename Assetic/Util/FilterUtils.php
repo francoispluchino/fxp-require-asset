@@ -42,11 +42,25 @@ abstract class FilterUtils
 
         if (isset($matches['url'][0]) && '/' == $matches['url'][0]) {
             // root relative
-            return (string) str_replace($matches['url'], $host . $matches['url'], $matches[0]);
+            return (string) str_replace($matches['url'], rtrim($host, '/') . '/' . ltrim($matches['url'], '/'), $matches[0]);
         }
 
         // document relative
         return static::getReferenceUrl($manager, $paths, $sourceBase, $targetBase, $matches['url']);
+    }
+
+    /**
+     * Fix the real path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public static function fixRealPath($path)
+    {
+        $rPath = realpath($path);
+
+        return is_string($rPath) ? $rPath : $path;
     }
 
     /**
@@ -63,13 +77,15 @@ abstract class FilterUtils
     protected static function getReferenceUrl(LazyAssetManager $manager, array $paths, $sourceBase, $targetBase, $url)
     {
         $fullpath = static::getRealPath($sourceBase, $url);
+        $urlOptions = substr(basename($url), strlen(basename($fullpath)));
 
         if (isset($paths[$fullpath])) {
             $fs = new Filesystem();
             $target = $manager->get($paths[$fullpath])->getTargetPath();
             $targetBase = $fs->makePathRelative(dirname($target), $targetBase);
-            $urlOptions = substr(basename($url), strlen(basename($fullpath)));
             $url = $targetBase . basename($target) . $urlOptions;
+        } else {
+            $url = $fullpath . $urlOptions;
         }
 
         return $url;
@@ -85,11 +101,13 @@ abstract class FilterUtils
      */
     protected static function getRealPath($sourceBase, $url)
     {
-        $path = $sourceBase . DIRECTORY_SEPARATOR . $url;
+        $path = $sourceBase . '/' . $url;
         $path = static::cleanPath($path, '?');
         $path = static::cleanPath($path, '#');
+        $path = static::fixRealPath($path);
+        $path = static::getVirtualRealPath($path);
 
-        return realpath($path);
+        return $path;
     }
 
     /**
@@ -106,6 +124,28 @@ abstract class FilterUtils
 
         if (false !== $pos) {
             $path = substr($path, 0, $pos);
+        }
+
+        return $path;
+    }
+
+    /**
+     * Convert the path to virtual real path.
+     *
+     * @param string $path The path contained '../'
+     *
+     * @return string
+     */
+    protected static function getVirtualRealPath($path)
+    {
+        if (false !== strpos($path, '../')) {
+            do {
+                $pos = strpos($path, '../');
+                $pathBase = substr($path, 0, $pos);
+                $pathBase = dirname($pathBase);
+                $path = $pathBase . '/' . substr($path, $pos + 3);
+
+            } while (false !== strpos($path, '../'));
         }
 
         return $path;

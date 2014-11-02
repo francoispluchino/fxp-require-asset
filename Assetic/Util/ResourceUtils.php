@@ -35,7 +35,7 @@ abstract class ResourceUtils
     public static function getPathRelative(PackageInterface $package, SplFileInfo $file)
     {
         $fs = new Filesystem();
-        $source = realpath($package->getSourcePath());
+        $source = FilterUtils::fixRealPath($package->getSourcePath());
 
         return rtrim($fs->makePathRelative($file->getLinkTarget(), $source), '/');
     }
