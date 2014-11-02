@@ -8,10 +8,10 @@ Fxp Require Asset
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/francoispluchino/fxp-require-asset/badges/quality-score.png)](https://scrutinizer-ci.com/g/francoispluchino/fxp-require-asset)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/43b207f9-6d4c-4d99-927d-e7bbd710d6ee/mini.png)](https://insight.sensiolabs.com/projects/43b207f9-6d4c-4d99-927d-e7bbd710d6ee)
 
-The Fxp Require Asset is a manager for the required assets. It allows to define the
-required assets (javascript, stylesheet) directly in the Twig template and adds the HTML
-links of the assets automatically to the right place in the template, while removing
-duplicates.
+The Fxp Require Asset is a helper for assetic and twig to manage automatically the
+required assets. It allows to define the required assets (javascript, stylesheet)
+directly in the Twig template and adds the HTML links of the assets automatically
+to the right place in the template, while removing duplicates.
 
 ##### Features include:
 
