@@ -28,7 +28,7 @@ abstract class ConfigUtils
      * @param FileExtensionManagerInterface|PackageManagerInterface $instance The instance
      * @param string                                                $method   The method
      *
-     * @return object The instance
+     * @return FileExtensionManagerInterface|PackageManagerInterface The instance
      */
     public static function addConfig(array $configs, $instance, $method)
     {
