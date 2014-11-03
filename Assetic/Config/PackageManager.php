@@ -12,7 +12,6 @@
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\PackageFactory;
-use Fxp\Component\RequireAsset\Assetic\Util\ConfigUtils;
 use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
 use Fxp\Component\RequireAsset\Exception\InvalidConfigurationException;
 
@@ -21,7 +20,7 @@ use Fxp\Component\RequireAsset\Exception\InvalidConfigurationException;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class PackageManager implements PackageManagerInterface
+class PackageManager extends AbstractConfigManager implements PackageManagerInterface
 {
     /**
      * @var FileExtensionManagerInterface
@@ -89,7 +88,7 @@ class PackageManager implements PackageManagerInterface
      */
     public function addPackages(array $configs)
     {
-        return ConfigUtils::addConfig($configs, $this, 'addPackage');
+        return $this->addConfig($configs, 'addPackage');
     }
 
     /**

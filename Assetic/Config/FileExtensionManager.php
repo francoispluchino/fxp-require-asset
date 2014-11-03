@@ -12,7 +12,6 @@
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\FileExtensionFactory;
-use Fxp\Component\RequireAsset\Assetic\Util\ConfigUtils;
 use Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils;
 use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
 use Fxp\Component\RequireAsset\Exception\InvalidConfigurationException;
@@ -22,7 +21,7 @@ use Fxp\Component\RequireAsset\Exception\InvalidConfigurationException;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class FileExtensionManager implements FileExtensionManagerInterface
+class FileExtensionManager extends AbstractConfigManager implements FileExtensionManagerInterface
 {
     /**
      * @var array
@@ -78,7 +77,7 @@ class FileExtensionManager implements FileExtensionManagerInterface
      */
     public function addDefaultExtensions(array $configs)
     {
-        return ConfigUtils::addConfig($configs, $this, 'addDefaultExtension');
+        return $this->addConfig($configs, 'addDefaultExtension');
     }
 
     /**
