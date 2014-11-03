@@ -107,7 +107,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFiles($debug)
     {
-        $this->createFixtures();
+        static::createFixtures();
 
         $cpkg = new ConfigPackage('NAME', $this->getFixturesDir() . '/foobar');
         $cpkg
@@ -161,27 +161,27 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($valid, $files);
     }
 
-    protected function createFixtures()
+    public static function createFixtures()
     {
         $fs = new Filesystem();
 
-        foreach ($this->getFixtureFiles() as $filename) {
-            $fs->dumpFile($this->getFixturesDir() . '/' . $filename, '');
+        foreach (static::getFixtureFiles() as $filename) {
+            $fs->dumpFile(static::getFixturesDir() . '/' . $filename, '');
         }
     }
 
-    protected function cleanFixtures()
+    public static function cleanFixtures()
     {
-        if (file_exists($this->getFixturesDir())) {
+        if (file_exists(static::getFixturesDir())) {
             $fs = new Filesystem();
-            $fs->remove($this->getFixturesDir());
+            $fs->remove(static::getFixturesDir());
         }
     }
 
     /**
      * @return string
      */
-    protected function getFixturesDir()
+    public static function getFixturesDir()
     {
         return sys_get_temp_dir() . '/fxp-require-asset-fixtures';
     }
@@ -189,7 +189,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    protected function getFixtureFiles()
+    public static function getFixtureFiles()
     {
         return array(
             'foobar/bower.json',
