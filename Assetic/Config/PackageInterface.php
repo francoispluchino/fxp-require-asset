@@ -19,15 +19,8 @@ use Symfony\Component\Finder\SplFileInfo;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-interface PackageInterface
+interface PackageInterface extends ConfigInterface
 {
-    /**
-     * Gets the asset package name.
-     *
-     * @return string
-     */
-    public function getName();
-
     /**
      * Gets the source path.
      *

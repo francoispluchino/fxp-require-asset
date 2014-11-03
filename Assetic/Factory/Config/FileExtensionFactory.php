@@ -78,30 +78,16 @@ abstract class FileExtensionFactory
      */
     public static function convertToArray(FileExtensionInterface $extension, $allFields = false)
     {
+        $outExt = $extension->getName() !== $extension->getOutputExtension();
         $value = array(
             'name' => $extension->getName(),
         );
 
-        if ($allFields || count($extension->getOptions()) > 0) {
-            $value['options'] = $extension->getOptions();
-        }
-
-        if ($allFields || count($extension->getFilters()) > 0) {
-            $value['filters'] = $extension->getFilters();
-        }
-
-        $outExt = $extension->getName() !== $extension->getOutputExtension();
-        if ($allFields || $outExt) {
-            $value['extension'] = $outExt ? $extension->getOutputExtension() : null;
-        }
-
-        if ($allFields || false !== $extension->isDebug()) {
-            $value['debug'] = $extension->isDebug();
-        }
-
-        if ($allFields || false !== $extension->isExclude()) {
-            $value['exclude'] = $extension->isExclude();
-        }
+        Utils::addArrayField($value, 'options', $extension, 'getOptions', 0, $allFields);
+        Utils::addArrayField($value, 'filters', $extension, 'getFilters', 0, $allFields);
+        Utils::addField($value, 'extension', $extension, 'getOutputExtension', $outExt, $allFields, true);
+        Utils::addBoolField($value, 'debug', $extension, 'isDebug', true, $allFields);
+        Utils::addBoolField($value, 'exclude', $extension, 'isExclude', true, $allFields);
 
         return $value;
     }

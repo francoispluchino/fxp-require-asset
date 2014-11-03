@@ -16,15 +16,8 @@ namespace Fxp\Component\RequireAsset\Assetic\Config;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-interface FileExtensionInterface
+interface FileExtensionInterface extends ConfigInterface
 {
-    /**
-     * Gets the extension name.
-     *
-     * @return string
-     */
-    public function getName();
-
     /**
      * Gets the assetic formulae options.
      *

@@ -133,21 +133,10 @@ abstract class PackageFactory
             'name' => $package->getName(),
         );
 
-        if ($allFields || null !== $package->getSourcePath()) {
-            $value['source_path'] = $package->getSourcePath();
-        }
-
-        if ($allFields || null !== $package->getSourceBase()) {
-            $value['source_base'] = $package->getSourceBase();
-        }
-
-        if ($allFields || false !== $package->replaceDefaultExtensions()) {
-            $value['replace_default_extensions'] = $package->replaceDefaultExtensions();
-        }
-
-        if ($allFields || false !== $package->replaceDefaultPatterns()) {
-            $value['replace_default_patterns'] = $package->replaceDefaultPatterns();
-        }
+        Utils::addStringField($value, 'source_path', $package, 'getSourcePath', $allFields);
+        Utils::addStringField($value, 'source_base', $package, 'getSourceBase', $allFields);
+        Utils::addBoolField($value, 'replace_default_extensions', $package, 'replaceDefaultExtensions', true, $allFields);
+        Utils::addBoolField($value, 'replace_default_patterns', $package, 'replaceDefaultPatterns', true, $allFields);
 
         if ($allFields || count($package->getExtensions()) > 0) {
             $value['extensions'] = array();
@@ -158,9 +147,7 @@ abstract class PackageFactory
             }
         }
 
-        if ($allFields || count($package->getPatterns()) > 0) {
-            $value['patterns'] = $package->getPatterns();
-        }
+        Utils::addArrayField($value, 'patterns', $package, 'getPatterns', 0, $allFields);
 
         return $value;
     }
