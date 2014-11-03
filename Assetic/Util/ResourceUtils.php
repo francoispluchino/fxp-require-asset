@@ -37,7 +37,7 @@ abstract class ResourceUtils
         $fs = new Filesystem();
         $source = FilterUtils::fixRealPath($package->getSourcePath());
 
-        return rtrim($fs->makePathRelative($file->getLinkTarget(), $source), '/');
+        return rtrim($fs->makePathRelative($file->getRealPath(), $source), '/');
     }
 
     /**
@@ -99,6 +99,6 @@ abstract class ResourceUtils
 
         $output = $outputManager->convertOutput($output);
 
-        return array($name, $file->getLinkTarget(), $output, $filters, $options);
+        return array($name, $file->getRealPath(), $output, $filters, $options);
     }
 }
