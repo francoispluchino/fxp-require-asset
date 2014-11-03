@@ -89,6 +89,35 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getCreateMethod
      */
+    public function testCreateWithExtensionList($method)
+    {
+        $config = array(
+            'name' => 'package1',
+            'source_path' => 'SOURCE_PATH',
+            'source_base' => 'SOURCE_BASE',
+            'extensions' => array(
+                'js',
+            ),
+        );
+        $pkg = PackageFactory::$method($config);
+
+        if ('createConfig' === $method) {
+            /* @var ConfigPackageInterface $pkg */
+            $pkg->getPackage();
+        }
+
+        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageInterface', $pkg);
+        $this->assertSame($config['name'], $pkg->getName());
+        $this->assertSame($config['source_path'], $pkg->getSourcePath());
+        $this->assertSame($config['source_base'], $pkg->getSourceBase());
+        $this->assertEquals(array(
+            'js' => new FileExtension('js'),
+        ), $pkg->getExtensions());
+    }
+
+    /**
+     * @dataProvider getCreateMethod
+     */
     public function testCreateWhithReplaceDefault($method)
     {
         $config = array(

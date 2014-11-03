@@ -75,7 +75,7 @@ abstract class PackageFactory
 
         if (array_key_exists('extensions', $config)) {
             foreach ($config['extensions'] as $extName => $confExt) {
-                $confExt['name'] = $extName;
+                $confExt = static::formatExtensionConfig($extName, $confExt);
                 $confExt = FileExtensionFactory::create($confExt);
                 $configPackage->addExtension($confExt);
             }
@@ -163,6 +163,26 @@ abstract class PackageFactory
         }
 
         return $value;
+    }
+
+    /**
+     * Format the extension config.
+     *
+     * @param string       $extName The extension name
+     * @param array|string $confExt The extension config or the extension name
+     *
+     * @return array The extension config
+     */
+    protected static function formatExtensionConfig($extName, $confExt)
+    {
+        if (is_string($confExt)) {
+            $confExt = array('name' => $confExt);
+
+        } elseif (!array_key_exists('name', $confExt)) {
+            $confExt['name'] = $extName;
+        }
+
+        return $confExt;
     }
 
     /**
