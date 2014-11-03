@@ -87,7 +87,7 @@ abstract class ResourceUtils
         $output = static::getPathRelative($package, $file);
         $filters = array();
         $options = array();
-        $ext = $file->getExtension();
+        $ext = static::getSplFileExtension($file);
         $output = $package->getSourceBase() . '/' . $output;
 
         if ($package->hasExtension($ext)) {
@@ -100,5 +100,17 @@ abstract class ResourceUtils
         $output = $outputManager->convertOutput($output);
 
         return array($name, $file->getRealPath(), $output, $filters, $options);
+    }
+
+    /**
+     * Get the file extension of spl file.
+     *
+     * @param SplFileInfo $file
+     *
+     * @return string
+     */
+    protected static function getSplFileExtension(SplFileInfo $file)
+    {
+        return substr($file->getFilename(), (strrpos($file->getFilename(), '.') + 1));
     }
 }
