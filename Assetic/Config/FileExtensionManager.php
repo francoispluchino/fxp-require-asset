@@ -60,9 +60,7 @@ class FileExtensionManager extends AbstractConfigManager implements FileExtensio
      */
     public function addDefaultExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false)
     {
-        $class = 'Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils';
-
-        return $this->doAdd($class, 'unresolvedDefaults', array($name, $options, $filters, $extension, $debug, $exclude));
+        return $this->doAdd('Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils', 'unresolvedDefaults', array($name, $options, $filters, $extension, $debug, $exclude));
     }
 
     /**

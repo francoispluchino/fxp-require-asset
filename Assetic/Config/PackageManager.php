@@ -75,9 +75,7 @@ class PackageManager extends AbstractConfigManager implements PackageManagerInte
      */
     public function addPackage($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
     {
-        $class = 'Fxp\Component\RequireAsset\Assetic\Util\PackageUtils';
-
-        return $this->doAdd($class, 'configPackages', array($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase));
+        return $this->doAdd('Fxp\Component\RequireAsset\Assetic\Util\PackageUtils', 'configPackages', array($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase));
     }
 
     /**
