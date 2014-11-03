@@ -11,6 +11,9 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Util;
 
+use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface;
+
 /**
  * Assetic Config Utils.
  *
@@ -21,9 +24,9 @@ abstract class ConfigUtils
     /**
      * Add the configs in the manager.
      *
-     * @param array  $configs  The configs
-     * @param object $instance The instance
-     * @param string $method   The method
+     * @param array                                                 $configs  The configs
+     * @param FileExtensionManagerInterface|PackageManagerInterface $instance The instance
+     * @param string                                                $method   The method
      *
      * @return object The instance
      */
