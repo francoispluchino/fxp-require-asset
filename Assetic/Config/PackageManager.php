@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\PackageFactory;
+use Fxp\Component\RequireAsset\Assetic\Util\ConfigUtils;
 use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
 use Fxp\Component\RequireAsset\Exception\InvalidConfigurationException;
 
@@ -91,15 +92,7 @@ class PackageManager implements PackageManagerInterface
      */
     public function addPackages(array $configs)
     {
-        foreach ($configs as $key => $config) {
-            if (is_array($config) && !isset($config['name'])) {
-                $config['name'] = $key;
-            }
-
-            $this->addPackage($config);
-        }
-
-        return $this;
+        return ConfigUtils::addConfig($configs, $this, 'addPackage');
     }
 
     /**
