@@ -75,12 +75,9 @@ class PackageManager extends AbstractConfigManager implements PackageManagerInte
      */
     public function addPackage($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
     {
-        $this->validate();
+        $class = 'Fxp\Component\RequireAsset\Assetic\Util\PackageUtils';
 
-        $config = $this->createByConfig($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase);
-        $this->configPackages[$config->getName()][] = $config;
-
-        return $this;
+        return $this->doAdd($class, 'configPackages', array($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase));
     }
 
     /**
@@ -144,48 +141,12 @@ class PackageManager extends AbstractConfigManager implements PackageManagerInte
     }
 
     /**
-     * Validate the instance.
-     *
-     * @throws BadMethodCallException When the config package is locked
+     * {@inheritdoc}
      */
     protected function validate()
     {
         if ($this->locked) {
             throw new BadMethodCallException('PackageManager methods cannot be accessed when the manager is locked');
         }
-    }
-
-    /**
-     * Create the config of asset package.
-     *
-     * @param string|array|ConfigPackageInterface $name                   The name of package or config or instance
-     * @param string|null                         $sourcePath             The package source path
-     * @param FileExtensionInterface[]|array      $extensions             The file extensions
-     * @param string[]                            $patterns               The patterns
-     * @param bool                                $replaceDefaultExts     Replace the default file extensions or add new file extensions
-     * @param bool                                $replaceDefaultPatterns Replace the default patterns or add new patterns
-     * @param string|null                         $sourceBase             The package source base
-     *
-     * @return ConfigPackageInterface
-     */
-    protected function createByConfig($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
-    {
-        if (!$name instanceof ConfigPackageInterface) {
-            $config = is_array($name) ? $name
-                : array(
-                    'name'                       => $name,
-                    'source_path'                => $sourcePath,
-                    'extensions'                 => $extensions,
-                    'patterns'                   => $patterns,
-                    'replace_default_extensions' => $replaceDefaultExts,
-                    'replace_default_patterns'   => $replaceDefaultPatterns,
-                    'source_base'                => $sourceBase,
-                )
-            ;
-
-            $name = PackageFactory::createConfig($config);
-        }
-
-        return $name;
     }
 }

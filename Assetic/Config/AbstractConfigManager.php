@@ -11,6 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
+use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
+
 /**
  * Abstract config manager.
  *
@@ -38,4 +40,32 @@ abstract class AbstractConfigManager
 
         return $this;
     }
+
+    /**
+     * Do add action.
+     *
+     * @param string $class    The class name for do the action
+     * @param string $property The property for save result
+     * @param array  $args     The arguments
+     *
+     * @return self
+     */
+    protected function doAdd($class, $property, array $args)
+    {
+        $this->validate();
+
+        $ref = new \ReflectionMethod($class ,'createByConfig');
+        $config = $ref->invokeArgs(null, $args);
+        $prop = &$this->$property;
+        $prop[$config->getName()][] = $config;
+
+        return $this;
+    }
+
+    /**
+     * Validate the instance.
+     *
+     * @throws BadMethodCallException When the config manager is locked
+     */
+    abstract protected function validate();
 }

@@ -12,7 +12,6 @@
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\FileExtensionFactory;
-use Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils;
 use Fxp\Component\RequireAsset\Exception\BadMethodCallException;
 use Fxp\Component\RequireAsset\Exception\InvalidConfigurationException;
 
@@ -61,12 +60,9 @@ class FileExtensionManager extends AbstractConfigManager implements FileExtensio
      */
     public function addDefaultExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false)
     {
-        $this->validate();
+        $class = 'Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils';
 
-        $config = FileExtensionUtils::createByConfig($name, $options, $filters, $extension, $debug, $exclude);
-        $this->unresolvedDefaults[$config->getName()][] = $config;
-
-        return $this;
+        return $this->doAdd($class, 'unresolvedDefaults', array($name, $options, $filters, $extension, $debug, $exclude));
     }
 
     /**
@@ -129,9 +125,7 @@ class FileExtensionManager extends AbstractConfigManager implements FileExtensio
     }
 
     /**
-     * Validate the instance.
-     *
-     * @throws BadMethodCallException When the config package is locked
+     * {@inheritdoc}
      */
     protected function validate()
     {
