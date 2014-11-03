@@ -149,7 +149,9 @@ class RequireAssetManager implements RequireAssetManagerInterface
     {
         if (null !== $this->cache && $this->cache->hasResources()) {
             foreach ($this->cache->getResources() as $resource) {
-                $assetManager->addResource($resource, 'fxp_require_asset_loader');
+                if (!$assetManager->has((string) $resource)) {
+                    $assetManager->addResource($resource, 'fxp_require_asset_loader');
+                }
             }
 
             return true;
