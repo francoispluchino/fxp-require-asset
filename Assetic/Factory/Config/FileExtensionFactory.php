@@ -40,11 +40,11 @@ abstract class FileExtensionFactory
         }
 
         $name = $config['name'];
-        $options = array_key_exists('options', $config) ? $config['options'] : array();
-        $filters = array_key_exists('filters', $config) ? $config['filters'] : array();
-        $outputExt = array_key_exists('extension', $config) ? $config['extension'] : null;
-        $debug = array_key_exists('debug', $config) ? $config['debug'] : false;
-        $exclude = array_key_exists('exclude', $config) ? $config['exclude'] : false;
+        $options = static::getValues($config, 'options', array());
+        $filters = static::getValues($config, 'filters', array());
+        $outputExt = static::getValues($config, 'extension', null);
+        $debug = static::getValues($config, 'debug', false);
+        $exclude = static::getValues($config, 'exclude', false);
 
         return new FileExtension($name, $options, $filters, $outputExt, $debug, $exclude);
     }
@@ -104,5 +104,21 @@ abstract class FileExtensionFactory
         }
 
         return $value;
+    }
+
+    /**
+     * Get the config value.
+     *
+     * @param array  $config
+     * @param string $option
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    protected static function getValues(array $config, $option, $default = null)
+    {
+        return array_key_exists($option, $config)
+            ? $config[$option]
+            : $default;
     }
 }
