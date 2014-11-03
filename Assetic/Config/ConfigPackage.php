@@ -63,9 +63,7 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     {
         $this->validate();
 
-        if (!$name instanceof FileExtensionInterface) {
-            $name = FileExtensionUtils::createByConfig($name, $options, $filters, $extension, $debug, $exclude);
-        }
+        $name = FileExtensionUtils::createByConfig($name, $options, $filters, $extension, $debug, $exclude);
 
         if ($this->hasExtension($name->getName())) {
             $name = FileExtensionFactory::merge(array($this->extensions[$name->getName()], $name));

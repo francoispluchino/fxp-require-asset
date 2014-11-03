@@ -63,11 +63,8 @@ class FileExtensionManager extends AbstractConfigManager implements FileExtensio
     {
         $this->validate();
 
-        if (!$name instanceof FileExtensionInterface) {
-            $name = FileExtensionUtils::createByConfig($name, $options, $filters, $extension, $debug, $exclude);
-        }
-
-        $this->unresolvedDefaults[$name->getName()][] = $name;
+        $config = FileExtensionUtils::createByConfig($name, $options, $filters, $extension, $debug, $exclude);
+        $this->unresolvedDefaults[$config->getName()][] = $config;
 
         return $this;
     }

@@ -24,29 +24,33 @@ abstract class FileExtensionUtils
     /**
      * Create the file extension with the config.
      *
-     * @param string|array $name      The name of extension or config
-     * @param array        $options   The assetic formulae options
-     * @param array        $filters   The assetic formulae filters
-     * @param string|null  $extension The output extension
-     * @param bool         $debug     The debug mode
-     * @param bool         $exclude   Exclude or not the file extension
+     * @param string|array|FileExtensionInterface $name      The name of extension or config, or instance
+     * @param array                               $options   The assetic formulae options
+     * @param array                               $filters   The assetic formulae filters
+     * @param string|null                         $extension The output extension
+     * @param bool                                $debug     The debug mode
+     * @param bool                                $exclude   Exclude or not the file extension
      *
      * @return FileExtensionInterface
      */
     public static function createByConfig($name, array $options, array $filters, $extension, $debug, $exclude)
     {
-        $config = is_array($name) ? $name
-            : array(
-                'name'      => $name,
-                'options'   => $options,
-                'filters'   => $filters,
-                'extension' => $extension === $name ? null : $extension,
-                'debug'     => $debug,
-                'exclude'   => $exclude,
-            )
-        ;
+        if (!$name instanceof FileExtensionInterface) {
+            $config = is_array($name) ? $name
+                : array(
+                    'name'      => $name,
+                    'options'   => $options,
+                    'filters'   => $filters,
+                    'extension' => $extension === $name ? null : $extension,
+                    'debug'     => $debug,
+                    'exclude'   => $exclude,
+                )
+            ;
 
-        return FileExtensionFactory::create($config);
+            $name = FileExtensionFactory::create($config);
+        }
+
+        return $name;
     }
 
     /**

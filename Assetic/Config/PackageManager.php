@@ -77,7 +77,7 @@ class PackageManager extends AbstractConfigManager implements PackageManagerInte
     {
         $this->validate();
 
-        $config = $this->convertConfig($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase);
+        $config = $this->createByConfig($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase);
         $this->configPackages[$config->getName()][] = $config;
 
         return $this;
@@ -156,54 +156,36 @@ class PackageManager extends AbstractConfigManager implements PackageManagerInte
     }
 
     /**
-     * Check if the config instance must be converted.
-     *
-     * @param string|array                   $name                   The name of package or config or instance
-     * @param string|null                    $sourcePath             The package source path
-     * @param FileExtensionInterface[]|array $extensions             The file extensions
-     * @param string[]                       $patterns               The patterns
-     * @param bool                           $replaceDefaultExts     Replace the default file extensions or add new file extensions
-     * @param bool                           $replaceDefaultPatterns Replace the default patterns or add new patterns
-     * @param string|null                    $sourceBase             The package source base
-     *
-     * @return ConfigPackageInterface
-     */
-    protected function convertConfig($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
-    {
-        if (!$name instanceof ConfigPackageInterface) {
-            $name = $this->createByConfig($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase);
-        }
-
-        return $name;
-    }
-
-    /**
      * Create the config of asset package.
      *
-     * @param string|array                   $name                   The name of package or config or instance
-     * @param string|null                    $sourcePath             The package source path
-     * @param FileExtensionInterface[]|array $extensions             The file extensions
-     * @param string[]                       $patterns               The patterns
-     * @param bool                           $replaceDefaultExts     Replace the default file extensions or add new file extensions
-     * @param bool                           $replaceDefaultPatterns Replace the default patterns or add new patterns
-     * @param string|null                    $sourceBase             The package source base
+     * @param string|array|ConfigPackageInterface $name                   The name of package or config or instance
+     * @param string|null                         $sourcePath             The package source path
+     * @param FileExtensionInterface[]|array      $extensions             The file extensions
+     * @param string[]                            $patterns               The patterns
+     * @param bool                                $replaceDefaultExts     Replace the default file extensions or add new file extensions
+     * @param bool                                $replaceDefaultPatterns Replace the default patterns or add new patterns
+     * @param string|null                         $sourceBase             The package source base
      *
      * @return ConfigPackageInterface
      */
     protected function createByConfig($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
     {
-        $config = is_array($name) ? $name
-            : array(
-                'name'                       => $name,
-                'source_path'                => $sourcePath,
-                'extensions'                 => $extensions,
-                'patterns'                   => $patterns,
-                'replace_default_extensions' => $replaceDefaultExts,
-                'replace_default_patterns'   => $replaceDefaultPatterns,
-                'source_base'                => $sourceBase,
-            )
-        ;
+        if (!$name instanceof ConfigPackageInterface) {
+            $config = is_array($name) ? $name
+                : array(
+                    'name'                       => $name,
+                    'source_path'                => $sourcePath,
+                    'extensions'                 => $extensions,
+                    'patterns'                   => $patterns,
+                    'replace_default_extensions' => $replaceDefaultExts,
+                    'replace_default_patterns'   => $replaceDefaultPatterns,
+                    'source_base'                => $sourceBase,
+                )
+            ;
 
-        return PackageFactory::createConfig($config);
+            $name = PackageFactory::createConfig($config);
+        }
+
+        return $name;
     }
 }
