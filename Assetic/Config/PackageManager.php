@@ -78,11 +78,8 @@ class PackageManager implements PackageManagerInterface
     {
         $this->validate();
 
-        if (!$name instanceof ConfigPackageInterface) {
-            $name = $this->createByConfig($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase);
-        }
-
-        $this->configPackages[$name->getName()][] = $name;
+        $config = $this->convertConfig($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase);
+        $this->configPackages[$config->getName()][] = $config;
 
         return $this;
     }
@@ -160,7 +157,29 @@ class PackageManager implements PackageManagerInterface
     }
 
     /**
-     * Adds the config of asset package.
+     * Check if the config instance must be converted.
+     *
+     * @param string|array                   $name                   The name of package or config or instance
+     * @param string|null                    $sourcePath             The package source path
+     * @param FileExtensionInterface[]|array $extensions             The file extensions
+     * @param string[]                       $patterns               The patterns
+     * @param bool                           $replaceDefaultExts     Replace the default file extensions or add new file extensions
+     * @param bool                           $replaceDefaultPatterns Replace the default patterns or add new patterns
+     * @param string|null                    $sourceBase             The package source base
+     *
+     * @return ConfigPackageInterface
+     */
+    protected function convertConfig($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
+    {
+        if (!$name instanceof ConfigPackageInterface) {
+            $name = $this->createByConfig($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase);
+        }
+
+        return $name;
+    }
+
+    /**
+     * Create the config of asset package.
      *
      * @param string|array                   $name                   The name of package or config or instance
      * @param string|null                    $sourcePath             The package source path
