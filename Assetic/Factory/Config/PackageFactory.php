@@ -174,7 +174,7 @@ abstract class PackageFactory
      * @param array  $config The config
      * @param string $field  The field
      *
-     * @return mixed|null
+     * @return string|null
      */
     protected static function getConfigValue(array $config, $field)
     {
