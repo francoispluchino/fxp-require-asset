@@ -31,7 +31,7 @@ class RequireAssetResourceTest extends \PHPUnit_Framework_TestCase
         $options = array();
         $resource = new RequireAssetResource($name, $sourcePath, $targetPath, $filters, $options);
 
-        $this->assertSame('require_asset_resource_' . $formulaeName, (string) $resource);
+        $this->assertSame($formulaeName, (string) $resource);
         $this->assertSame($name, $resource->getName());
         $this->assertSame($sourcePath, $resource->getSourcePath());
         $this->assertTrue($resource->isFresh($time->getTimestamp()));

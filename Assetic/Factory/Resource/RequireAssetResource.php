@@ -133,6 +133,6 @@ class RequireAssetResource implements ResourceInterface
      */
     public function __toString()
     {
-        return 'require_asset_resource_'.$this->formulaeName;
+        return $this->formulaeName;
     }
 }
