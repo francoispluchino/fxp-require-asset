@@ -61,37 +61,16 @@ abstract class PackageFactory
             throw new InvalidArgumentException('The key "name" of package config must be present');
         }
 
-        $sourcePath = isset($config['source_path']) ? $config['source_path'] : null;
-        $sourceBase = isset($config['source_base']) ? $config['source_base'] : null;
+        $sourcePath = self::getConfigValue($config, 'source_path');
+        $sourceBase = self::getConfigValue($config, 'source_base');
         $configPackage = new ConfigPackage($config['name'], $sourcePath, $sourceBase);
         $configPackage->setReplaceDefaultExtensions(self::fieldIsTrue('replace_default_extensions', $config));
         $configPackage->setReplaceDefaultPatterns(self::fieldIsTrue('replace_default_patterns', $config));
 
-        if (!$configPackage->replaceDefaultExtensions()) {
-            foreach ($defaultExts as $extension) {
-                $configPackage->addExtension($extension);
-            }
-        }
-
-        if (array_key_exists('extensions', $config)) {
-            foreach ($config['extensions'] as $extName => $confExt) {
-                $confExt = static::formatExtensionConfig($extName, $confExt);
-                $confExt = FileExtensionFactory::create($confExt);
-                $configPackage->addExtension($confExt);
-            }
-        }
-
-        if (!$configPackage->replaceDefaultPatterns()) {
-            foreach ($defaultPatterns as $pattern) {
-                $configPackage->addPattern($pattern);
-            }
-        }
-
-        if (array_key_exists('patterns', $config)) {
-            foreach ($config['patterns'] as $pattern) {
-                $configPackage->addPattern($pattern);
-            }
-        }
+        self::addDefaultConfig($configPackage, 'replaceDefaultExtensions', 'addExtension', $defaultExts);
+        self::addDefaultConfig($configPackage, 'replaceDefaultPatterns', 'addPattern', $defaultPatterns);
+        self::addExtensionConfig($config, $configPackage);
+        self::addPatternConfig($config, $configPackage);
 
         return $configPackage;
     }
@@ -187,5 +166,67 @@ abstract class PackageFactory
         }
 
         return false;
+    }
+
+    /**
+     * Get the config value.
+     *
+     * @param array  $config The config
+     * @param string $field  The field
+     *
+     * @return mixed|null
+     */
+    protected static function getConfigValue(array $config, $field)
+    {
+        return isset($config[$field]) ? $config[$field] : null;
+    }
+
+    /**
+     * Add the default config.
+     *
+     * @param ConfigPackageInterface $package   The config package
+     * @param string                 $method    The check method
+     * @param string                 $addMethod The method name for add default config
+     * @param array                  $defaults  The list default value of config
+     */
+    protected static function addDefaultConfig(ConfigPackageInterface $package, $method, $addMethod, array $defaults = array())
+    {
+        if (!$package->$method()) {
+            foreach ($defaults as $default) {
+                $package->$addMethod($default);
+            }
+        }
+    }
+
+    /**
+     * Add the file extension config.
+     *
+     * @param array                  $config  The config
+     * @param ConfigPackageInterface $package The package instance
+     */
+    protected static function addExtensionConfig(array $config, ConfigPackageInterface $package)
+    {
+        if (array_key_exists('extensions', $config)) {
+            foreach ($config['extensions'] as $extName => $confExt) {
+                $confExt = static::formatExtensionConfig($extName, $confExt);
+                $confExt = FileExtensionFactory::create($confExt);
+                $package->addExtension($confExt);
+            }
+        }
+    }
+
+    /**
+     * Add the pattern config.
+     *
+     * @param array                  $config  The config
+     * @param ConfigPackageInterface $package The package instance
+     */
+    protected static function addPatternConfig(array $config, ConfigPackageInterface $package)
+    {
+        if (array_key_exists('patterns', $config)) {
+            foreach ($config['patterns'] as $pattern) {
+                $package->addPattern($pattern);
+            }
+        }
     }
 }
