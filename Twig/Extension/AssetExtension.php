@@ -14,29 +14,23 @@ namespace Fxp\Component\RequireAsset\Twig\Extension;
 use Fxp\Component\RequireAsset\Twig\TokenParser\InlineAssetTokenParser;
 
 /**
- * InlineAssetExtension extends Twig with global assets rendering capabilities.
+ * AssetExtension extends Twig with global assets rendering capabilities.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class InlineAssetExtension extends \Twig_Extension
+class AssetExtension extends \Twig_Extension
 {
     /**
      * @var array
      */
-    protected $javascripts;
-
-    /**
-     * @var array
-     */
-    protected $stylesheets;
+    protected $inlines;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->javascripts = array();
-        $this->stylesheets = array();
+        $this->inlines = array();
     }
 
     /**
@@ -47,7 +41,7 @@ class InlineAssetExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('inlineJavascriptsPosition', array($this, 'inlineJavascriptsPosition'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('inlineStylesheetsPosition', array($this, 'inlineStylesheetsPosition'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('renderInlineAssets',        array($this, 'renderInlineAssets'),        array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('renderAssets',              array($this, 'renderAssets'),              array('is_safe' => array('html'))),
         );
     }
 
@@ -84,21 +78,15 @@ class InlineAssetExtension extends \Twig_Extension
      */
     public function addAsset($type, $callable, array $context, array $blocks)
     {
-        $asset = array(
+        if (!in_array($type, array('javascript', 'stylesheet'))) {
+            throw new \Twig_Error_Runtime('The asset type must be only "javascript" or "stylesheet"');
+        }
+
+        $this->inlines[$type][] = array(
             'callable' => $callable,
             'context'  => $context,
             'blocks'   => $blocks,
         );
-
-        if ('javascript' === $type) {
-            $this->javascripts[] = $asset;
-
-        } elseif ('stylesheet' === $type) {
-            $this->stylesheets[] = $asset;
-
-        } else {
-            throw new \Twig_Error_Runtime('The asset type must be only "javascript" or "stylesheet"');
-        }
     }
 
     /**
@@ -122,16 +110,16 @@ class InlineAssetExtension extends \Twig_Extension
     }
 
     /**
-     * Render inline assets.
+     * Render all assets.
      *
      * Replaces the current buffer with the new edited buffer content.
      */
-    public function renderInlineAssets()
+    public function renderAssets()
     {
         $output = ob_get_contents();
 
-        $output = str_replace($this->inlineJavascriptsPosition(), $this->doRenderInlineAssets('javascripts'), $output);
-        $output = str_replace($this->inlineStylesheetsPosition(), $this->doRenderInlineAssets('stylesheets'), $output);
+        $output = str_replace($this->inlineJavascriptsPosition(), $this->doRenderInlineAssets('javascript'), $output);
+        $output = str_replace($this->inlineStylesheetsPosition(), $this->doRenderInlineAssets('stylesheet'), $output);
 
         ob_clean();
         echo $output;
@@ -148,11 +136,13 @@ class InlineAssetExtension extends \Twig_Extension
     {
         $output = '';
 
-        foreach ($this->$type as $asset) {
-            $output .= $this->renderInlineAsset($asset['callable'], $asset['context'], $asset['blocks']);
-        }
+        if (isset($this->inlines[$type])) {
+            foreach ($this->inlines[$type] as $asset) {
+                $output .= $this->renderInlineAsset($asset['callable'], $asset['context'], $asset['blocks']);
+            }
 
-        $this->$type = array();
+            unset($this->inlines[$type]);
+        }
 
         return $output;
     }
@@ -186,6 +176,6 @@ class InlineAssetExtension extends \Twig_Extension
      */
     protected function getTagPosition($type)
     {
-        return '{#TAG_POSITION_EMBED_' . strtoupper($type) . '_'.spl_object_hash($this).'#}';
+        return '{#TAG_POSITION_INLINE_' . strtoupper($type) . '_'.spl_object_hash($this).'#}';
     }
 }

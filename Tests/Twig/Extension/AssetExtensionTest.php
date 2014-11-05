@@ -11,14 +11,14 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
-use Fxp\Component\RequireAsset\Twig\Extension\InlineAssetExtension;
+use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 
 /**
  * Inline Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class InlineAssetExtensionTest extends \PHPUnit_Framework_TestCase
+class AssetExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param $file
@@ -29,7 +29,7 @@ class InlineAssetExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../Fixtures/Resources/views');
         $twig = new \Twig_Environment($loader, array('debug' => true, 'cache' => false));
-        $twig->addExtension(new InlineAssetExtension());
+        $twig->addExtension(new AssetExtension());
 
         return $twig->loadTemplate($file);
     }
@@ -56,7 +56,7 @@ class InlineAssetExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testInvalidAssetType()
     {
-        $ext = new InlineAssetExtension();
+        $ext = new AssetExtension();
 
         $this->setExpectedException('Twig_Error_Runtime');
         $ext->addAsset('invalid', array(), array(), array());
@@ -64,12 +64,12 @@ class InlineAssetExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testWrongAssetCallable()
     {
-        $ext = new InlineAssetExtension();
+        $ext = new AssetExtension();
 
         $ext->addAsset('javascript', array(), array(), array());
 
         $this->setExpectedException('Twig_Error_Runtime');
-        $ext->renderInlineAssets();
+        $ext->renderAssets();
     }
 
     public function testEmptyBody()
