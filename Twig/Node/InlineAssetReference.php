@@ -40,7 +40,7 @@ class InlineAssetReference extends \Twig_Node
     {
         $compiler
             ->addDebugInfo($this)
-            ->write(sprintf("\$this->env->getExtension('%s')->addAsset('%s', array(\$this, '%s'), \$context, \$blocks);\n", 'fxp_require_asset_inline_asset', $this->getAttribute('type'), $this->getAttribute('name')))
+            ->write(sprintf("\$this->env->getExtension('%s')->addInlineAsset('%s', array(\$this, '%s'), \$context, \$blocks);\n", 'fxp_require_asset', $this->getAttribute('type'), $this->getAttribute('name')))
         ;
     }
 }

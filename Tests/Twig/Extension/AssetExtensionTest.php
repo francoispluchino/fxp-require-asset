@@ -59,14 +59,18 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
         $ext = new AssetExtension();
 
         $this->setExpectedException('Twig_Error_Runtime');
-        $ext->addAsset('invalid', array(), array(), array());
+        $ext->addInlineAsset('invalid', array(), array(), array());
     }
 
     public function testWrongAssetCallable()
     {
         $ext = new AssetExtension();
 
-        $ext->addAsset('javascript', array(), array(), array());
+        $ext->addInlineAsset('javascript', array(), array(), array());
+
+        ob_get_contents();
+        echo $ext->inlineJavascriptsPosition();
+        ob_clean();
 
         $this->setExpectedException('Twig_Error_Runtime');
         $ext->renderAssets();
@@ -99,5 +103,32 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Twig_Error_Syntax');
         $this->getTemplate('asset_invalid_value.html.twig');
+    }
+
+    public function testTagPositionIsAlreadyIncluded()
+    {
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidTwigArgumentException');
+
+        try {
+            $ext = new AssetExtension();
+            ob_get_contents();
+            echo $ext->inlineJavascriptsPosition();
+            echo $ext->inlineJavascriptsPosition();
+            ob_clean();
+
+        } catch (\Exception $e) {
+            ob_clean();
+            throw $e;
+        }
+    }
+
+    public function testMissingAssetContentsAreNotRendered()
+    {
+        $ext = new AssetExtension();
+
+        $ext->addInlineAsset('javascript', array(), array(), array());
+
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidTwigConfigurationException');
+        $ext->renderAssets();
     }
 }

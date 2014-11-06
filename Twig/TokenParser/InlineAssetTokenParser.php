@@ -25,7 +25,7 @@ class InlineAssetTokenParser extends \Twig_TokenParser
      */
     protected $type;
 
-    protected $defaultAttributes = array('keep_tag' => false);
+    protected $defaultAttributes = array('keep_html_tag' => false, 'position' => null);
 
     /**
      * Constructor.
@@ -60,8 +60,8 @@ class InlineAssetTokenParser extends \Twig_TokenParser
         $name = uniqid($this->type);
         $body = $this->parser->subparse(array($this, 'decideBlockEnd'), true);
 
-        if (!$options['keep_tag']) {
-            $this->removeTag($body, $lineno);
+        if (!$options['keep_html_tag']) {
+            $this->removeHtmlTag($body, $lineno);
         }
 
         $body = new \Twig_Node_Block($name, $body, $lineno);
@@ -146,7 +146,7 @@ class InlineAssetTokenParser extends \Twig_TokenParser
      *
      * @return \Twig_Node
      */
-    protected function removeTag(\Twig_Node $body, $lineno)
+    protected function removeHtmlTag(\Twig_Node $body, $lineno)
     {
         if (0 === count($body)) {
             $body = new \Twig_Node(array($body), array(), $lineno);
