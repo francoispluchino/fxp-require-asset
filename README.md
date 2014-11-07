@@ -9,9 +9,9 @@ Fxp Require Asset
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/43b207f9-6d4c-4d99-927d-e7bbd710d6ee/mini.png)](https://insight.sensiolabs.com/projects/43b207f9-6d4c-4d99-927d-e7bbd710d6ee)
 
 The Fxp Require Asset is a helper for assetic and twig to manage automatically the
-required assets. It allows to define the required assets (javascript, stylesheet)
-directly in the Twig template and adds the HTML links of the assets automatically
-to the right place in the template, while removing duplicates.
+required assets. It allows to define the required assets (script, style) directly
+in the Twig template and adds the HTML links of the assets automatically to the
+right place in the template, while removing duplicates.
 
 ##### Features include:
 
@@ -26,9 +26,11 @@ to the right place in the template, while removing duplicates.
 - Compiling the final list of asset in cache for increase performance
 - Assetic filters:
   - `requirecssrewrite`: for rewrite the url of another require asset in css file
-- Twig extension for Automatically move all inline:
-  - javascript in the same place defined in the twig base template
-  - stylesheet in the same place defined in the twig base template
+- Twig extension for:
+  - require a script and inject the link in the good place defined in the twig base template
+  - require a style and inject the link in the good place defined in the twig base template
+  - automatically move all inline script in the same place defined in the twig base template
+  - automatically move all inline style in the same place defined in the twig base template
 
 Documentation
 -------------
