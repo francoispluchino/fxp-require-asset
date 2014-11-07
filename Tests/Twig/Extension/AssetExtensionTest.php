@@ -11,6 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
+use Fxp\Component\RequireAsset\Twig\Asset\InlineScriptTwigAsset;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 
 /**
@@ -34,7 +35,7 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
         return $twig->loadTemplate($file);
     }
 
-    public function testAssetStylesheets()
+    public function testAssetStyles()
     {
         $tpl = $this->getTemplate('asset_css.html.twig');
         $content = $tpl->render(array());
@@ -44,7 +45,7 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
     }
 
-    public function testAssetJavascripts()
+    public function testAssetScripts()
     {
         $tpl = $this->getTemplate('asset_js.html.twig');
         $content = $tpl->render(array());
@@ -54,22 +55,15 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
     }
 
-    public function testInvalidAssetType()
-    {
-        $ext = new AssetExtension();
-
-        $this->setExpectedException('Twig_Error_Runtime');
-        $ext->addInlineAsset('invalid', array(), array(), array());
-    }
-
     public function testWrongAssetCallable()
     {
         $ext = new AssetExtension();
+        $asset = new InlineScriptTwigAsset(array(), array(), array());
 
-        $ext->addInlineAsset('javascript', array(), array(), array());
+        $ext->addAsset($asset);
 
         ob_get_contents();
-        echo $ext->inlineJavascriptsPosition();
+        echo $ext->createAssetPosition('inline', 'script');
         ob_clean();
 
         $this->setExpectedException('Twig_Error_Runtime');
@@ -112,8 +106,8 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
         try {
             $ext = new AssetExtension();
             ob_get_contents();
-            echo $ext->inlineJavascriptsPosition();
-            echo $ext->inlineJavascriptsPosition();
+            echo $ext->createAssetPosition('inline', 'script');
+            echo $ext->createAssetPosition('inline', 'script');
             ob_clean();
 
         } catch (\Exception $e) {
@@ -125,8 +119,9 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
     public function testMissingAssetContentsAreNotRendered()
     {
         $ext = new AssetExtension();
+        $asset = new InlineScriptTwigAsset(array(), array(), array());
 
-        $ext->addInlineAsset('javascript', array(), array(), array());
+        $ext->addAsset($asset);
 
         $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidTwigConfigurationException');
         $ext->renderAssets();

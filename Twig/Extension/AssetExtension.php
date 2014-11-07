@@ -13,8 +13,14 @@ namespace Fxp\Component\RequireAsset\Twig\Extension;
 
 use Fxp\Component\RequireAsset\Exception\InvalidTwigArgumentException;
 use Fxp\Component\RequireAsset\Exception\InvalidTwigConfigurationException;
-use Fxp\Component\RequireAsset\Exception\TwigRuntimeException;
-use Fxp\Component\RequireAsset\Twig\TokenParser\InlineAssetTokenParser;
+use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
+use Fxp\Component\RequireAsset\Twig\Asset\TwigContainerAwareInterface;
+use Fxp\Component\RequireAsset\Twig\TokenParser\InlineScriptTokenParser;
+use Fxp\Component\RequireAsset\Twig\TokenParser\InlineStyleTokenParser;
+use Fxp\Component\RequireAsset\Twig\TokenParser\RequireScriptTokenParser;
+use Fxp\Component\RequireAsset\Twig\TokenParser\RequireStyleTokenParser;
+use Fxp\Component\RequireAsset\Twig\TwigFunction\TwigAssetFunction;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * AssetExtension extends Twig with global assets rendering capabilities.
@@ -23,6 +29,11 @@ use Fxp\Component\RequireAsset\Twig\TokenParser\InlineAssetTokenParser;
  */
 class AssetExtension extends \Twig_Extension
 {
+    /**
+     * @var ContainerInterface
+     */
+    public $container;
+
     /**
      * @var array
      */
@@ -48,9 +59,11 @@ class AssetExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('inlineJavascriptsPosition', array($this, 'inlineJavascriptsPosition'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('inlineStylesheetsPosition', array($this, 'inlineStylesheetsPosition'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('renderAssets',              array($this, 'renderAssets'),              array('is_safe' => array('html'))),
+            new TwigAssetFunction('inlineScriptsPosition',  array($this, 'createAssetPosition'), array('category' => 'inline',  'type' => 'script')),
+            new TwigAssetFunction('inlineStylesPosition',   array($this, 'createAssetPosition'), array('category' => 'inline',  'type' => 'style')),
+            new TwigAssetFunction('requireScriptsPosition', array($this, 'createAssetPosition'), array('category' => 'require', 'type' => 'script')),
+            new TwigAssetFunction('requireStylesPosition',  array($this, 'createAssetPosition'), array('category' => 'require', 'type' => 'style')),
+            new \Twig_SimpleFunction('renderAssets',        array($this, 'renderAssets'),        array('is_safe' => array('html'))),
         );
     }
 
@@ -60,8 +73,10 @@ class AssetExtension extends \Twig_Extension
     public function getTokenParsers()
     {
         $tokens = array(
-            new InlineAssetTokenParser('javascript'),
-            new InlineAssetTokenParser('stylesheet'),
+            new InlineScriptTokenParser(),
+            new InlineStyleTokenParser(),
+            new RequireScriptTokenParser(),
+            new RequireStyleTokenParser(),
         );
 
         return $tokens;
@@ -76,51 +91,43 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * Adds inline asset.
+     * Add twig asset.
      *
-     * @param string $type
-     * @param array  $callable
-     * @param array  $context
-     * @param array  $blocks
-     * @param string $position
+     * @param TwigAssetInterface $asset
      *
-     * @throws TwigRuntimeException When type is not javascript or stylesheet
+     * @return self
      */
-    public function addInlineAsset($type, $callable, array $context, array $blocks, $position = null)
+    public function addAsset(TwigAssetInterface $asset)
     {
-        if (!in_array($type, array('javascript', 'stylesheet'))) {
-            throw new TwigRuntimeException('The asset type must be only "javascript" or "stylesheet"');
+        $this->contents[$asset->getTagPositionName()][] = $asset;
+
+        return $this;
+    }
+
+    /**
+     * Create the asset position tag to included in the twig template.
+     *
+     * @param string      $category The twig asset category
+     * @param string      $type     The asset type
+     * @param string|null $position The name of tag position in the twig template
+     *
+     * @return string
+     *
+     * @throws InvalidTwigArgumentException When tag position is already defined in template
+     */
+    public function createAssetPosition($category, $type, $position = null)
+    {
+        $pos = trim($position, '_');
+        $pos = strlen($pos) > 0 ? '_' . $pos : '';
+        $tag = strtoupper($category . '_' . $type . $pos);
+
+        if (isset($this->tagPositions[$tag])) {
+            throw new InvalidTwigArgumentException($category, $type, $position);
         }
 
-        $this->contents[$this->formatTagPosition('inline', $type, $position)][] = array(
-            'callable' => $callable,
-            'context'  => $context,
-            'blocks'   => $blocks,
-        );
-    }
+        $this->tagPositions[$tag] = $this->formatTagPosition($category, $type, $position);
 
-    /**
-     * Tag the inline javascripts position.
-     *
-     * @param string|null $position The name of tag position in the twig template
-     *
-     * @return string
-     */
-    public function inlineJavascriptsPosition($position = null)
-    {
-        return $this->addTagPosition('inline', 'javascript', $position);
-    }
-
-    /**
-     * Tag the inline stylesheets position.
-     *
-     * @param string|null $position The name of tag position in the twig template
-     *
-     * @return string
-     */
-    public function inlineStylesheetsPosition($position = null)
-    {
-        return $this->addTagPosition('inline', 'stylesheet', $position);
+        return $this->getTagPosition($tag);
     }
 
     /**
@@ -156,52 +163,18 @@ class AssetExtension extends \Twig_Extension
         $content = '';
 
         if (isset($this->contents[$contentType])) {
-            if (0 === strpos($contentType, 'inline:')) {
-                $content = $this->doRenderInlineAssets($this->contents[$contentType]);
-            }
+            /* @var TwigAssetInterface|TwigContainerAwareInterface $asset */
+            foreach ($this->contents[$contentType] as $asset) {
+                if ($asset instanceof TwigContainerAwareInterface) {
+                    $asset->setContainer($this->container);
+                }
 
+                $content .= $asset->render();
+            }
             unset($this->contents[$contentType]);
         }
 
         return str_replace($this->getTagPosition($name), $content, $output);
-    }
-
-    /**
-     * Execution of render all global assets.
-     *
-     * @param array $assets The assets
-     *
-     * @return string
-     */
-    protected function doRenderInlineAssets(array $assets)
-    {
-        $output = '';
-
-        foreach ($assets as $asset) {
-            $output .= $this->renderInlineAsset($asset['callable'], $asset['context'], $asset['blocks']);
-        }
-
-        return $output;
-    }
-
-    /**
-     * Render inline asset.
-     *
-     * @param array $callable
-     * @param array $context
-     * @param array $blocks
-     *
-     * @return string
-     *
-     * @throws TwigRuntimeException When the callable argument is not an array with Twig_Tempate instance of the block
-     */
-    protected function renderInlineAsset(array $callable, array $context, array $blocks)
-    {
-        if (2 !== count($callable) || !$callable[0] instanceof \Twig_Template || !is_string($callable[1])) {
-            throw new TwigRuntimeException('The callable argument must be an array with Twig_Template instance and name function of the block to rendering');
-        }
-
-        return $callable[0]->renderBlock($callable[1], $context, $blocks);
     }
 
     /**
@@ -219,32 +192,6 @@ class AssetExtension extends \Twig_Extension
         list($name, $type, $position) = explode(':', $keys[0]);
 
         throw new InvalidTwigConfigurationException($name, $type, $position);
-    }
-
-    /**
-     * Add the tag position of asset.
-     *
-     * @param string      $name     The tag position name
-     * @param string      $type     The asset type
-     * @param string|null $position The name of tag position in the twig template
-     *
-     * @return string The tag position
-     *
-     * @throws InvalidTwigArgumentException When tag position is already defined in template
-     */
-    protected function addTagPosition($name, $type, $position = null)
-    {
-        $pos = trim($position, '_');
-        $pos = strlen($pos) > 0 ? '_' . $pos : '';
-        $tag = strtoupper($name . '_' . $type . $pos);
-
-        if (isset($this->tagPositions[$tag])) {
-            throw new InvalidTwigArgumentException($name, $type, $position);
-        }
-
-        $this->tagPositions[$tag] = $this->formatTagPosition($name, $type, $position);
-
-        return $this->getTagPosition($tag);
     }
 
     /**

@@ -14,29 +14,12 @@ namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 use Fxp\Component\RequireAsset\Twig\Node\InlineAssetReference;
 
 /**
- * Token Parser for the 'asset' tag.
+ * Abstract Token Parser for the 'inline_ASSET' tag.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class InlineAssetTokenParser extends \Twig_TokenParser
+abstract class AbstractInlineAssetTokenParser extends AbstractTokenParser
 {
-    /**
-     * @var string
-     */
-    protected $type;
-
-    protected $defaultAttributes = array('keep_html_tag' => false, 'position' => null);
-
-    /**
-     * Constructor.
-     *
-     * @param string $type The asset type
-     */
-    public function __construct($type)
-    {
-        $this->type = $type;
-    }
-
     /**
      * Parses a token and returns a node.
      *
@@ -53,14 +36,15 @@ class InlineAssetTokenParser extends \Twig_TokenParser
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
-        $options = $this->getTagOptions();
+        $attributes = $this->getTagAttributes();
+        $position = $this->getPosition($attributes);
 
         $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
-        $name = uniqid($this->type);
+        $name = uniqid($this->getTag());
         $body = $this->parser->subparse(array($this, 'decideBlockEnd'), true);
 
-        if (!$options['keep_html_tag']) {
+        if (!$attributes['keep_html_tag']) {
             $this->removeHtmlTag($body, $lineno);
         }
 
@@ -75,7 +59,7 @@ class InlineAssetTokenParser extends \Twig_TokenParser
         $this->parser->popBlockStack();
         $this->parser->popLocalScope();
 
-        return new InlineAssetReference($name, $this->type, $lineno);
+        return new InlineAssetReference($name, $this->getTwigAssetClass(), $lineno, $position);
     }
 
     /**
@@ -91,51 +75,13 @@ class InlineAssetTokenParser extends \Twig_TokenParser
     }
 
     /**
-     * Gets the tag name associated with this token parser.
-     *
-     * @return string The tag name
+     * {@inheritDoc}
      */
-    public function getTag()
+    protected function getDefaultAttributes()
     {
-        return 'inline_' . $this->type;
-    }
-
-    /**
-     * Gets the options of the twig tag.
-     *
-     * @return array The tag options
-     *
-     * @throws \Twig_Error_Syntax When the attribute does not exist
-     * @throws \Twig_Error_Syntax When the attribute is not followed by "=" operator
-     */
-    protected function getTagOptions()
-    {
-        $stream = $this->parser->getStream();
-        $options = $this->defaultAttributes;
-
-        if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
-            do {
-                $this->validateCurrentToken($stream, 'value');
-                $attr = $stream->getCurrent()->getValue();
-                $stream->next();
-
-                if (!in_array($attr, array_keys($options))) {
-                    throw new \Twig_Error_Syntax(sprintf('The attribute "%s" does not exist. Only attributes "%s" exists', $attr, implode('", ', array_keys($options))), $stream->getCurrent()->getLine(), $stream->getFilename());
-                }
-
-                if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
-                    throw new \Twig_Error_Syntax("The attribute must be followed by '=' operator", $stream->getCurrent()->getLine(), $stream->getFilename());
-                }
-
-                $stream->next();
-                $this->validateCurrentToken($stream, 'value');
-
-                $options[$attr] = $this->parser->getExpressionParser()->parseExpression()->getAttribute('value');
-
-            } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
-        }
-
-        return $options;
+        return array_merge(parent::getDefaultAttributes(), array(
+            'keep_html_tag' => false,
+        ));
     }
 
     /**
@@ -172,22 +118,6 @@ class InlineAssetTokenParser extends \Twig_TokenParser
             $positionBody = preg_replace($pattern, '', $positionBody);
 
             $body->getNode($position)->setAttribute('data', $positionBody);
-        }
-    }
-
-    /**
-     * Validates the current token.
-     *
-     * @param \Twig_TokenStream $stream The token stream
-     * @param string            $type   The token type name
-     *
-     * @throws \Twig_Error_Syntax When the token type is not valid
-     */
-    protected function validateCurrentToken(\Twig_TokenStream $stream, $type)
-    {
-        if (!$stream->test(\Twig_Token::NAME_TYPE)
-            && !$stream->test(\Twig_Token::STRING_TYPE)) {
-            throw new \Twig_Error_Syntax(sprintf('The %s name "%s" must be an STRING or CONSTANT', $type, $stream->getCurrent()->getValue()), $stream->getCurrent()->getLine(), $stream->getFilename());
         }
     }
 }

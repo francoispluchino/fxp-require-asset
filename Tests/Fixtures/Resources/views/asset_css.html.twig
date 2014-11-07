@@ -5,7 +5,7 @@
 {% block body %}
 {% set id = 'myblock' %}
 <div id="{{ id }}">Hello world</div>
-{% inline_stylesheet %}
+{% inline_style %}
 <style>
 body {
     background: #e0e0e0;
@@ -14,5 +14,5 @@ body {
     background: #ff0000;
 }
 </style>
-{% endinline_stylesheet %}
+{% endinline_style %}
 {% endblock %}

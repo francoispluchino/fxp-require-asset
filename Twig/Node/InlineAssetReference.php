@@ -21,14 +21,21 @@ class InlineAssetReference extends \Twig_Node
     /**
      * Constructor.
      *
-     * @param string $name
-     * @param string $type
-     * @param int    $lineno
-     * @param string $tag
+     * @param string      $name           The node name
+     * @param string      $twigAssetClass The twig asset class name
+     * @param int         $lineno         The lineno
+     * @param string|null $position       The position in template
+     * @param string      $tag            The twig tag
      */
-    public function __construct($name, $type, $lineno, $tag = null)
+    public function __construct($name, $twigAssetClass, $lineno, $position = null, $tag = null)
     {
-        parent::__construct(array(), array('name' => $name, 'type' => $type), $lineno, $tag);
+        $twigAttributes = array(
+            'name'           => $name,
+            'twigAssetClass' => $twigAssetClass,
+            'position'       => $position,
+        );
+
+        parent::__construct(array(), $twigAttributes, $lineno, $tag);
     }
 
     /**
@@ -38,9 +45,21 @@ class InlineAssetReference extends \Twig_Node
      */
     public function compile(\Twig_Compiler $compiler)
     {
+        $name = $this->getAttribute('name');
+        $twigAssetClass = $this->getAttribute('twigAssetClass');
+        $position = $this->getAttribute('position');
+
         $compiler
             ->addDebugInfo($this)
-            ->write(sprintf("\$this->env->getExtension('%s')->addInlineAsset('%s', array(\$this, '%s'), \$context, \$blocks);\n", 'fxp_require_asset', $this->getAttribute('type'), $this->getAttribute('name')))
+            ->write(sprintf('$this->env->getExtension(\'%s\')->addAsset(new \%s(', 'fxp_require_asset', $twigAssetClass))
+            ->raw(sprintf('array($this, \'%s\')', $name))
+            ->raw(', ')
+            ->raw('$context')
+            ->raw(', ')
+            ->raw('$blocks')
+            ->raw(', ')
+            ->repr($position)
+            ->raw('));' . PHP_EOL);
         ;
     }
 }
