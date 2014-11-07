@@ -29,7 +29,7 @@ class InvalidTwigArgumentException extends InvalidArgumentException implements T
      */
     public function __construct($tagType, $assetType, $position = null, $code = 0, \Exception $previous = null)
     {
-        $functionName = $tagType . ucfirst($assetType) . 'Position';
+        $functionName = $tagType . ucfirst($assetType) . 'sPosition';
         $positionName = empty($position) ? '' : '"' . $position . '"';
         $message = sprintf('The twig function "%s(%s)" is already defined in the current page', $functionName, $positionName);
 

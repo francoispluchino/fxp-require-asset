@@ -29,7 +29,7 @@ class InvalidTwigConfigurationException extends InvalidConfigurationException im
      */
     public function __construct($tagType, $assetType, $position = null, $code = 0, \Exception $previous = null)
     {
-        $functionName = $tagType . ucfirst($assetType) . 'Position';
+        $functionName = $tagType . ucfirst($assetType) . 'sPosition';
         $tagName = $tagType . '_' . $assetType;
         $positionName = empty($position) ? '' : '"' . $position . '"';
         $message = sprintf('The twig function "%s(%s)" must be defined in the template, because it is required by a twig tag "%s" (%s)', $functionName, $positionName, $tagName, $positionName);
