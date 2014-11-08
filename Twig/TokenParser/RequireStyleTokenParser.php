@@ -11,6 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
+use Fxp\Component\RequireAsset\Twig\Config\RequireStyleConfiguration;
+
 /**
  * Token Parser for the 'require_style' tag.
  *
@@ -29,16 +31,9 @@ class RequireStyleTokenParser extends AbstractRequireAssetTokenParser
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultAttributes()
+    protected function getAttributeNodeConfig()
     {
-        return array_merge(parent::getDefaultAttributes(), array(
-            'href'     => null,
-            'rel'      => 'stylesheet',
-            'media'    => null,
-            'type'     => null,
-            'hreflang' => null,
-            'sizes'    => null,
-        ));
+        return RequireStyleConfiguration::getNode();
     }
 
     /**

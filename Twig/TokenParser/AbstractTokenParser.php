@@ -11,6 +11,11 @@
 
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
+use Symfony\Component\Config\Definition\ArrayNode;
+use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
+use Symfony\Component\Config\Definition\NodeInterface;
+use Symfony\Component\Config\Definition\Processor;
+
 /**
  * Token Parser for the 'asset' tag.
  *
@@ -29,14 +34,16 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
     protected function getTagAttributes()
     {
         $stream = $this->parser->getStream();
-        $attributes = $this->getDefaultAttributes();
+        $attributes = array();
+        $lineno = $stream->getCurrent()->getLine();
+        $filename = $stream->getFilename();
 
         if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
             do {
-                $this->validateCurrentToken($stream, 'value');
+                $this->validateCurrentToken($stream, 'attribute');
                 $attr = $stream->getCurrent()->getValue();
                 $stream->next();
-                $this->validateAttribute($stream, $attributes, $attr);
+                $this->validateAttribute($stream, $attr);
                 $stream->next();
                 $this->validateCurrentToken($stream, 'value');
 
@@ -45,7 +52,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
             } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
         }
 
-        return $attributes;
+        return $this->formatAttributes($attributes, $lineno, $filename);
     }
 
     /**
@@ -67,33 +74,82 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
     /**
      * Validate the current attribute.
      *
-     * @param \Twig_TokenStream $stream     The token stream
-     * @param array             $attributes The options
-     * @param string            $attr       The name of attributes
+     * @param \Twig_TokenStream $stream The token stream
+     * @param string            $attr   The attribute name
      *
-     * @throws \Twig_Error_Syntax When the attribute does not exist
+     * @throws \Twig_Error_Syntax When the attribute is not following by "="
      */
-    protected function validateAttribute(\Twig_TokenStream $stream, array $attributes, $attr)
+    protected function validateAttribute(\Twig_TokenStream $stream, $attr)
     {
-        if (!in_array($attr, array_keys($attributes))) {
-            throw new \Twig_Error_Syntax(sprintf('The attribute "%s" does not exist for the "%s" tag. Only attributes "%s" exists', $attr, $this->getTag(), implode('", ', array_keys($attributes))), $stream->getCurrent()->getLine(), $stream->getFilename());
-        }
-
         if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
             throw new \Twig_Error_Syntax(sprintf('The attribute "%s" must be followed by "=" operator', $attr), $stream->getCurrent()->getLine(), $stream->getFilename());
         }
     }
 
     /**
-     * Get the default twig tag attributes.
+     * Validate and format all attributes.
      *
-     * @return array
+     * @param array  $attributes
+     * @param int    $lineno
+     * @param string $filename
+     *
+     * @return array The formatted attributes
+     *
+     * @throws \Twig_Error_Syntax When the attribute does not exist
      */
-    protected function getDefaultAttributes()
+    protected function formatAttributes(array $attributes, $lineno, $filename)
     {
-        return array(
-            'position' => null,
-        );
+        try {
+            $processor = new Processor();
+
+            return $processor->process($this->getAttributeNodeConfig(), array($attributes));
+
+        } catch (\Exception $e) {
+            throw new \Twig_Error_Syntax($this->getFormattedMessageException($e), $lineno, $filename);
+        }
+    }
+
+    /**
+     * Get the formatted message excpetion of the attributes validation and formatting.
+     *
+     * @param \Exception $exception The exception
+     *
+     * @return string The exception message
+     */
+    protected function getFormattedMessageException(\Exception $exception)
+    {
+        if ($exception instanceof InvalidTypeException) {
+            $attribute = $this->getExceptionAttribute($exception->getMessage());
+            $attribute = substr($attribute, strrpos($attribute, '.') + 1);
+            $message = sprintf('Invalid type for attribute "%s"', $attribute);
+            $message .= substr($exception->getMessage(), strrpos($exception->getMessage(), '". ') + 1);
+
+            return $message;
+        }
+
+        $attribute = $this->getExceptionAttribute($exception->getMessage());
+        $message = sprintf('The attribute "%s" does not exist for the "%s" tag', $attribute, $this->getTag());
+        $validNode = $this->getAttributeNodeConfig();
+
+        if ($validNode instanceof ArrayNode) {
+            $message .= sprintf('. Only attributes "%s" are available', implode('", ', array_keys($validNode->getChildren())));
+        }
+
+        return $message;
+    }
+
+    /**
+     * Get the attribute name in the message of config exception.
+     *
+     * @param string $message The message exception
+     *
+     * @return string The attribute name
+     */
+    protected function getExceptionAttribute($message)
+    {
+        $message = substr($message, strpos($message, '"') + 1);
+
+        return substr($message, 0, strpos($message, '"'));
     }
 
     /**
@@ -118,4 +174,9 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
      * @return string
      */
     abstract protected function getTwigAssetClass();
+
+    /**
+     * @return NodeInterface
+     */
+    abstract protected function getAttributeNodeConfig();
 }

@@ -145,7 +145,7 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
         $output = '<' . $this->getHtmlTag();
 
         foreach ($attributes as $attr => $value) {
-            if (null !== $value) {
+            if ($this->isValidValue($value)) {
                 $output .= ' ' . $attr . '="' . $value . '"';
             }
         }
@@ -157,6 +157,18 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
         }
 
         return $output;
+    }
+
+    /**
+     * Check if the value of attribute can be added in the render.
+     *
+     * @param mixed $value The attribute value
+     *
+     * @return bool
+     */
+    protected function isValidValue($value)
+    {
+        return !empty($value) && is_scalar($value) && !is_bool($value);
     }
 
     /**

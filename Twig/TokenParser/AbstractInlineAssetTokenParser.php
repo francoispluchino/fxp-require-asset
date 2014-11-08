@@ -11,6 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
+use Fxp\Component\RequireAsset\Twig\Config\InlineAssetConfiguration;
 use Fxp\Component\RequireAsset\Twig\Node\InlineAssetReference;
 
 /**
@@ -77,11 +78,9 @@ abstract class AbstractInlineAssetTokenParser extends AbstractTokenParser
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultAttributes()
+    protected function getAttributeNodeConfig()
     {
-        return array_merge(parent::getDefaultAttributes(), array(
-            'keep_html_tag' => false,
-        ));
+        return InlineAssetConfiguration::getNode();
     }
 
     /**
