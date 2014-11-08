@@ -15,7 +15,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 /**
- * This is the class that validates and merges configuration for pattern.
+ * This is the class that validates and merges configuration.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */

@@ -12,7 +12,7 @@
 namespace Fxp\Component\RequireAsset\Config;
 
 /**
- * This is the class that validates and merges configuration for pattern.
+ * This is the class that validates and merges configuration for package.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
