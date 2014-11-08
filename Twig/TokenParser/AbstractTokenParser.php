@@ -76,11 +76,11 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
     protected function validateAttribute(\Twig_TokenStream $stream, array $attributes, $attr)
     {
         if (!in_array($attr, array_keys($attributes))) {
-            throw new \Twig_Error_Syntax(sprintf('The attribute "%s" does not exist. Only attributes "%s" exists', $attr, implode('", ', array_keys($attributes))), $stream->getCurrent()->getLine(), $stream->getFilename());
+            throw new \Twig_Error_Syntax(sprintf('The attribute "%s" does not exist for the "%s" tag. Only attributes "%s" exists', $attr, $this->getTag(), implode('", ', array_keys($attributes))), $stream->getCurrent()->getLine(), $stream->getFilename());
         }
 
         if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
-            throw new \Twig_Error_Syntax("The attribute must be followed by '=' operator", $stream->getCurrent()->getLine(), $stream->getFilename());
+            throw new \Twig_Error_Syntax(sprintf('The attribute "%s" must be followed by "=" operator', $attr), $stream->getCurrent()->getLine(), $stream->getFilename());
         }
     }
 
