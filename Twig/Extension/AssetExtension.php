@@ -13,6 +13,8 @@ namespace Fxp\Component\RequireAsset\Twig\Extension;
 
 use Fxp\Component\RequireAsset\Exception\InvalidTwigArgumentException;
 use Fxp\Component\RequireAsset\Exception\InvalidTwigConfigurationException;
+use Fxp\Component\RequireAsset\Twig\Asset\Conditional\ConditionalRenderInterface;
+use Fxp\Component\RequireAsset\Twig\Asset\Conditional\UniqueRequireAsset;
 use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
 use Fxp\Component\RequireAsset\Twig\Asset\TwigContainerAwareInterface;
 use Fxp\Component\RequireAsset\Twig\TokenParser\InlineScriptTokenParser;
@@ -138,9 +140,10 @@ class AssetExtension extends \Twig_Extension
     public function renderAssets()
     {
         $output = ob_get_contents();
+        $conditional = new UniqueRequireAsset();
 
         foreach ($this->tagPositions as $name => $contentType) {
-            $output = $this->doRenderAssets($name, $contentType, $output);
+            $output = $this->doRenderAssets($name, $contentType, $output, $conditional);
         }
 
         ob_clean();
@@ -152,13 +155,14 @@ class AssetExtension extends \Twig_Extension
     /**
      * Do render the assets by type.
      *
-     * @param string $name
-     * @param string $contentType
-     * @param string $output
+     * @param string                     $name
+     * @param string                     $contentType
+     * @param string                     $output
+     * @param ConditionalRenderInterface $conditional The conditional render instance
      *
      * @return string The output with replaced asset tag position
      */
-    protected function doRenderAssets($name, $contentType, $output)
+    protected function doRenderAssets($name, $contentType, $output, ConditionalRenderInterface $conditional)
     {
         $content = '';
 
@@ -169,7 +173,7 @@ class AssetExtension extends \Twig_Extension
                     $asset->setContainer($this->container);
                 }
 
-                $content .= $asset->render();
+                $content .= $asset->render($conditional);
             }
             unset($this->contents[$contentType]);
         }

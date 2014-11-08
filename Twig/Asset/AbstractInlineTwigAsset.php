@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Twig\Asset;
 
 use Fxp\Component\RequireAsset\Exception\TwigRuntimeException;
+use Fxp\Component\RequireAsset\Twig\Asset\Conditional\ConditionalRenderInterface;
 
 /**
  * Abstract config of twig inline asset.
@@ -62,7 +63,7 @@ abstract class AbstractInlineTwigAsset extends AbstractTwigAsset
     /**
      * {@inheritDoc}
      */
-    public function render()
+    public function render(ConditionalRenderInterface $conditional = null)
     {
         $callable = $this->callable;
 

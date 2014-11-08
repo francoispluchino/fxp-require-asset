@@ -14,6 +14,8 @@ namespace Fxp\Component\RequireAsset\Twig\Asset;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\Util\VarUtils;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
+use Fxp\Component\RequireAsset\Twig\Asset\Conditional\ConditionalRenderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Templating\Helper\CoreAssetsHelper;
 
@@ -22,12 +24,17 @@ use Symfony\Component\Templating\Helper\CoreAssetsHelper;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements TwigContainerAwareInterface
+abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements TwigRequireAssetInterface
 {
     /**
      * @var string
      */
     protected $asset;
+
+    /**
+     * @var string
+     */
+    protected $asseticName;
 
     /**
      * @var array
@@ -55,6 +62,7 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
         parent::__construct($position);
 
         $this->asset = $asset;
+        $this->asseticName = Utils::formatName($asset);
         $this->attributes = $attributes;
     }
 
@@ -80,15 +88,37 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
     /**
      * {@inheritDoc}
      */
-    public function render()
+    public function getAsseticName()
     {
-        $assetName = Utils::formatName($this->getAsset());
+        return $this->asseticName;
+    }
 
-        if (!$this->manager->has($assetName)) {
+    /**
+     * {@inheritDoc}
+     */
+    public function render(ConditionalRenderInterface $conditional = null)
+    {
+        if (null === $conditional) {
+            throw new InvalidArgumentException(sprintf('The conditional render is required for the %s asset "%s"', $this->getCategory(), $this->getAsset()));
+        }
+
+        return $conditional->isValid($this)
+            ? $this->preRender()
+            : '';
+    }
+
+    /**
+     * Prepare the render and do the render.
+     *
+     * @return string The output render
+     */
+    protected function preRender()
+    {
+        if (!$this->manager->has($this->getAsseticName())) {
             return '';
         }
 
-        $assetFile = $this->manager->get($assetName);
+        $assetFile = $this->manager->get($this->getAsseticName());
         $target = str_replace('_controller/', '', $assetFile->getTargetPath());
         $target = VarUtils::resolve($target, $assetFile->getVars(), $assetFile->getValues());
         $target = $this->helper->getUrl($target);

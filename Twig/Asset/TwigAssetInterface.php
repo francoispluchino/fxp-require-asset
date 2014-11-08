@@ -11,6 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Asset;
 
+use Fxp\Component\RequireAsset\Twig\Asset\Conditional\ConditionalRenderInterface;
+
 /**
  * Interface of twig asset configuration.
  *
@@ -49,7 +51,9 @@ interface TwigAssetInterface
     /**
      * Render the asset.
      *
+     * @param ConditionalRenderInterface $conditional The conditional render instance
+     *
      * @return string
      */
-    public function render();
+    public function render(ConditionalRenderInterface $conditional = null);
 }
