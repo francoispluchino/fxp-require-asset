@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Exception;
+namespace Fxp\Component\RequireAsset\Exception\Twig;
 
 /**
- * TwigRuntimeException for the Require asset.
+ * Twig RequireAssetException for the Require asset.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class TwigRuntimeException extends \Twig_Error_Runtime implements TwigExceptionInterface
+class RequireAssetException extends RuntimeException
 {
 }

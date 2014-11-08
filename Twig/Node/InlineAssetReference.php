@@ -53,12 +53,11 @@ class InlineAssetReference extends \Twig_Node
             ->addDebugInfo($this)
             ->write(sprintf('$this->env->getExtension(\'%s\')->addAsset(new \%s(', 'fxp_require_asset', $twigAssetClass))
             ->raw(sprintf('array($this, \'%s\')', $name))
-            ->raw(', ')
-            ->raw('$context')
-            ->raw(', ')
-            ->raw('$blocks')
-            ->raw(', ')
-            ->repr($position)
+            ->raw(', ')->raw('$context')
+            ->raw(', ')->raw('$blocks')
+            ->raw(', ')->repr($position)
+            ->raw(', ')->repr($this->getLine())
+            ->raw(', ')->repr($compiler->getFilename())
             ->raw('));' . PHP_EOL);
         ;
     }

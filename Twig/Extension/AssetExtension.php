@@ -11,8 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
-use Fxp\Component\RequireAsset\Exception\InvalidTwigArgumentException;
-use Fxp\Component\RequireAsset\Exception\InvalidTwigConfigurationException;
+use Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistAssetPositionException;
+use Fxp\Component\RequireAsset\Exception\Twig\MissingAssetPositionException;
 use Fxp\Component\RequireAsset\Twig\Asset\Conditional\ConditionalRenderInterface;
 use Fxp\Component\RequireAsset\Twig\Asset\Conditional\UniqueRequireAsset;
 use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
@@ -111,20 +111,22 @@ class AssetExtension extends \Twig_Extension
      *
      * @param string      $category The twig asset category
      * @param string      $type     The asset type
+     * @param int         $lineno   The lineno
+     * @param string|null $filename The twig filename
      * @param string|null $position The name of tag position in the twig template
      *
      * @return string
      *
-     * @throws InvalidTwigArgumentException When tag position is already defined in template
+     * @throws AlreadyExistAssetPositionException When tag position is already defined in template
      */
-    public function createAssetPosition($category, $type, $position = null)
+    public function createAssetPosition($category, $type, $lineno = -1, $filename = null, $position = null)
     {
         $pos = trim($position, '_');
         $pos = strlen($pos) > 0 ? '_' . $pos : '';
         $tag = strtoupper($category . '_' . $type . $pos);
 
         if (isset($this->tagPositions[$tag])) {
-            throw new InvalidTwigArgumentException($category, $type, $position);
+            throw new AlreadyExistAssetPositionException($category, $type, $position, $lineno, $filename);
         }
 
         $this->tagPositions[$tag] = $this->formatTagPosition($category, $type, $position);
@@ -184,18 +186,15 @@ class AssetExtension extends \Twig_Extension
     /**
      * Validate the renderAssets method.
      *
-     * @throws InvalidTwigConfigurationException When the contents assets are not injected in the template
+     * @throws MissingAssetPositionException When the contents assets are not injected in the template
      */
     protected function validateRenderAssets()
     {
-        if (empty($this->contents)) {
-            return;
+        if (!empty($this->contents)) {
+            $keys = array_keys($this->contents);
+
+            throw new MissingAssetPositionException($this->contents[$keys[0]][0]);
         }
-
-        $keys = array_keys($this->contents);
-        list($name, $type, $position) = explode(':', $keys[0]);
-
-        throw new InvalidTwigConfigurationException($name, $type, $position);
     }
 
     /**

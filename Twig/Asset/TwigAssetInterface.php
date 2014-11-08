@@ -49,6 +49,20 @@ interface TwigAssetInterface
     public function getTagPositionName();
 
     /**
+     * Get the lineno.
+     *
+     * @return int
+     */
+    public function getLineno();
+
+    /**
+     * Get the twig filename.
+     *
+     * @return string|null
+     */
+    public function getFilename();
+
+    /**
      * Render the asset.
      *
      * @param ConditionalRenderInterface $conditional The conditional render instance

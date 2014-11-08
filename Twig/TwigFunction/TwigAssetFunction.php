@@ -30,9 +30,10 @@ class TwigAssetFunction extends \Twig_SimpleFunction
         parent::__construct($name, $callable, $options);
 
         $this->options = array_merge($this->options, array(
-            'is_safe'  => array('html'),
-            'category' => null,
-            'type'     => null,
+            'node_class' => 'Fxp\Component\RequireAsset\Twig\Node\AssetFunctionPosition',
+            'is_safe'    => array('html'),
+            'category'   => null,
+            'type'       => null,
         ), $options);
     }
 

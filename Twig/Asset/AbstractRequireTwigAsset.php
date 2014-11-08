@@ -14,7 +14,8 @@ namespace Fxp\Component\RequireAsset\Twig\Asset;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\Util\VarUtils;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
-use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
+use Fxp\Component\RequireAsset\Exception\Twig\AssetRenderException;
+use Fxp\Component\RequireAsset\Exception\Twig\RequireAssetException;
 use Fxp\Component\RequireAsset\Twig\Asset\Conditional\ConditionalRenderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Templating\Helper\CoreAssetsHelper;
@@ -56,10 +57,12 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
      * @param string      $asset      The asset source path
      * @param array       $attributes The HTML attributes
      * @param string|null $position   The position in the template
+     * @param int         $lineno     The twig lineno
+     * @param string|null $filename   The twig filename
      */
-    public function __construct($asset, array $attributes = array(), $position = null)
+    public function __construct($asset, array $attributes = array(), $position = null, $lineno = -1, $filename = null)
     {
-        parent::__construct($position);
+        parent::__construct($position, $lineno, $filename);
 
         $this->asset = $asset;
         $this->asseticName = Utils::formatName($asset);
@@ -99,7 +102,7 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
     public function render(ConditionalRenderInterface $conditional = null)
     {
         if (null === $conditional) {
-            throw new InvalidArgumentException(sprintf('The conditional render is required for the %s asset "%s"', $this->getCategory(), $this->getAsset()));
+            throw new AssetRenderException(sprintf('The conditional render is required for the %s asset "%s"', $this->getCategory(), $this->getAsset()), $this->getLineno(), $this->getFilename());
         }
 
         return $conditional->isValid($this)
@@ -111,11 +114,13 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
      * Prepare the render and do the render.
      *
      * @return string The output render
+     *
+     * @throws RequireAssetException When the asset is not managed by the Assetic Manager
      */
     protected function preRender()
     {
         if (!$this->manager->has($this->getAsseticName())) {
-            return '';
+            throw new RequireAssetException(sprintf('The %s %s "%s" is not managed by the Assetic Manager', $this->getCategory(), $this->getType(), $this->getAsset()), $this->getLineno(), $this->getFilename());
         }
 
         $assetFile = $this->manager->get($this->getAsseticName());

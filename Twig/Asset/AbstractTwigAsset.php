@@ -24,13 +24,27 @@ abstract class AbstractTwigAsset implements TwigAssetInterface
     protected $position;
 
     /**
+     * @var int
+     */
+    protected $lineno;
+
+    /**
+     * @var string|null
+     */
+    protected $filename;
+
+    /**
      * Constructor.
      *
      * @param string|null $position The positon in template
+     * @param int         $lineno   The twig lineno
+     * @param string|null $filename The twig filename
      */
-    public function __construct($position = null)
+    public function __construct($position = null, $lineno = -1, $filename = null)
     {
         $this->position = $position;
+        $this->lineno = $lineno;
+        $this->filename = $filename;
     }
 
     /**
@@ -42,12 +56,26 @@ abstract class AbstractTwigAsset implements TwigAssetInterface
     }
 
     /**
-     * Get the tag position name of asset.
-     *
-     * @return string The formatted tag position
+     * {@inheritDoc}
      */
     public function getTagPositionName()
     {
         return strtolower($this->getCategory() . ':' . $this->getType() . ':' . $this->getPosition());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLineno()
+    {
+        return $this->lineno;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFilename()
+    {
+        return $this->filename;
     }
 }

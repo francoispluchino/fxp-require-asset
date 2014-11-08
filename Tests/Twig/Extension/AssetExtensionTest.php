@@ -101,7 +101,7 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testTagPositionIsAlreadyIncluded()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidTwigArgumentException');
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistAssetPositionException');
 
         try {
             $ext = new AssetExtension();
@@ -123,7 +123,7 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
 
         $ext->addAsset($asset);
 
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidTwigConfigurationException');
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\MissingAssetPositionException');
         $ext->renderAssets();
     }
 }

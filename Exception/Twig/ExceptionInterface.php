@@ -9,13 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Exception;
+namespace Fxp\Component\RequireAsset\Exception\Twig;
+
+use Fxp\Component\RequireAsset\Exception\ExceptionInterface as BaseExceptionInterface;
 
 /**
- * Base TwigExceptionInterface for the Require asset.
+ * Base Twig ExceptionInterface for the Require asset.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-interface TwigExceptionInterface extends ExceptionInterface
+interface ExceptionInterface extends BaseExceptionInterface
 {
 }

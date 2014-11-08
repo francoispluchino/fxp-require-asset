@@ -80,10 +80,10 @@ class RequireAssetReference extends \Twig_Node
             $compiler
                 ->write(sprintf('->addAsset(new \%s(', $twigAssetClass))
                 ->repr($asset)
-                ->raw(', ')
-                ->repr($attributes)
-                ->raw(', ')
-                ->repr($position)
+                ->raw(', ')->repr($attributes)
+                ->raw(', ')->repr($position)
+                ->raw(', ')->repr($this->getLine())
+                ->raw(', ')->repr($compiler->getFilename())
                 ->raw('))' . PHP_EOL)
             ;
         }
