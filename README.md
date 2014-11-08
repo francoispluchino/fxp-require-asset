@@ -26,11 +26,22 @@ right place in the template, while removing duplicates.
 - Compiling the final list of asset in cache for increase performance
 - Assetic filters:
   - `requirecssrewrite`: for rewrite the url of another require asset in css file
-- Twig extension for:
-  - require a script and inject the link in the good place defined in the twig base template
-  - require a style and inject the link in the good place defined in the twig base template
-  - automatically move all inline script in the same place defined in the twig base template
-  - automatically move all inline style in the same place defined in the twig base template
+- Twig features:
+  - possibility to defined the asset in one or more template Twig:
+    - reference to the source file of the asset in the Twig template, and not the target path of the asset defined in the Assetic Manager
+    - one only link will be added in the final Twig template (no duplicates)
+    - the link will be placed in the right place in the final Twig template (defined in the twig base template)
+    - the generated link will corresponding to the link defined by the rewrite rules of assets (the asset target path in Assetic Manager)
+  - tags:
+    - `require_script`: for require a script and inject the link in the good place defined in the twig base template
+    - `require_style`: for require a style and inject the link in the good place defined in the twig base template
+    - `inline_script`: for automatically move all inline script in the same place defined in the twig base template
+    - `inline_style`: for automatically move all inline style in the same place defined in the twig base template
+  - functions:
+    - `requireScriptsPosition`: to position the require scripts in the Twig template
+    - `requireStylesPosition`: to position the require styles in the Twig template
+    - `inlineScriptsPosition`: to position the inline scripts in the Twig template
+    - `inlineStylesPosition`: to position the inline styles in the Twig template
 
 Documentation
 -------------
