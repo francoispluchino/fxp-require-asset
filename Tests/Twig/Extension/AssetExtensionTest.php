@@ -11,16 +11,115 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
-use Fxp\Component\RequireAsset\Twig\Asset\InlineScriptTwigAsset;
+use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 
 /**
- * Inline Asset Extension Tests.
+ * Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
 class AssetExtensionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return array
+     */
+    public function getTwigTags()
+    {
+        return array(
+            array('inline_script'),
+            array('inline_style'),
+        );
+    }
+
+    public function testTagPositionIsAlreadyIncluded()
+    {
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistAssetPositionException');
+
+        $ext = new AssetExtension();
+        $ext->createAssetPosition('inline', 'script');
+        $ext->createAssetPosition('inline', 'script');
+    }
+
+    public function testContentIsNotRenderingBecauseTheAssetPositionIsMissing()
+    {
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\MissingAssetPositionException');
+
+        $ext = new AssetExtension();
+        $asset = $this->getMock('Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface');
+        $asset
+            ->expects($this->any())
+            ->method('getTagPositionName')
+            ->will($this->returnValue('category:type:position'));
+
+        /* @var TwigAssetInterface $asset */
+        $ext->addAsset($asset);
+        $ext->renderAssets();
+    }
+
+    /**
+     * @dataProvider getTwigTags
+     * @param string $tag
+     */
+    public function testTwigTags($tag)
+    {
+        $tpl = $this->getTemplate($tag . '.html.twig');
+        $content = $tpl->render(array());
+        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/' . $tag . '.valid.template');
+        $valid = str_replace("\r", "", $valid);
+
+        $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
+    }
+
+    /**
+     * @dataProvider getTwigTags
+     * @param string $tag
+     */
+    public function testInlineEmptyBody($tag)
+    {
+        $this->getTemplate($tag . '_empty_body.html.twig');
+    }
+
+    /**
+     * @dataProvider getTwigTags
+     * @param string $tag
+     */
+    public function testInvalidAttributeType($tag)
+    {
+        $this->setExpectedException('Twig_Error_Syntax');
+        $this->getTemplate($tag . '_invalid_attr_type.html.twig');
+    }
+
+    /**
+     * @dataProvider getTwigTags
+     * @param string $tag
+     */
+    public function testInvalidAttributeName($tag)
+    {
+        $this->setExpectedException('Twig_Error_Syntax');
+        $this->getTemplate($tag . '_invalid_attr_name.html.twig');
+    }
+
+    /**
+     * @dataProvider getTwigTags
+     * @param string $tag
+     */
+    public function testInvalidAttributeOperator($tag)
+    {
+        $this->setExpectedException('Twig_Error_Syntax');
+        $this->getTemplate($tag . '_invalid_attr_operator.html.twig');
+    }
+
+    /**
+     * @dataProvider getTwigTags
+     * @param string $tag
+     */
+    public function testInvalidAttributeValue($tag)
+    {
+        $this->setExpectedException('Twig_Error_Syntax');
+        $this->getTemplate($tag . '_invalid_attr_value.html.twig');
+    }
+
     /**
      * @param $file
      *
@@ -33,97 +132,5 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
         $twig->addExtension(new AssetExtension());
 
         return $twig->loadTemplate($file);
-    }
-
-    public function testAssetStyles()
-    {
-        $tpl = $this->getTemplate('inline_style.html.twig');
-        $content = $tpl->render(array());
-        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/inline_style.valid.template');
-        $valid = str_replace("\r", "", $valid);
-
-        $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
-    }
-
-    public function testAssetScripts()
-    {
-        $tpl = $this->getTemplate('inline_script.html.twig');
-        $content = $tpl->render(array());
-        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/inline_script.valid.template');
-        $valid = str_replace("\r", "", $valid);
-
-        $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
-    }
-
-    public function testWrongAssetCallable()
-    {
-        $ext = new AssetExtension();
-        $asset = new InlineScriptTwigAsset(array(), array(), array());
-
-        $ext->addAsset($asset);
-
-        ob_get_contents();
-        echo $ext->createAssetPosition('inline', 'script');
-        ob_clean();
-
-        $this->setExpectedException('Twig_Error_Runtime');
-        $ext->renderAssets();
-    }
-
-    public function testEmptyBody()
-    {
-        $this->getTemplate('inline_style_empty_body.html.twig');
-    }
-
-    public function testInvalidNameType()
-    {
-        $this->setExpectedException('Twig_Error_Syntax');
-        $this->getTemplate('inline_style_invalid_name_type.html.twig');
-    }
-
-    public function testInvalidAttributeName()
-    {
-        $this->setExpectedException('Twig_Error_Syntax');
-        $this->getTemplate('inline_style_invalid_attr_name.html.twig');
-    }
-
-    public function testInvalidOperator()
-    {
-        $this->setExpectedException('Twig_Error_Syntax');
-        $this->getTemplate('inline_style_invalid_operator.html.twig');
-    }
-
-    public function testInvalidValue()
-    {
-        $this->setExpectedException('Twig_Error_Syntax');
-        $this->getTemplate('inline_style_invalid_value.html.twig');
-    }
-
-    public function testTagPositionIsAlreadyIncluded()
-    {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistAssetPositionException');
-
-        try {
-            $ext = new AssetExtension();
-            ob_get_contents();
-            echo $ext->createAssetPosition('inline', 'script');
-            echo $ext->createAssetPosition('inline', 'script');
-            ob_clean();
-
-        } catch (\Exception $e) {
-            ob_clean();
-            throw $e;
-        }
-    }
-
-    public function testMissingAssetContentsAreNotRendered()
-    {
-        $ext = new AssetExtension();
-        $asset = new InlineScriptTwigAsset(array(), array(), array());
-
-        $ext->addAsset($asset);
-
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\MissingAssetPositionException');
-        $ext->renderAssets();
     }
 }
