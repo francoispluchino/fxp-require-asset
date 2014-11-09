@@ -85,7 +85,7 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidTypeAttributeName($tag)
     {
-        $this->setExpectedExceptionRegExp('Twig_Error_Syntax', '/^The attribute name "(\w+)" must be an CONSTANT or STRING/');
+        $this->setExpectedExceptionRegExp('Twig_Error_Syntax', '/^The attribute name "(\w+)" must be an NAME, STRING/');
         $this->getTemplate($tag, 'invalid_attr_type.html.twig');
     }
 
@@ -95,7 +95,7 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidTypeAttributeValue($tag)
     {
-        $this->setExpectedExceptionRegExp('Twig_Error_Syntax', '/^The attribute value "([w\/]+)" must be an CONSTANT, NUMBER or STRING/');
+        $this->setExpectedExceptionRegExp('Twig_Error_Syntax', '/^The attribute value "([w\/]+)" must be an NAME, STRING, NUMBER/');
         $this->getTemplate($tag, 'invalid_attr_value.html.twig');
     }
 

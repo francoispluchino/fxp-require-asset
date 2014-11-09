@@ -40,12 +40,12 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
 
         if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
             do {
-                $this->validateCurrentTypeAttributeName($stream);
+                $this->validateAttributeType($stream, 'name', array('NAME', 'STRING'));
                 $attr = $stream->getCurrent()->getValue();
                 $stream->next();
-                $this->validateAttribute($stream, $attr);
+                $this->validateAttributeOperator($stream, $attr);
                 $stream->next();
-                $this->validateCurrentTypeAttributeValue($stream);
+                $this->validateAttributeType($stream, 'value', array('NAME', 'STRING', 'NUMBER'));
 
                 $attributes[$attr] = $this->parser->getExpressionParser()->parseExpression()->getAttribute('value');
 
@@ -56,59 +56,40 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
     }
 
     /**
-     * Validate the current token type of attribute name.
+     * Validate the current attribute type.
      *
      * @param \Twig_TokenStream $stream
+     * @param string            $type
+     * @param array             $allowed
      *
-     * @throws \Twig_Error_Syntax When the type of attribute name is not a STRING or CONSTANT
+     * @throws \Twig_Error_Syntax When the attribute type is not allowed
      */
-    protected function validateCurrentTypeAttributeName(\Twig_TokenStream $stream)
+    protected function validateAttributeType(\Twig_TokenStream $stream, $type, array $allowed)
     {
-        $condition = !$stream->test(\Twig_Token::NAME_TYPE)
-            && !$stream->test(\Twig_Token::STRING_TYPE);
-        $this->doValidateCurrentTokenType($stream, $condition, 'The attribute name "%s" must be an CONSTANT or STRING');
-    }
+        $valid = false;
 
-    /**
-     * Validate the current token type of attribute value.
-     *
-     * @param \Twig_TokenStream $stream
-     *
-     * @throws \Twig_Error_Syntax When the type of attribute value is not a STRING, NUMBER or CONSTANT
-     */
-    protected function validateCurrentTypeAttributeValue(\Twig_TokenStream $stream)
-    {
-        $condition = !$stream->test(\Twig_Token::NAME_TYPE)
-            && !$stream->test(\Twig_Token::STRING_TYPE)
-            && !$stream->test(\Twig_Token::NUMBER_TYPE);
-        $this->doValidateCurrentTokenType($stream, $condition, 'The attribute value "%s" must be an CONSTANT, NUMBER or STRING');
-    }
+        foreach ($allowed as $aType) {
+            if ($stream->test(constant('\Twig_Token::' . $aType . '_TYPE'))) {
+                $valid = true;
+                break;
+            }
+        }
 
-    /**
-     * Do validate the current token.
-     *
-     * @param \Twig_TokenStream $stream    The token stream
-     * @param bool              $condition The condition
-     * @param string            $message   The message exception
-     *
-     * @throws \Twig_Error_Syntax When the token type is not valid
-     */
-    protected function doValidateCurrentTokenType(\Twig_TokenStream $stream, $condition, $message)
-    {
-        if ($condition) {
-            throw new \Twig_Error_Syntax(sprintf($message, $stream->getCurrent()->getValue()), $stream->getCurrent()->getLine(), $stream->getFilename());
+        if (!$valid) {
+            $message = 'The attribute %s "%s" must be an %s';
+            throw new \Twig_Error_Syntax(sprintf($message, $type, $stream->getCurrent()->getValue(), implode(', ', $allowed)), $stream->getCurrent()->getLine(), $stream->getFilename());
         }
     }
 
     /**
-     * Validate the current attribute.
+     * Validate the current attribute operator.
      *
      * @param \Twig_TokenStream $stream The token stream
      * @param string            $attr   The attribute name
      *
      * @throws \Twig_Error_Syntax When the attribute is not following by "="
      */
-    protected function validateAttribute(\Twig_TokenStream $stream, $attr)
+    protected function validateAttributeOperator(\Twig_TokenStream $stream, $attr)
     {
         if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
             throw new \Twig_Error_Syntax(sprintf('The attribute "%s" must be followed by "=" operator', $attr), $stream->getCurrent()->getLine(), $stream->getFilename());
