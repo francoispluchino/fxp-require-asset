@@ -1,0 +1,9 @@
+<html>
+<head>
+<link href="/assets/acemodemo/css/asset.css" rel="stylesheet" />
+</head>
+<body>
+<div id="myblock">Hello world</div>
+</body>
+</html>
+

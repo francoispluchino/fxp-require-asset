@@ -1,0 +1,7 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+{% set id = 'myblock' %}
+<div id="{{ id }}">Hello world</div>
+{% require_script '@acme_demo/js/asset.js' async=true %}
+{% endblock %}
