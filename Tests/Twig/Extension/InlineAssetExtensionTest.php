@@ -11,6 +11,10 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
+use Fxp\Component\RequireAsset\Twig\Asset\InlineScriptTwigAsset;
+use Fxp\Component\RequireAsset\Twig\Asset\InlineStyleTwigAsset;
+use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
+
 /**
  * Inline Asset Extension Tests.
  *
@@ -34,5 +38,26 @@ class InlineAssetExtensionTest extends AbstractAssetExtensionTest
     public function testTwigTags($tag)
     {
         $this->doValidTagTest($tag);
+    }
+
+    public function getInlineTwigAsset()
+    {
+        return array(
+            array(new InlineScriptTwigAsset(array(), array(), array())),
+            array(new InlineStyleTwigAsset(array(), array(), array())),
+        );
+    }
+
+    /**
+     * @dataProvider getInlineTwigAsset
+     * @param TwigAssetInterface $asset
+     */
+    public function testWrongInlineScriptCallable(TwigAssetInterface $asset)
+    {
+        $this->setExpectedException('Twig_Error_Runtime');
+
+        $this->ext->addAsset($asset);
+        $this->ext->createAssetPosition($asset->getCategory(), $asset->getType());
+        $this->ext->renderAssets();
     }
 }
