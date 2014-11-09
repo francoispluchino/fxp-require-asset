@@ -208,7 +208,7 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
         $this->doValidateContainer(null === $container, 'The twig tag "%s_%s" require the container service');
 
         foreach ($services as $service) {
-            $this->doValidateContainer(null !== $container && !$container->has($service), 'The twig tag "%s_%s" require the service "%s"');
+            $this->doValidateContainer(null !== $container && !$container->has($service), 'The twig tag "%s_%s" require the service "' . $service . '"');
         }
 
         return $container;
