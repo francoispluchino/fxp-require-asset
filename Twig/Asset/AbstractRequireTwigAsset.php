@@ -196,7 +196,7 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
     /**
      * Validate the container service.
      *
-     * @param array              $services  The required service ids
+     * @param string[]           $services  The required service ids
      * @param ContainerInterface $container The container service
      *
      * @return ContainerInterface
