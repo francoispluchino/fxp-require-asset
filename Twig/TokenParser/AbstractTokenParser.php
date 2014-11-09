@@ -40,12 +40,12 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
 
         if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
             do {
-                $this->validateCurrentToken($stream, 'attribute');
+                $this->validateCurrentTypeAttributeName($stream);
                 $attr = $stream->getCurrent()->getValue();
                 $stream->next();
                 $this->validateAttribute($stream, $attr);
                 $stream->next();
-                $this->validateCurrentToken($stream, 'value');
+                $this->validateCurrentTypeAttributeValue($stream);
 
                 $attributes[$attr] = $this->parser->getExpressionParser()->parseExpression()->getAttribute('value');
 
@@ -56,18 +56,47 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
     }
 
     /**
-     * Validates the current token.
+     * Validate the current token type of attribute name.
      *
-     * @param \Twig_TokenStream $stream The token stream
-     * @param string            $type   The token type name
+     * @param \Twig_TokenStream $stream
+     *
+     * @throws \Twig_Error_Syntax When the type of attribute name is not a STRING or CONSTANT
+     */
+    protected function validateCurrentTypeAttributeName(\Twig_TokenStream $stream)
+    {
+        $condition = !$stream->test(\Twig_Token::NAME_TYPE)
+            && !$stream->test(\Twig_Token::STRING_TYPE);
+        $this->doValidateCurrentTokenType($stream, $condition, 'The attribute name "%s" must be an CONSTANT or STRING');
+    }
+
+    /**
+     * Validate the current token type of attribute value.
+     *
+     * @param \Twig_TokenStream $stream
+     *
+     * @throws \Twig_Error_Syntax When the type of attribute value is not a STRING, NUMBER or CONSTANT
+     */
+    protected function validateCurrentTypeAttributeValue(\Twig_TokenStream $stream)
+    {
+        $condition = !$stream->test(\Twig_Token::NAME_TYPE)
+            && !$stream->test(\Twig_Token::STRING_TYPE)
+            && !$stream->test(\Twig_Token::NUMBER_TYPE);
+        $this->doValidateCurrentTokenType($stream, $condition, 'The attribute value "%s" must be an CONSTANT, NUMBER or STRING');
+    }
+
+    /**
+     * Do validate the current token.
+     *
+     * @param \Twig_TokenStream $stream    The token stream
+     * @param bool              $condition The condition
+     * @param string            $message   The message exception
      *
      * @throws \Twig_Error_Syntax When the token type is not valid
      */
-    protected function validateCurrentToken(\Twig_TokenStream $stream, $type)
+    protected function doValidateCurrentTokenType(\Twig_TokenStream $stream, $condition, $message)
     {
-        if (!$stream->test(\Twig_Token::NAME_TYPE)
-            && !$stream->test(\Twig_Token::STRING_TYPE)) {
-            throw new \Twig_Error_Syntax(sprintf('The %s name "%s" must be an STRING or CONSTANT', $type, $stream->getCurrent()->getValue()), $stream->getCurrent()->getLine(), $stream->getFilename());
+        if ($condition) {
+            throw new \Twig_Error_Syntax(sprintf($message, $stream->getCurrent()->getValue()), $stream->getCurrent()->getLine(), $stream->getFilename());
         }
     }
 
@@ -132,7 +161,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
         $validNode = $this->getAttributeNodeConfig();
 
         if ($validNode instanceof ArrayNode) {
-            $message .= sprintf('. Only attributes "%s" are available', implode('", ', array_keys($validNode->getChildren())));
+            $message .= sprintf('. Only attributes "%s" are available', implode('", "', array_keys($validNode->getChildren())));
         }
 
         return $message;
