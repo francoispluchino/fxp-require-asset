@@ -21,6 +21,21 @@ use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var AssetExtension
+     */
+    protected $ext;
+
+    protected function setUp()
+    {
+        $this->ext = new AssetExtension();
+    }
+
+    protected function tearDown()
+    {
+        $this->ext = null;
+    }
+
+    /**
      * @return array
      */
     public function getInlineTwigTags()
@@ -63,7 +78,7 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../Fixtures/Resources/views/' . $tag);
         $twig = new \Twig_Environment($loader, array('debug' => true, 'cache' => false));
-        $twig->addExtension(new AssetExtension());
+        $twig->addExtension($this->ext);
 
         return $twig->loadTemplate($file);
     }

@@ -12,7 +12,6 @@
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
-use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 
 /**
  * Common Asset Extension Tests.
@@ -25,16 +24,14 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
     {
         $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistAssetPositionException');
 
-        $ext = new AssetExtension();
-        $ext->createAssetPosition('category', 'type');
-        $ext->createAssetPosition('category', 'type');
+        $this->ext->createAssetPosition('category', 'type');
+        $this->ext->createAssetPosition('category', 'type');
     }
 
     public function testContentIsNotRenderingBecauseTheAssetPositionIsMissing()
     {
         $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\MissingAssetPositionException');
 
-        $ext = new AssetExtension();
         $asset = $this->getMock('Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface');
         $asset
             ->expects($this->any())
@@ -42,8 +39,8 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
             ->will($this->returnValue('category:type:position'));
 
         /* @var TwigAssetInterface $asset */
-        $ext->addAsset($asset);
-        $ext->renderAssets();
+        $this->ext->addAsset($asset);
+        $this->ext->renderAssets();
     }
 
     /**
