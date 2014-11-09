@@ -15,45 +15,12 @@ use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 
 /**
- * Asset Extension Tests.
+ * Common Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class AssetExtensionTest extends \PHPUnit_Framework_TestCase
+class CommonAssetExtensionTest extends AbstractAssetExtensionTest
 {
-    /**
-     * @return array
-     */
-    public function getInlineTwigTags()
-    {
-        return array(
-            array('inline_script'),
-            array('inline_style'),
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getRequireTwigTags()
-    {
-        return array(
-            array('require_script'),
-            array('require_style'),
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function getTwigTags()
-    {
-        return array_merge(
-            $this->getInlineTwigTags(),
-            $this->getRequireTwigTags()
-        );
-    }
-
     public function testTagPositionIsAlreadyIncluded()
     {
         $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistAssetPositionException');
@@ -127,43 +94,5 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Twig_Error_Syntax', 'must be followed by "=" operator');
         $this->getTemplate($tag, 'invalid_attr_operator.html.twig');
-    }
-
-    /**
-     * @dataProvider getInlineTwigTags
-     * @param string $tag
-     */
-    public function testInlineEmptyBody($tag)
-    {
-        $this->getTemplate($tag, 'empty_body.html.twig');
-    }
-
-    /**
-     * @dataProvider getInlineTwigTags
-     * @param string $tag
-     */
-    public function testTwigTags($tag)
-    {
-        $tpl = $this->getTemplate($tag, 'test.html.twig');
-        $content = $tpl->render(array());
-        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/' . $tag . '/test.valid.template');
-        $valid = str_replace("\r", "", $valid);
-
-        $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
-    }
-
-    /**
-     * @param string $tag
-     * @param string $file
-     *
-     * @return \Twig_TemplateInterface
-     */
-    protected function getTemplate($tag, $file)
-    {
-        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../Fixtures/Resources/views/' . $tag);
-        $twig = new \Twig_Environment($loader, array('debug' => true, 'cache' => false));
-        $twig->addExtension(new AssetExtension());
-
-        return $twig->loadTemplate($file);
     }
 }
