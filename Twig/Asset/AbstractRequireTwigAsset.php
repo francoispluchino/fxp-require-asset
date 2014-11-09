@@ -85,7 +85,7 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
         $managerId = 'assetic.asset_manager';
         $helperId = 'templating.helper.assets';
 
-        $this->validateContainer(array($managerId, $helperId), $container);
+        $container = $this->validateContainer(array($managerId, $helperId), $container);
         $this->manager = $container->get($managerId);
         $this->helper = $container->get($helperId);
     }
@@ -199,18 +199,33 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
      * @param array              $services  The required service ids
      * @param ContainerInterface $container The container service
      *
+     * @return ContainerInterface
+     *
      * @throws RequireAssetException
      */
     protected function validateContainer(array $services, ContainerInterface $container = null)
     {
-        if (null === $container) {
-            throw new RequireAssetException(sprintf('The twig tag "%s_%s" has require the container service', $this->getCategory(), $this->getType()), $this->getLineno(), $this->getFilename());
-        }
+        $this->doValidateContainer(null === $container, 'The twig tag "%s_%s" has require the container service');
 
         foreach ($services as $service) {
-            if (!$container->has($service)) {
-                throw new RequireAssetException(sprintf('The twig tag "%s_%s" has require the service "%s"', $this->getCategory(), $this->getType(), $service), $this->getLineno(), $this->getFilename());
-            }
+            $this->doValidateContainer(!$container->has($service), 'The twig tag "%s_%s" has require the service "%s"');
+        }
+
+        return $container;
+    }
+
+    /**
+     * Do validate the container service.
+     *
+     * @param bool   $condition The test
+     * @param string $message   The message excepetion
+     *
+     * @throws RequireAssetException
+     */
+    protected function doValidateContainer($condition, $message)
+    {
+        if ($condition) {
+            throw new RequireAssetException(sprintf($message, $this->getCategory(), $this->getType()), $this->getLineno(), $this->getFilename());
         }
     }
 
