@@ -37,8 +37,8 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistAssetPositionException');
 
         $ext = new AssetExtension();
-        $ext->createAssetPosition('inline', 'script');
-        $ext->createAssetPosition('inline', 'script');
+        $ext->createAssetPosition('category', 'type');
+        $ext->createAssetPosition('category', 'type');
     }
 
     public function testContentIsNotRenderingBecauseTheAssetPositionIsMissing()
