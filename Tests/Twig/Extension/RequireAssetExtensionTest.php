@@ -12,7 +12,11 @@
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Assetic\Asset\AssetInterface;
+use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Twig\Asset\RequireScriptTwigAsset;
+use Fxp\Component\RequireAsset\Twig\Asset\RequireStyleTwigAsset;
+use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -82,41 +86,59 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
         $container = $this->getContainer();
         $manager = $container->get('assetic.asset_manager');
 
-        $scriptAsset = $this->getMock('Assetic\Asset\AssetInterface');
-        $scriptAsset
-            ->expects($this->any())
-            ->method('getTargetPath')
-            ->will($this->returnValue('acemodemo/js/asset.js'));
-        $scriptAsset
-            ->expects($this->any())
-            ->method('getVars')
-            ->will($this->returnValue(array()));
-        $scriptAsset
-            ->expects($this->any())
-            ->method('getValues')
-            ->will($this->returnValue(array()));
-
-        $styleAsset = $this->getMock('Assetic\Asset\AssetInterface');
-        $styleAsset
-            ->expects($this->any())
-            ->method('getTargetPath')
-            ->will($this->returnValue('acemodemo/css/asset.css'));
-        $styleAsset
-            ->expects($this->any())
-            ->method('getVars')
-            ->will($this->returnValue(array()));
-        $styleAsset
-            ->expects($this->any())
-            ->method('getValues')
-            ->will($this->returnValue(array()));
-
-        /* @var AssetInterface $scriptAsset */
-        $manager->set(Utils::formatName('@acme_demo/js/asset.js'), $scriptAsset);
-        /* @var AssetInterface $styleAsset */
-        $manager->set(Utils::formatName('@acme_demo/css/asset.css'), $styleAsset);
+        $this->addAsset($manager, '@acme_demo/js/asset.js', 'acemodemo/js/asset.js');
+        $this->addAsset($manager, '@acme_demo/css/asset.css', 'acemodemo/css/asset.css');
 
         $this->ext->container = $container;
         $this->doValidTagTest($tag);
+    }
+
+    /**
+     * @dataProvider getRequireTwigTags
+     * @param string $tag
+     */
+    public function testTwigTagsWithMultiAsset($tag)
+    {
+        $container = $this->getContainer();
+        $manager = $container->get('assetic.asset_manager');
+
+        $this->addAsset($manager, '@acme_demo/js/asset.js', 'acemodemo/js/asset.js');
+        $this->addAsset($manager, '@acme_demo/js/asset2.js', 'acemodemo/js/asset2.js');
+        $this->addAsset($manager, '@acme_demo/css/asset.css', 'acemodemo/css/asset.css');
+        $this->addAsset($manager, '@acme_demo/css/asset2.css', 'acemodemo/css/asset2.css');
+
+        $this->ext->container = $container;
+        $this->doValidTagTest($tag, 'test_multi_asset');
+    }
+
+    /**
+     * @dataProvider getRequireTwigTags
+     * @param string $tag
+     */
+    public function testTwigTagsWithoutAssetInTag($tag)
+    {
+        $this->setExpectedException('\Twig_Error_Syntax', sprintf('The twig tag "%s" require a lest one asset', $tag));
+        $this->doValidTagTest($tag, 'test_without_asset');
+    }
+
+    public function getRequireTwigAsset()
+    {
+        return array(
+            array(new RequireScriptTwigAsset('asset_source_path')),
+            array(new RequireStyleTwigAsset('asset_source_path')),
+        );
+    }
+
+    /**
+     * @dataProvider getRequireTwigAsset
+     * @param TwigAssetInterface $asset
+     */
+    public function testWrongInlineScriptCallable(TwigAssetInterface $asset)
+    {
+        $msg = sprintf('The conditional render is required for the %s asset "%s"', $asset->getCategory(), 'asset_source_path');
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AssetRenderException', $msg);
+
+        $asset->render(null);
     }
 
     /**
@@ -172,5 +194,32 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
         }
 
         return $container;
+    }
+
+    /**
+     * Add require asset in assetic manager.
+     *
+     * @param LazyAssetManager $manager
+     * @param string           $source
+     * @param string           $target
+     */
+    protected function addAsset(LazyAssetManager $manager, $source, $target)
+    {
+        $asset = $this->getMock('Assetic\Asset\AssetInterface');
+        $asset
+            ->expects($this->any())
+            ->method('getTargetPath')
+            ->will($this->returnValue($target));
+        $asset
+            ->expects($this->any())
+            ->method('getVars')
+            ->will($this->returnValue(array()));
+        $asset
+            ->expects($this->any())
+            ->method('getValues')
+            ->will($this->returnValue(array()));
+
+        /* @var AssetInterface $asset */
+        $manager->set(Utils::formatName($source), $asset);
     }
 }

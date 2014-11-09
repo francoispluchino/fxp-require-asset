@@ -85,12 +85,13 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $tag
+     * @param string $testFile
      */
-    public function doValidTagTest($tag)
+    public function doValidTagTest($tag, $testFile = 'test')
     {
-        $tpl = $this->getTemplate($tag, 'test.html.twig');
+        $tpl = $this->getTemplate($tag, $testFile . '.html.twig');
         $content = $tpl->render(array());
-        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/' . $tag . '/test.valid.template');
+        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/' . $tag . '/' . $testFile . '.valid.template');
         $valid = str_replace("\r", "", $valid);
 
         $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
