@@ -60,7 +60,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
      *
      * @param \Twig_TokenStream $stream
      * @param string            $type
-     * @param array             $allowed
+     * @param string[]          $allowed
      *
      * @throws \Twig_Error_Syntax When the attribute type is not allowed
      */
