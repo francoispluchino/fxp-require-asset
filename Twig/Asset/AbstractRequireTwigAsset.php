@@ -84,6 +84,8 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
     {
         $managerId = 'assetic.asset_manager';
         $helperId = 'templating.helper.assets';
+
+        $this->validateContainer(array($managerId, $helperId), $container);
         $this->manager = $container->get($managerId);
         $this->helper = $container->get($helperId);
     }
@@ -189,6 +191,27 @@ abstract class AbstractRequireTwigAsset extends AbstractTwigAsset implements Twi
     protected function getAsset()
     {
         return $this->asset;
+    }
+
+    /**
+     * Validate the container service.
+     *
+     * @param array              $services  The required service ids
+     * @param ContainerInterface $container The container service
+     *
+     * @throws RequireAssetException
+     */
+    protected function validateContainer(array $services, ContainerInterface $container = null)
+    {
+        if (null === $container) {
+            throw new RequireAssetException(sprintf('The twig tag "%s_%s" has require the container service', $this->getCategory(), $this->getType()), $this->getLineno(), $this->getFilename());
+        }
+
+        foreach ($services as $service) {
+            if (!$container->has($service)) {
+                throw new RequireAssetException(sprintf('The twig tag "%s_%s" has require the service "%s"', $this->getCategory(), $this->getType(), $service), $this->getLineno(), $this->getFilename());
+            }
+        }
     }
 
     /**
