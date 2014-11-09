@@ -83,10 +83,30 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getTwigTags
      * @param string $tag
      */
-    public function testInvalidAttributeType($tag)
+    public function testInvalidTypeAttributeName($tag)
     {
-        $this->setExpectedException('Twig_Error_Syntax');
+        $this->setExpectedExceptionRegExp('Twig_Error_Syntax', '/^The attribute name "(\w+)" must be an CONSTANT or STRING/');
         $this->getTemplate($tag . '_invalid_attr_type.html.twig');
+    }
+
+    /**
+     * @dataProvider getTwigTags
+     * @param string $tag
+     */
+    public function testInvalidTypeAttributeValue($tag)
+    {
+        $this->setExpectedExceptionRegExp('Twig_Error_Syntax', '/^The attribute value "([w\/]+)" must be an CONSTANT, NUMBER or STRING/');
+        $this->getTemplate($tag . '_invalid_attr_value.html.twig');
+    }
+
+    /**
+     * @dataProvider getTwigTags
+     * @param string $tag
+     */
+    public function testInvalidConfigTypeAttributeValue($tag)
+    {
+        $this->setExpectedExceptionRegExp('Twig_Error_Syntax', '/^Invalid type for attribute "(\w+)". Expected /');
+        $this->getTemplate($tag . '_invalid_attr_value_config.html.twig');
     }
 
     /**
@@ -95,7 +115,7 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidAttributeName($tag)
     {
-        $this->setExpectedException('Twig_Error_Syntax');
+        $this->setExpectedExceptionRegExp('Twig_Error_Syntax', '/^The attribute "(\w+)" does not exist for the "(\w+)" tag. Only attributes "([A-Za-z0-9_, "]+)" are available/');
         $this->getTemplate($tag . '_invalid_attr_name.html.twig');
     }
 
@@ -105,32 +125,8 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidAttributeOperator($tag)
     {
-        $this->setExpectedException('Twig_Error_Syntax');
+        $this->setExpectedException('Twig_Error_Syntax', 'must be followed by "=" operator');
         $this->getTemplate($tag . '_invalid_attr_operator.html.twig');
-    }
-
-    /**
-     * @dataProvider getTwigTags
-     * @param string $tag
-     */
-    public function testInvalidAttributeValue($tag)
-    {
-        $this->setExpectedException('Twig_Error_Syntax');
-        $this->getTemplate($tag . '_invalid_attr_value.html.twig');
-    }
-
-    /**
-     * @param $file
-     *
-     * @return \Twig_TemplateInterface
-     */
-    protected function getTemplate($file)
-    {
-        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../Fixtures/Resources/views');
-        $twig = new \Twig_Environment($loader, array('debug' => true, 'cache' => false));
-        $twig->addExtension(new AssetExtension());
-
-        return $twig->loadTemplate($file);
     }
 
     /**
@@ -145,7 +141,6 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getInlineTwigTags
      * @param string $tag
-     * @group fxp
      */
     public function testTwigTags($tag)
     {
@@ -155,5 +150,19 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
         $valid = str_replace("\r", "", $valid);
 
         $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
+    }
+
+    /**
+     * @param $file
+     *
+     * @return \Twig_TemplateInterface
+     */
+    protected function getTemplate($file)
+    {
+        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../Fixtures/Resources/views');
+        $twig = new \Twig_Environment($loader, array('debug' => true, 'cache' => false));
+        $twig->addExtension(new AssetExtension());
+
+        return $twig->loadTemplate($file);
     }
 }
