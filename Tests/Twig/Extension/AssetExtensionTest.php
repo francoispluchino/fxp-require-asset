@@ -24,11 +24,33 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getTwigTags()
+    public function getInlineTwigTags()
     {
         return array(
             array('inline_script'),
             array('inline_style'),
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequireTwigTags()
+    {
+        return array(
+            array('require_script'),
+            array('require_style'),
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getTwigTags()
+    {
+        return array_merge(
+            $this->getInlineTwigTags(),
+            $this->getRequireTwigTags()
         );
     }
 
@@ -55,29 +77,6 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
         /* @var TwigAssetInterface $asset */
         $ext->addAsset($asset);
         $ext->renderAssets();
-    }
-
-    /**
-     * @dataProvider getTwigTags
-     * @param string $tag
-     */
-    public function testTwigTags($tag)
-    {
-        $tpl = $this->getTemplate($tag . '.html.twig');
-        $content = $tpl->render(array());
-        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/' . $tag . '.valid.template');
-        $valid = str_replace("\r", "", $valid);
-
-        $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
-    }
-
-    /**
-     * @dataProvider getTwigTags
-     * @param string $tag
-     */
-    public function testInlineEmptyBody($tag)
-    {
-        $this->getTemplate($tag . '_empty_body.html.twig');
     }
 
     /**
@@ -132,5 +131,29 @@ class AssetExtensionTest extends \PHPUnit_Framework_TestCase
         $twig->addExtension(new AssetExtension());
 
         return $twig->loadTemplate($file);
+    }
+
+    /**
+     * @dataProvider getInlineTwigTags
+     * @param string $tag
+     */
+    public function testInlineEmptyBody($tag)
+    {
+        $this->getTemplate($tag . '_empty_body.html.twig');
+    }
+
+    /**
+     * @dataProvider getInlineTwigTags
+     * @param string $tag
+     * @group fxp
+     */
+    public function testTwigTags($tag)
+    {
+        $tpl = $this->getTemplate($tag . '.html.twig');
+        $content = $tpl->render(array());
+        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/' . $tag . '.valid.template');
+        $valid = str_replace("\r", "", $valid);
+
+        $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
     }
 }
