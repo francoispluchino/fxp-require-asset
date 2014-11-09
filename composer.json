@@ -19,7 +19,9 @@
         "kriswallsmith/assetic": "~1.2"
     },
     "require-dev": {
-        "twig/twig": "~1.12"
+        "twig/twig": "~1.12",
+        "symfony/dependency-injection": "~2.4",
+        "symfony/templating": "~2.4"
     },
     "suggest": {
         "fxp/composer-asset-plugin": "For manage NPM/Bower dependencies with Composer"
