@@ -19,7 +19,7 @@ namespace Fxp\Component\RequireAsset\Twig\Asset;
 class RequireStyleTwigAsset extends AbstractRequireTwigAsset
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getType()
     {
@@ -27,25 +27,25 @@ class RequireStyleTwigAsset extends AbstractRequireTwigAsset
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    protected function shortEndTag()
+    public function shortEndTag()
     {
         return true;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    protected function getHtmlTag()
+    public function getHtmlTag()
     {
         return 'link';
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    protected function getLinkAttribute()
+    public function getLinkAttribute()
     {
         return 'href';
     }

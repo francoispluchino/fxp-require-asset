@@ -12,15 +12,9 @@
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Assetic\Asset\AssetInterface;
-use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Twig\Asset\RequireScriptTwigAsset;
 use Fxp\Component\RequireAsset\Twig\Asset\RequireStyleTwigAsset;
-use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Require Asset Extension Tests.
@@ -46,26 +40,6 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
     }
 
     /**
-     * @dataProvider getContainerServiceConfig
-     *
-     * @param string $tag
-     * @param bool   $useContainer
-     * @param bool   $useAssetic
-     * @param bool   $useHelper
-     * @param string $message
-     */
-    public function testInvalidContainerServce($tag, $useContainer, $useAssetic, $useHelper, $message)
-    {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\RequireAssetException', sprintf($message, $tag));
-
-        if ($useContainer) {
-            $this->ext->container = $this->getContainer($useAssetic, $useHelper);
-        }
-
-        $this->doValidTagTest($tag);
-    }
-
-    /**
      * @dataProvider getRequireTwigTags
      * @param string $tag
      */
@@ -73,7 +47,6 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
     {
         $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\RequireAssetException', 'is not managed by the Assetic Manager');
 
-        $this->ext->container = $this->getContainer();
         $this->doValidTagTest($tag);
     }
 
@@ -83,13 +56,9 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
      */
     public function testTwigTags($tag)
     {
-        $container = $this->getContainer();
-        $manager = $container->get('assetic.asset_manager');
+        $this->addAsset('@acme_demo/js/asset.js', '/assets/acemodemo/js/asset.js');
+        $this->addAsset('@acme_demo/css/asset.css', '/assets/acemodemo/css/asset.css');
 
-        $this->addAsset($manager, '@acme_demo/js/asset.js', 'acemodemo/js/asset.js');
-        $this->addAsset($manager, '@acme_demo/css/asset.css', 'acemodemo/css/asset.css');
-
-        $this->ext->container = $container;
         $this->doValidTagTest($tag);
     }
 
@@ -99,15 +68,11 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
      */
     public function testTwigTagsWithMultiAsset($tag)
     {
-        $container = $this->getContainer();
-        $manager = $container->get('assetic.asset_manager');
+        $this->addAsset('@acme_demo/js/asset.js', '/assets/acemodemo/js/asset.js');
+        $this->addAsset('@acme_demo/js/asset2.js', '/assets/acemodemo/js/asset2.js');
+        $this->addAsset('@acme_demo/css/asset.css', '/assets/acemodemo/css/asset.css');
+        $this->addAsset('@acme_demo/css/asset2.css', '/assets/acemodemo/css/asset2.css');
 
-        $this->addAsset($manager, '@acme_demo/js/asset.js', 'acemodemo/js/asset.js');
-        $this->addAsset($manager, '@acme_demo/js/asset2.js', 'acemodemo/js/asset2.js');
-        $this->addAsset($manager, '@acme_demo/css/asset.css', 'acemodemo/css/asset.css');
-        $this->addAsset($manager, '@acme_demo/css/asset2.css', 'acemodemo/css/asset2.css');
-
-        $this->ext->container = $container;
         $this->doValidTagTest($tag, 'test_multi_asset');
     }
 
@@ -130,80 +95,12 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
     }
 
     /**
-     * @dataProvider getRequireTwigAsset
-     * @param TwigAssetInterface $asset
-     */
-    public function testWrongInlineScriptCallable(TwigAssetInterface $asset)
-    {
-        $msg = sprintf('The conditional render is required for the %s asset "%s"', $asset->getCategory(), 'asset_source_path');
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AssetRenderException', $msg);
-
-        $asset->render(null);
-    }
-
-    /**
-     * Gets the container.
-     *
-     * @param bool $useAssetic
-     * @param bool $useHelper
-     *
-     * @return ContainerBuilder
-     */
-    protected function getContainer($useAssetic = true, $useHelper = true)
-    {
-        $container = new ContainerBuilder(new ParameterBag(array(
-            'kernel.debug'       => false,
-            'kernel.environment' => 'test',
-            'kernel.name'        => 'kernel',
-            'kernel.root_dir'    => __DIR__,
-            'kernel.charset'     => 'UTF-8',
-            'assetic.debug'      => false,
-        )));
-
-        if ($useAssetic) {
-            $asseticFactory = new Definition('Assetic\Factory\AssetFactory');
-            $asseticFactory->addArgument('web');
-            $container->setDefinition('assetic.asset_factory', $asseticFactory);
-
-            $asseticManager = new Definition('Assetic\Factory\LazyAssetManager');
-            $asseticManager->addArgument(new Reference('assetic.asset_factory'));
-            $container->setDefinition('assetic.asset_manager', $asseticManager);
-        }
-
-        if ($useHelper) {
-            $package = new Definition($this->getMockClass('Symfony\Component\Templating\Asset\PackageInterface'));
-            $container->setDefinition('templating.asset.default_package', $package);
-            $helper = new Definition('Symfony\Component\Templating\Helper\CoreAssetsHelper');
-            $helper->addArgument(new Reference('templating.asset.default_package'));
-            $container->setDefinition('templating.helper.assets', $helper);
-        }
-
-        $container->getCompilerPassConfig()->setOptimizationPasses(array());
-        $container->getCompilerPassConfig()->setRemovingPasses(array());
-        $container->compile();
-
-        if ($useHelper) {
-            $packageId = 'templating.asset.default_package';
-            $packageDefault = $container->get($packageId);
-            $packageDefault
-                ->expects($this->any())
-                ->method('getUrl')
-                ->will($this->returnCallback(function ($value) {
-                    return '/assets/' . $value;
-                }));
-        }
-
-        return $container;
-    }
-
-    /**
      * Add require asset in assetic manager.
      *
-     * @param LazyAssetManager $manager
-     * @param string           $source
-     * @param string           $target
+     * @param string $source
+     * @param string $target
      */
-    protected function addAsset(LazyAssetManager $manager, $source, $target)
+    protected function addAsset($source, $target)
     {
         $asset = $this->getMock('Assetic\Asset\AssetInterface');
         $asset
@@ -220,6 +117,6 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
             ->will($this->returnValue(array()));
 
         /* @var AssetInterface $asset */
-        $manager->set(Utils::formatName($source), $asset);
+        $this->manager->set(Utils::formatName($source), $asset);
     }
 }

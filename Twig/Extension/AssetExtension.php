@@ -12,17 +12,15 @@
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
 use Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistAssetPositionException;
+use Fxp\Component\RequireAsset\Exception\Twig\AssetRendererException;
 use Fxp\Component\RequireAsset\Exception\Twig\MissingAssetPositionException;
-use Fxp\Component\RequireAsset\Twig\Asset\Conditional\ConditionalRenderInterface;
-use Fxp\Component\RequireAsset\Twig\Asset\Conditional\UniqueRequireAsset;
 use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
-use Fxp\Component\RequireAsset\Twig\Asset\TwigContainerAwareInterface;
+use Fxp\Component\RequireAsset\Twig\Renderer\AssetRendererInterface;
 use Fxp\Component\RequireAsset\Twig\TokenParser\InlineScriptTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\InlineStyleTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\RequireScriptTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\RequireStyleTokenParser;
 use Fxp\Component\RequireAsset\Twig\TwigFunction\TwigAssetFunction;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * AssetExtension extends Twig with global assets rendering capabilities.
@@ -32,9 +30,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AssetExtension extends \Twig_Extension
 {
     /**
-     * @var ContainerInterface
+     * @var AssetRendererInterface[]
      */
-    public $container;
+    protected $renderers;
 
     /**
      * @var array
@@ -51,6 +49,7 @@ class AssetExtension extends \Twig_Extension
      */
     public function __construct()
     {
+        $this->renderers = array();
         $this->contents = array();
         $this->tagPositions = array();
     }
@@ -90,6 +89,48 @@ class AssetExtension extends \Twig_Extension
     public function getName()
     {
         return 'fxp_require_asset';
+    }
+
+    /**
+     * Add twig asset renderer.
+     *
+     * @param AssetRendererInterface $renderer The renderer
+     *
+     * @return self
+     */
+    public function addRenderer(AssetRendererInterface $renderer)
+    {
+        $this->renderers[] = $renderer;
+
+        return $this;
+    }
+
+    /**
+     * Set the twig asset renderers.
+     *
+     * @param AssetRendererInterface[] $renderers
+     *
+     * @return self
+     */
+    public function setRenderers(array $renderers)
+    {
+        $this->renderers = array();
+
+        foreach ($renderers as $renderer) {
+            $this->addRenderer($renderer);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the twig asset renderers.
+     *
+     * @return AssetRendererInterface[]
+     */
+    public function getRenderers()
+    {
+        return $this->renderers;
     }
 
     /**
@@ -142,45 +183,63 @@ class AssetExtension extends \Twig_Extension
     public function renderAssets()
     {
         $output = ob_get_contents();
-        $conditional = new UniqueRequireAsset();
 
         foreach ($this->tagPositions as $name => $contentType) {
-            $output = $this->doRenderAssets($name, $contentType, $output, $conditional);
+            $output = $this->doRenderAssets($name, $contentType, $output);
         }
 
         ob_clean();
         echo $output;
 
         $this->validateRenderAssets();
+        $this->resetRenderers();
     }
 
     /**
      * Do render the assets by type.
      *
-     * @param string                     $name
-     * @param string                     $contentType
-     * @param string                     $output
-     * @param ConditionalRenderInterface $conditional The conditional render instance
+     * @param string $name
+     * @param string $contentType
+     * @param string $output
      *
      * @return string The output with replaced asset tag position
      */
-    protected function doRenderAssets($name, $contentType, $output, ConditionalRenderInterface $conditional)
+    protected function doRenderAssets($name, $contentType, $output)
     {
         $content = '';
 
         if (isset($this->contents[$contentType])) {
-            /* @var TwigAssetInterface|TwigContainerAwareInterface $asset */
+            $renderer = null;
             foreach ($this->contents[$contentType] as $asset) {
-                if ($asset instanceof TwigContainerAwareInterface) {
-                    $asset->setContainer($this->container);
+                if (null === $renderer) {
+                    $renderer = $this->findRenderer($asset);
                 }
-
-                $content .= $asset->render($conditional);
+                $content .= $renderer->render($asset);
             }
             unset($this->contents[$contentType]);
         }
 
         return str_replace($this->getTagPosition($name), $content, $output);
+    }
+
+    /**
+     * Find the asset renderer.
+     *
+     * @param TwigAssetInterface $asset
+     *
+     * @return AssetRendererInterface
+     *
+     * @throws AssetRendererException When no asset renderer has been found
+     */
+    protected function findRenderer(TwigAssetInterface $asset)
+    {
+        foreach ($this->getRenderers() as $renderer) {
+            if ($renderer->validate($asset)) {
+                return $renderer;
+            }
+        }
+
+        throw new AssetRendererException(sprintf('No twig asset renderer has been found for the "%s_%s" asset', $asset->getCategory(), $asset->getType()), $asset->getLineno(), $asset->getFilename());
     }
 
     /**
@@ -194,6 +253,18 @@ class AssetExtension extends \Twig_Extension
             $keys = array_keys($this->contents);
 
             throw new MissingAssetPositionException($this->contents[$keys[0]][0]);
+        }
+    }
+
+    /**
+     * Reset all renderers.
+     *
+     * @return void
+     */
+    protected function resetRenderers()
+    {
+        foreach ($this->getRenderers() as $renderer) {
+            $renderer->reset();
         }
     }
 

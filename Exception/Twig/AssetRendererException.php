@@ -9,15 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Twig\Asset;
-
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+namespace Fxp\Component\RequireAsset\Exception\Twig;
 
 /**
- * Interface of twig asset configuration with container service.
+ * Twig AssetRendererException for the asset renderer.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-interface TwigContainerAwareInterface extends TwigAssetInterface, ContainerAwareInterface
+class AssetRendererException extends RuntimeException
 {
 }

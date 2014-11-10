@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
+use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 
 /**
  * Common Asset Extension Tests.
@@ -41,6 +42,31 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
         /* @var TwigAssetInterface $asset */
         $this->ext->addAsset($asset);
         $this->ext->renderAssets();
+    }
+
+    public function testAssetRendererNotFound()
+    {
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AssetRendererException', 'No twig asset renderer has been found for the "category_type" asset');
+
+        $ext = new AssetExtension();
+        $asset = $this->getMock('Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface');
+        $asset
+            ->expects($this->any())
+            ->method('getTagPositionName')
+            ->will($this->returnValue('category:type:position'));
+        $asset
+            ->expects($this->any())
+            ->method('getCategory')
+            ->will($this->returnValue('category'));
+        $asset
+            ->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue('type'));
+
+        /* @var TwigAssetInterface $asset */
+        $ext->createAssetPosition('category', 'type', -1, null, 'position');
+        $ext->addAsset($asset);
+        $ext->renderAssets();
     }
 
     /**

@@ -11,15 +11,12 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Asset;
 
-use Fxp\Component\RequireAsset\Exception\Twig\AssetRenderException;
-use Fxp\Component\RequireAsset\Twig\Asset\Conditional\ConditionalRenderInterface;
-
 /**
  * Abstract config of twig inline asset.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-abstract class AbstractInlineTwigAsset extends AbstractTwigAsset
+abstract class AbstractInlineTwigAsset extends AbstractTwigAsset implements TwigInlineAssetInterface
 {
     /**
      * @var array
@@ -56,7 +53,7 @@ abstract class AbstractInlineTwigAsset extends AbstractTwigAsset
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getCategory()
     {
@@ -64,16 +61,26 @@ abstract class AbstractInlineTwigAsset extends AbstractTwigAsset
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function render(ConditionalRenderInterface $conditional = null)
+    public function getCallable()
     {
-        $callable = $this->callable;
+        return $this->callable;
+    }
 
-        if (2 !== count($callable) || !$callable[0] instanceof \Twig_Template || !is_string($callable[1])) {
-            throw new AssetRenderException('The callable argument must be an array with Twig_Template instance and name function of the block to rendering', $this->getLineno(), $this->getFilename());
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
 
-        return $callable[0]->renderBlock($callable[1], $this->context, $this->blocks);
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlocks()
+    {
+        return $this->blocks;
     }
 }
