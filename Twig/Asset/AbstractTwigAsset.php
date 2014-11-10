@@ -48,7 +48,7 @@ abstract class AbstractTwigAsset implements TwigAssetInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getPosition()
     {
@@ -56,7 +56,7 @@ abstract class AbstractTwigAsset implements TwigAssetInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTagPositionName()
     {
@@ -64,7 +64,7 @@ abstract class AbstractTwigAsset implements TwigAssetInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getLineno()
     {
@@ -72,7 +72,7 @@ abstract class AbstractTwigAsset implements TwigAssetInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFilename()
     {

@@ -21,7 +21,7 @@ use Fxp\Component\RequireAsset\Twig\Config\RequireScriptConfiguration;
 class RequireScriptTokenParser extends AbstractRequireAssetTokenParser
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTag()
     {
@@ -29,7 +29,7 @@ class RequireScriptTokenParser extends AbstractRequireAssetTokenParser
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getAttributeNodeConfig()
     {
@@ -37,7 +37,7 @@ class RequireScriptTokenParser extends AbstractRequireAssetTokenParser
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getTwigAssetClass()
     {

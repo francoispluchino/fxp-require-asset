@@ -76,7 +76,7 @@ abstract class AbstractInlineAssetTokenParser extends AbstractTokenParser
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getAttributeNodeConfig()
     {

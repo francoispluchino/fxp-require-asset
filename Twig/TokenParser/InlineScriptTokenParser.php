@@ -19,7 +19,7 @@ namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 class InlineScriptTokenParser extends AbstractInlineAssetTokenParser
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTag()
     {
@@ -27,7 +27,7 @@ class InlineScriptTokenParser extends AbstractInlineAssetTokenParser
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getTwigAssetClass()
     {

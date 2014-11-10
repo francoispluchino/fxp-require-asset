@@ -21,7 +21,7 @@ use Fxp\Component\RequireAsset\Twig\Config\RequireStyleConfiguration;
 class RequireStyleTokenParser extends AbstractRequireAssetTokenParser
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getTag()
     {
@@ -29,7 +29,7 @@ class RequireStyleTokenParser extends AbstractRequireAssetTokenParser
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getAttributeNodeConfig()
     {
@@ -37,7 +37,7 @@ class RequireStyleTokenParser extends AbstractRequireAssetTokenParser
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getTwigAssetClass()
     {

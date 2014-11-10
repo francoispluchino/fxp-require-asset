@@ -19,7 +19,7 @@ namespace Fxp\Component\RequireAsset\Twig\Asset;
 class InlineStyleTwigAsset extends AbstractInlineTwigAsset
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getType()
     {
