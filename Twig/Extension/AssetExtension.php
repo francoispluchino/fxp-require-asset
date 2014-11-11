@@ -11,16 +11,18 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
-use Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistAssetPositionException;
-use Fxp\Component\RequireAsset\Exception\Twig\AssetRendererException;
-use Fxp\Component\RequireAsset\Exception\Twig\MissingAssetPositionException;
-use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
-use Fxp\Component\RequireAsset\Twig\Renderer\AssetRendererInterface;
+use Fxp\Component\RequireAsset\Exception\TagRendererExceptionInterface;
+use Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistTagPositionException;
+use Fxp\Component\RequireAsset\Exception\Twig\RuntimeTagRendererException;
+use Fxp\Component\RequireAsset\Exception\Twig\MissingTagPositionException;
+use Fxp\Component\RequireAsset\Exception\Twig\RequireTagException;
+use Fxp\Component\RequireAsset\Tag\TagInterface;
+use Fxp\Component\RequireAsset\Tag\Renderer\TagRendererInterface;
 use Fxp\Component\RequireAsset\Twig\TokenParser\InlineScriptTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\InlineStyleTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\RequireScriptTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\RequireStyleTokenParser;
-use Fxp\Component\RequireAsset\Twig\TwigFunction\TwigAssetFunction;
+use Fxp\Component\RequireAsset\Twig\TwigFunction\TagPositionFunction;
 
 /**
  * AssetExtension extends Twig with global assets rendering capabilities.
@@ -30,7 +32,7 @@ use Fxp\Component\RequireAsset\Twig\TwigFunction\TwigAssetFunction;
 class AssetExtension extends \Twig_Extension
 {
     /**
-     * @var AssetRendererInterface[]
+     * @var TagRendererInterface[]
      */
     protected $renderers;
 
@@ -60,11 +62,11 @@ class AssetExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new TwigAssetFunction('inlineScriptsPosition',  array($this, 'createAssetPosition'), array('category' => 'inline',  'type' => 'script')),
-            new TwigAssetFunction('inlineStylesPosition',   array($this, 'createAssetPosition'), array('category' => 'inline',  'type' => 'style')),
-            new TwigAssetFunction('requireScriptsPosition', array($this, 'createAssetPosition'), array('category' => 'require', 'type' => 'script')),
-            new TwigAssetFunction('requireStylesPosition',  array($this, 'createAssetPosition'), array('category' => 'require', 'type' => 'style')),
-            new \Twig_SimpleFunction('renderAssets',        array($this, 'renderAssets'),        array('is_safe' => array('html'))),
+            new TagPositionFunction('inlineScriptsPosition',  array($this, 'createTagPosition'), array('category' => 'inline',  'type' => 'script')),
+            new TagPositionFunction('inlineStylesPosition',   array($this, 'createTagPosition'), array('category' => 'inline',  'type' => 'style')),
+            new TagPositionFunction('requireScriptsPosition', array($this, 'createTagPosition'), array('category' => 'require', 'type' => 'script')),
+            new TagPositionFunction('requireStylesPosition',  array($this, 'createTagPosition'), array('category' => 'require', 'type' => 'style')),
+            new \Twig_SimpleFunction('renderAssetTags',       array($this, 'renderTags'),        array('is_safe' => array('html'))),
         );
     }
 
@@ -92,13 +94,13 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * Add twig asset renderer.
+     * Add template tag renderer.
      *
-     * @param AssetRendererInterface $renderer The renderer
+     * @param TagRendererInterface $renderer The template tag renderer
      *
      * @return self
      */
-    public function addRenderer(AssetRendererInterface $renderer)
+    public function addRenderer(TagRendererInterface $renderer)
     {
         $this->renderers[] = $renderer;
 
@@ -106,9 +108,9 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * Set the twig asset renderers.
+     * Set the template tag renderers.
      *
-     * @param AssetRendererInterface[] $renderers
+     * @param TagRendererInterface[] $renderers The template tag renderers
      *
      * @return self
      */
@@ -124,9 +126,9 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * Get the twig asset renderers.
+     * Get the template tag renderers.
      *
-     * @return AssetRendererInterface[]
+     * @return TagRendererInterface[]
      */
     public function getRenderers()
     {
@@ -134,21 +136,21 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * Add twig asset.
+     * Add template tag.
      *
-     * @param TwigAssetInterface $asset
+     * @param TagInterface $tag
      *
      * @return self
      */
-    public function addAsset(TwigAssetInterface $asset)
+    public function addTag(TagInterface $tag)
     {
-        $this->contents[$asset->getTagPositionName()][] = $asset;
+        $this->contents[$tag->getTagPositionName()][] = $tag;
 
         return $this;
     }
 
     /**
-     * Create the asset position tag to included in the twig template.
+     * Create the tagposition to included in the twig template.
      *
      * @param string      $category The twig asset category
      * @param string      $type     The asset type
@@ -158,16 +160,16 @@ class AssetExtension extends \Twig_Extension
      *
      * @return string
      *
-     * @throws AlreadyExistAssetPositionException When tag position is already defined in template
+     * @throws AlreadyExistTagPositionException When tag position is already defined in template
      */
-    public function createAssetPosition($category, $type, $lineno = -1, $filename = null, $position = null)
+    public function createTagPosition($category, $type, $lineno = -1, $filename = null, $position = null)
     {
         $pos = trim($position, '_');
         $pos = strlen($pos) > 0 ? '_' . $pos : '';
         $tag = strtoupper($category . '_' . $type . $pos);
 
         if (isset($this->tagPositions[$tag])) {
-            throw new AlreadyExistAssetPositionException($category, $type, $position, $lineno, $filename);
+            throw new AlreadyExistTagPositionException($category, $type, $position, $lineno, $filename);
         }
 
         $this->tagPositions[$tag] = $this->formatTagPosition($category, $type, $position);
@@ -176,27 +178,27 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * Render all assets.
+     * Render all template tags.
      *
      * Replaces the current buffer with the new edited buffer content.
      */
-    public function renderAssets()
+    public function renderTags()
     {
         $output = ob_get_contents();
 
         foreach ($this->tagPositions as $name => $contentType) {
-            $output = $this->doRenderAssets($name, $contentType, $output);
+            $output = $this->doRenderTags($name, $contentType, $output);
         }
 
         ob_clean();
         echo $output;
 
-        $this->validateRenderAssets();
+        $this->validateRenderTags();
         $this->resetRenderers();
     }
 
     /**
-     * Do render the assets by type.
+     * Do render the tags by type.
      *
      * @param string $name
      * @param string $contentType
@@ -204,17 +206,17 @@ class AssetExtension extends \Twig_Extension
      *
      * @return string The output with replaced asset tag position
      */
-    protected function doRenderAssets($name, $contentType, $output)
+    protected function doRenderTags($name, $contentType, $output)
     {
         $content = '';
 
         if (isset($this->contents[$contentType])) {
             $renderer = null;
-            foreach ($this->contents[$contentType] as $asset) {
+            foreach ($this->contents[$contentType] as $tag) {
                 if (null === $renderer) {
-                    $renderer = $this->findRenderer($asset);
+                    $renderer = $this->findRenderer($tag);
                 }
-                $content .= $renderer->render($asset);
+                $content .= $this->renderTag($renderer, $tag);
             }
             unset($this->contents[$contentType]);
         }
@@ -223,36 +225,60 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * Find the asset renderer.
+     * Find the template tag renderer.
      *
-     * @param TwigAssetInterface $asset
+     * @param TagInterface $tag The template tag
      *
-     * @return AssetRendererInterface
+     * @return TagRendererInterface
      *
-     * @throws AssetRendererException When no asset renderer has been found
+     * @throws RuntimeTagRendererException When no template tag renderer has been found
      */
-    protected function findRenderer(TwigAssetInterface $asset)
+    protected function findRenderer(TagInterface $tag)
     {
         foreach ($this->getRenderers() as $renderer) {
-            if ($renderer->validate($asset)) {
+            if ($renderer->validate($tag)) {
                 return $renderer;
             }
         }
 
-        throw new AssetRendererException(sprintf('No twig asset renderer has been found for the "%s_%s" asset', $asset->getCategory(), $asset->getType()), $asset->getLineno(), $asset->getFilename());
+        throw new RuntimeTagRendererException(sprintf('No template tag renderer has been found for the "%s_%s" tag', $tag->getCategory(), $tag->getType()), $tag->getLineno(), $tag->getFilename());
     }
 
     /**
-     * Validate the renderAssets method.
+     * Render the tag.
      *
-     * @throws MissingAssetPositionException When the contents assets are not injected in the template
+     * @param TagRendererInterface $renderer The template tag renderer
+     * @param TagInterface         $tag      The template tag
+     *
+     * @return string The rendered tag
+     *
+     * @throws RequireTagException
      */
-    protected function validateRenderAssets()
+    protected function renderTag(TagRendererInterface $renderer, TagInterface $tag)
+    {
+        $content = '';
+
+        try {
+            $content .= $renderer->render($tag);
+        } catch (TagRendererExceptionInterface $e) {
+            $tag = $e->getTag();
+            throw new RequireTagException($e->getMessage(), $tag->getLineno(), $tag->getFilename(), $e->getPrevious());
+        }
+
+        return $content;
+    }
+
+    /**
+     * Validate the renderTags method.
+     *
+     * @throws MissingTagPositionException When the tag positions are not injected in the template
+     */
+    protected function validateRenderTags()
     {
         if (!empty($this->contents)) {
             $keys = array_keys($this->contents);
 
-            throw new MissingAssetPositionException($this->contents[$keys[0]][0]);
+            throw new MissingTagPositionException($this->contents[$keys[0]][0]);
         }
     }
 
@@ -269,25 +295,25 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * Format the tag position of asset.
+     * Format the template tag position.
      *
-     * @param string      $name     The tag position name
-     * @param string      $type     The asset type
-     * @param string|null $position The name of tag position in the twig template
+     * @param string      $category The template tag category
+     * @param string      $type     The template tag type
+     * @param string|null $position The name of template tag position in the template
      *
      * @return string The formatted tag position
      */
-    protected function formatTagPosition($name, $type, $position = null)
+    protected function formatTagPosition($category, $type, $position = null)
     {
-        return strtolower($name . ':' . $type . ':' . $position);
+        return strtolower($category . ':' . $type . ':' . $position);
     }
 
     /**
-     * Get the tag position of inline asset.
+     * Get the tag position of inline tag.
      *
      * @param string $name The tag position name
      *
-     * @return string The tag position
+     * @return string The tag position for the template
      */
     protected function getTagPosition($name)
     {

@@ -13,8 +13,8 @@ namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Assetic\Asset\AssetInterface;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
-use Fxp\Component\RequireAsset\Twig\Asset\RequireScriptTwigAsset;
-use Fxp\Component\RequireAsset\Twig\Asset\RequireStyleTwigAsset;
+use Fxp\Component\RequireAsset\Tag\RequireScriptTag;
+use Fxp\Component\RequireAsset\Tag\RequireStyleTag;
 
 /**
  * Require Asset Extension Tests.
@@ -45,7 +45,7 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
      */
     public function testAssetIsNotManagedByAsseticManager($tag)
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\RequireAssetException', 'is not managed by the Assetic Manager');
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\RequireTagException', 'is not managed by the Assetic Manager');
 
         $this->doValidTagTest($tag);
     }
@@ -89,8 +89,8 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
     public function getRequireTwigAsset()
     {
         return array(
-            array(new RequireScriptTwigAsset('asset_source_path')),
-            array(new RequireStyleTwigAsset('asset_source_path')),
+            array(new RequireScriptTag('asset_source_path')),
+            array(new RequireStyleTag('asset_source_path')),
         );
     }
 

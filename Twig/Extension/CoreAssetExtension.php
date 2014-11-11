@@ -12,8 +12,8 @@
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
 use Assetic\AssetManager;
-use Fxp\Component\RequireAsset\Twig\Renderer\AssetInlineRenderer;
-use Fxp\Component\RequireAsset\Twig\Renderer\AssetRequireRenderer;
+use Fxp\Component\RequireAsset\Tag\Renderer\InlineTagRenderer;
+use Fxp\Component\RequireAsset\Tag\Renderer\RequireTagRenderer;
 
 /**
  * Core asset extension.
@@ -32,8 +32,8 @@ class CoreAssetExtension extends AssetExtension
         parent::__construct();
 
         $this->setRenderers(array(
-            new AssetInlineRenderer(),
-            new AssetRequireRenderer($manager),
+            new InlineTagRenderer(),
+            new RequireTagRenderer($manager),
         ));
     }
 }

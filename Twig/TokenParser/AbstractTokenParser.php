@@ -183,7 +183,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
      *
      * @return string
      */
-    abstract protected function getTwigAssetClass();
+    abstract protected function getTagClass();
 
     /**
      * @return NodeInterface

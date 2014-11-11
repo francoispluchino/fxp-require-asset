@@ -9,28 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Twig\TokenParser;
+namespace Fxp\Component\RequireAsset\Tag;
 
 /**
- * Token Parser for the 'inline_style' tag.
+ * Inline script tag.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class InlineStyleTokenParser extends AbstractInlineTokenParser
+class InlineScriptTag extends AbstractInlineTag
 {
     /**
      * {@inheritdoc}
      */
-    public function getTag()
+    public function getType()
     {
-        return 'inline_style';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTagClass()
-    {
-        return 'Fxp\Component\RequireAsset\Tag\InlineStyleTag';
+        return 'script';
     }
 }

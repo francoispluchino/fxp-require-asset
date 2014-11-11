@@ -11,14 +11,14 @@
 
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
-use Fxp\Component\RequireAsset\Twig\Config\RequireStyleConfiguration;
+use Fxp\Component\RequireAsset\Tag\Config\RequireStyleTagConfiguration;
 
 /**
  * Token Parser for the 'require_style' tag.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireStyleTokenParser extends AbstractRequireAssetTokenParser
+class RequireStyleTokenParser extends AbstractRequireTokenParser
 {
     /**
      * {@inheritdoc}
@@ -33,14 +33,14 @@ class RequireStyleTokenParser extends AbstractRequireAssetTokenParser
      */
     protected function getAttributeNodeConfig()
     {
-        return RequireStyleConfiguration::getNode();
+        return RequireStyleTagConfiguration::getNode();
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getTwigAssetClass()
+    protected function getTagClass()
     {
-        return 'Fxp\Component\RequireAsset\Twig\Asset\RequireStyleTwigAsset';
+        return 'Fxp\Component\RequireAsset\Tag\RequireStyleTag';
     }
 }

@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
-use Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface;
+use Fxp\Component\RequireAsset\Tag\TagInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 
 /**
@@ -23,50 +23,50 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
 {
     public function testTagPositionIsAlreadyIncluded()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistAssetPositionException');
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistTagPositionException');
 
-        $this->ext->createAssetPosition('category', 'type');
-        $this->ext->createAssetPosition('category', 'type');
+        $this->ext->createTagPosition('category', 'type');
+        $this->ext->createTagPosition('category', 'type');
     }
 
-    public function testContentIsNotRenderingBecauseTheAssetPositionIsMissing()
+    public function testContentIsNotRenderingBecauseTheTagPositionIsMissing()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\MissingAssetPositionException');
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\MissingTagPositionException');
 
-        $asset = $this->getMock('Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface');
-        $asset
+        $tag = $this->getMock('Fxp\Component\RequireAsset\Tag\TagInterface');
+        $tag
             ->expects($this->any())
             ->method('getTagPositionName')
             ->will($this->returnValue('category:type:position'));
 
-        /* @var TwigAssetInterface $asset */
-        $this->ext->addAsset($asset);
-        $this->ext->renderAssets();
+        /* @var TagInterface $tag */
+        $this->ext->addTag($tag);
+        $this->ext->renderTags();
     }
 
     public function testAssetRendererNotFound()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\AssetRendererException', 'No twig asset renderer has been found for the "category_type" asset');
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\RuntimeTagRendererException', 'No template tag renderer has been found for the "category_type" tag');
 
         $ext = new AssetExtension();
-        $asset = $this->getMock('Fxp\Component\RequireAsset\Twig\Asset\TwigAssetInterface');
-        $asset
+        $tag = $this->getMock('Fxp\Component\RequireAsset\Tag\TagInterface');
+        $tag
             ->expects($this->any())
             ->method('getTagPositionName')
             ->will($this->returnValue('category:type:position'));
-        $asset
+        $tag
             ->expects($this->any())
             ->method('getCategory')
             ->will($this->returnValue('category'));
-        $asset
+        $tag
             ->expects($this->any())
             ->method('getType')
             ->will($this->returnValue('type'));
 
-        /* @var TwigAssetInterface $asset */
-        $ext->createAssetPosition('category', 'type', -1, null, 'position');
-        $ext->addAsset($asset);
-        $ext->renderAssets();
+        /* @var TagInterface $tag */
+        $ext->createTagPosition('category', 'type', -1, null, 'position');
+        $ext->addTag($tag);
+        $ext->renderTags();
     }
 
     /**
