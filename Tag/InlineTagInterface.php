@@ -21,7 +21,7 @@ interface InlineTagInterface extends TagInterface
     /**
      * Get the content body.
      *
-     * @return array
+     * @return string
      */
     public function getBody();
 }
