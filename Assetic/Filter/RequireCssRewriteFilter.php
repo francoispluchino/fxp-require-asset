@@ -14,6 +14,7 @@ namespace Fxp\Component\RequireAsset\Assetic\Filter;
 use Assetic\Asset\AssetInterface;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\Filter\FilterInterface;
+use Assetic\Filter\HashableInterface;
 use Assetic\Util\CssUtils;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource;
 use Fxp\Component\RequireAsset\Assetic\Util\FilterUtils;
@@ -23,7 +24,7 @@ use Fxp\Component\RequireAsset\Assetic\Util\FilterUtils;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireCssRewriteFilter implements FilterInterface
+class RequireCssRewriteFilter implements FilterInterface, HashableInterface
 {
     /**
      * @var LazyAssetManager
@@ -62,6 +63,14 @@ class RequireCssRewriteFilter implements FilterInterface
 
         $content = $this->getContent($asset, $paths, dirname($sourceFile), $sourceFile);
         $asset->setContent($content);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hash()
+    {
+        return spl_object_hash($this);
     }
 
     /**

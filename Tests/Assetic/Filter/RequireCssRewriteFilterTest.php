@@ -222,4 +222,9 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
             }
         }
     }
+
+    public function testGetHash()
+    {
+        $this->assertSame(spl_object_hash($this->rcrf), $this->rcrf->hash());
+    }
 }
