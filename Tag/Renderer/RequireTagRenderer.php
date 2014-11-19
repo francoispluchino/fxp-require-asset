@@ -181,6 +181,7 @@ class RequireTagRenderer implements TagRendererInterface
         /* @var AssetInterface $child */
         foreach ($iterator as $child) {
             $target = $this->getTargetPath($child);
+            $attributes = $tag->getAttributes();
             $attributes[$tag->getLinkAttribute()] = $target;
 
             $output .= $this->doRender($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
