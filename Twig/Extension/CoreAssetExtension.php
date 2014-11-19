@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
-use Assetic\AssetManager;
+use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Tag\Renderer\InlineTagRenderer;
 use Fxp\Component\RequireAsset\Tag\Renderer\RequireTagRenderer;
 
@@ -25,9 +25,9 @@ class CoreAssetExtension extends AssetExtension
     /**
      * Constructor.
      *
-     * @param AssetManager $manager The assetic manager
+     * @param LazyAssetManager $manager The lazy assetic manager
      */
-    public function __construct(AssetManager $manager)
+    public function __construct(LazyAssetManager $manager)
     {
         parent::__construct();
 
