@@ -211,11 +211,8 @@ class AssetExtension extends \Twig_Extension
         $content = '';
 
         if (isset($this->contents[$contentType])) {
-            $renderer = null;
-            foreach ($this->contents[$contentType] as $tag) {
-                if (null === $renderer) {
-                    $renderer = $this->findRenderer($tag);
-                }
+            $renderer = $this->findRenderer(current($this->contents[$contentType]));
+            foreach ($renderer->order($this->contents[$contentType]) as $tag) {
                 $content .= $this->renderTag($renderer, $tag);
             }
             unset($this->contents[$contentType]);

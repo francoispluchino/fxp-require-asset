@@ -24,6 +24,14 @@ class InlineTagRenderer implements TagRendererInterface
     /**
      * {@inheritdoc}
      */
+    public function order(array $tags)
+    {
+        return $tags;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function render(TagInterface $tag)
     {
         /* @var InlineTagInterface $tag */

@@ -11,9 +11,11 @@
 
 namespace Fxp\Component\RequireAsset\Tag\Renderer;
 
+use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetInterface;
-use Assetic\AssetManager;
+use Assetic\Factory\LazyAssetManager;
 use Assetic\Util\VarUtils;
+use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Exception\RequireTagRendererException;
 use Fxp\Component\RequireAsset\Tag\TagInterface;
 use Fxp\Component\RequireAsset\Tag\RequireTagInterface;
@@ -32,19 +34,39 @@ class RequireTagRenderer implements TagRendererInterface
     protected $renderedTags;
 
     /**
-     * @var AssetManager
+     * @var LazyAssetManager
      */
     protected $manager;
 
     /**
      * Constructor.
      *
-     * @param AssetManager $manager
+     * @param LazyAssetManager $manager
      */
-    public function __construct(AssetManager $manager)
+    public function __construct(LazyAssetManager $manager)
     {
         $this->manager = $manager;
         $this->reset();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function order(array $tags)
+    {
+        $commons = array();
+        $singles = array();
+
+        /* @var RequireTagInterface $tag */
+        foreach ($tags as $tag) {
+            if ($this->configureCommonTag($tag)) {
+                $commons[] = $tag;
+            } else {
+                $singles[] = $tag;
+            }
+        }
+
+        return array_merge($commons, $singles);
     }
 
     /**
@@ -76,6 +98,28 @@ class RequireTagRenderer implements TagRendererInterface
     }
 
     /**
+     * Configure the common template tag.
+     *
+     * @param RequireTagInterface $tag The template tag
+     *
+     * @return bool Return TRUE if the tag is a common asset
+     */
+    protected function configureCommonTag(RequireTagInterface $tag)
+    {
+        if ($this->manager->hasFormula($tag->getAsseticName())) {
+            $resource = $this->manager->getFormula($tag->getAsseticName());
+
+            if (isset($resource[2]['fxp_require_common_asset'])) {
+                $tag->setInputs($resource[0]);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Check if the template tag can be rendered.
      *
      * @param RequireTagInterface $tag
@@ -89,6 +133,10 @@ class RequireTagRenderer implements TagRendererInterface
         }
 
         $this->renderedTags[] = $tag->getAsseticName();
+
+        foreach ($tag->getInputs() as $input) {
+            $this->renderedTags[] = Utils::formatName($input);
+        }
 
         return true;
     }
@@ -108,6 +156,48 @@ class RequireTagRenderer implements TagRendererInterface
             throw new RequireTagRendererException($tag, sprintf('The %s %s "%s" is not managed by the Assetic Manager', $tag->getCategory(), $tag->getType(), $tag->getPath()));
         }
 
+        if ($this->manager->isDebug() && count($tag->getInputs()) > 0) {
+            return $this->preRenderCommonDebug($tag);
+        }
+
+        return $this->preRenderProd($tag);
+    }
+
+    /**
+     * Prepare the render of common assets in debug mode and do the render.
+     *
+     * @param RequireTagInterface $tag The require template tag
+     *
+     * @return string The output render
+     */
+    protected function preRenderCommonDebug(RequireTagInterface $tag)
+    {
+        $output = '';
+
+        /* @var AssetCollection $asset */
+        $asset = $this->manager->get($tag->getAsseticName());
+        $iterator = $asset->getIterator();
+
+        /* @var AssetInterface $child */
+        foreach ($iterator as $child) {
+            $target = $this->getTargetPath($child);
+            $attributes[$tag->getLinkAttribute()] = $target;
+
+            $output .= $this->doRender($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
+        }
+
+        return $output;
+    }
+
+    /**
+     * Prepare the render of asset and do the render.
+     *
+     * @param RequireTagInterface $tag The require template tag
+     *
+     * @return string The output render
+     */
+    protected function preRenderProd(RequireTagInterface $tag)
+    {
         $asset = $this->manager->get($tag->getAsseticName());
         $target = $this->getTargetPath($asset);
         $attributes = $tag->getAttributes();

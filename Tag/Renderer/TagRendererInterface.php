@@ -21,6 +21,15 @@ use Fxp\Component\RequireAsset\Tag\TagInterface;
 interface TagRendererInterface
 {
     /**
+     * Order the template tags.
+     *
+     * @param TagInterface[] $tags
+     *
+     * @return TagInterface[]
+     */
+    public function order(array $tags);
+
+    /**
      * Render the template tag.
      *
      * @param TagInterface $tag The template tag

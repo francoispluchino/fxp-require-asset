@@ -11,7 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
-use Assetic\AssetManager;
+use Assetic\Factory\AssetFactory;
+use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 use Fxp\Component\RequireAsset\Twig\Extension\CoreAssetExtension;
 
@@ -28,13 +29,14 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
     protected $ext;
 
     /**
-     * @var AssetManager
+     * @var LazyAssetManager
      */
     protected $manager;
 
     protected function setUp()
     {
-        $this->manager = new AssetManager();
+        $factory = new AssetFactory('web');
+        $this->manager = new LazyAssetManager($factory);
         $this->ext = new CoreAssetExtension($this->manager);
     }
 

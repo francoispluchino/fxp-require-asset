@@ -11,42 +11,38 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Factory\Resource;
 
+use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+
 /**
- * Require asset resource.
+ * Common require asset resource.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireAssetResource extends AbstractRequireAssetResource
+class CommonRequireAssetResource extends AbstractRequireAssetResource
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $sourcePath;
+    protected $inputs;
 
     /**
      * Constructor.
      *
      * @param string $name       The asset name
-     * @param string $sourcePath The asset source path
+     * @param array  $inputs     The require assets
      * @param string $targetPath The asset target path
      * @param array  $filters    The asset filters
      * @param array  $options    The asset filters
      */
-    public function __construct($name, $sourcePath, $targetPath, array $filters = array(), array $options = array())
+    public function __construct($name, array $inputs, $targetPath, array $filters = array(), array $options = array())
     {
         parent::__construct($name, $targetPath, $filters, $options);
 
-        $this->sourcePath = $sourcePath;
-    }
+        $this->inputs = array();
 
-    /**
-     * Get the source path.
-     *
-     * @return string
-     */
-    public function getSourcePath()
-    {
-        return $this->sourcePath;
+        foreach ($inputs as $input) {
+            $this->inputs[] = '@' . Utils::formatName($input);
+        }
     }
 
     /**
@@ -54,7 +50,7 @@ class RequireAssetResource extends AbstractRequireAssetResource
      */
     protected function getInputs()
     {
-        return array($this->sourcePath);
+        return $this->inputs;
     }
 
     /**
@@ -62,6 +58,8 @@ class RequireAssetResource extends AbstractRequireAssetResource
      */
     protected function getFixedOptions()
     {
-        return array('debug' => false);
+        return array(
+            'fxp_require_common_asset' => true,
+        );
     }
 }

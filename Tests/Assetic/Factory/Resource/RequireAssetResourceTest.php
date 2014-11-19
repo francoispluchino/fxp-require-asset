@@ -32,7 +32,7 @@ class RequireAssetResourceTest extends \PHPUnit_Framework_TestCase
         $resource = new RequireAssetResource($name, $sourcePath, $targetPath, $filters, $options);
 
         $this->assertSame($formulaeName, (string) $resource);
-        $this->assertSame($name, $resource->getName());
+        $this->assertSame($name, $resource->getPrettyName());
         $this->assertSame($sourcePath, $resource->getSourcePath());
         $this->assertTrue($resource->isFresh($time->getTimestamp()));
         $this->assertSame('', $resource->getContent());
@@ -42,8 +42,8 @@ class RequireAssetResourceTest extends \PHPUnit_Framework_TestCase
                 array($sourcePath),
                 $filters,
                 array_merge($options, array(
-                    'output' => $targetPath,
                     'debug' => false,
+                    'output' => $targetPath,
                 )),
             ),
         );

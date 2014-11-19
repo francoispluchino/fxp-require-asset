@@ -13,7 +13,7 @@ namespace Fxp\Component\RequireAsset\Assetic\Factory\Loader;
 
 use Assetic\Factory\Loader\FormulaLoaderInterface;
 use Assetic\Factory\Resource\ResourceInterface;
-use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource;
+use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface;
 
 /**
  * Creates formulaes for require asset resources.
@@ -27,6 +27,6 @@ class RequireAssetLoader implements FormulaLoaderInterface
      */
     public function load(ResourceInterface $resource)
     {
-        return $resource instanceof RequireAssetResource ? $resource->getFormulae() : array();
+        return $resource instanceof RequireAssetResourceInterface ? $resource->getFormulae() : array();
     }
 }
