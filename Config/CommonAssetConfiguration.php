@@ -28,6 +28,11 @@ class CommonAssetConfiguration extends AbstractConfiguration
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->beforeNormalization()
+                    // a scalar is a simple formula of one input file
+                    ->ifTrue(function ($v) { return !is_array($v); })
+                    ->then(function ($v) { return array('inputs' => array($v)); })
+                ->end()
+                ->beforeNormalization()
                     ->always()
                     ->then(function ($v) {
                         // cast scalars as array
