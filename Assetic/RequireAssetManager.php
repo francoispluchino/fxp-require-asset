@@ -23,8 +23,11 @@ use Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Factory\Loader\RequireAssetLoader;
+use Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource;
+use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface;
 use Fxp\Component\RequireAsset\Assetic\Util\ResourceUtils;
+use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -55,6 +58,11 @@ class RequireAssetManager implements RequireAssetManagerInterface
     protected $packageManager;
 
     /**
+     * @var CommonRequireAssetResource[]
+     */
+    protected $commons;
+
+    /**
      * @var RequireAssetCacheInterface
      */
     protected $cache;
@@ -72,6 +80,7 @@ class RequireAssetManager implements RequireAssetManagerInterface
         $this->patternManager = $patternManager ?: new PatternManager();
         $this->outputManager = $outputManager ?: new OutputManager();
         $this->packageManager = new PackageManager($this->extensionManager, $this->patternManager);
+        $this->commons = array();
     }
 
     /**
@@ -127,6 +136,18 @@ class RequireAssetManager implements RequireAssetManagerInterface
     /**
      * {@inheritdoc}
      */
+    public function addCommonAsset($name, array $inputs, $targetPath, array $filters = array(), array $options = array())
+    {
+        $targetPath = $this->outputManager->convertOutput(trim($targetPath, '/'));
+        $common = new CommonRequireAssetResource($name, $inputs, $targetPath, $filters, $options);
+        $this->commons[Utils::formatName($name)] = $common;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addAssetResources(LazyAssetManager $assetManager)
     {
         $assetManager->setLoader('fxp_require_asset_loader', new RequireAssetLoader());
@@ -172,6 +193,7 @@ class RequireAssetManager implements RequireAssetManagerInterface
         foreach ($this->packageManager->getPackages() as $package) {
             $resources = array_merge($resources, $this->addPackageAssets($assetManager, $package));
         }
+        $resources = $this->loadCommonAssets($assetManager, $resources);
 
         if (null !== $this->cache) {
             $this->cache->setResources($resources);
@@ -212,5 +234,23 @@ class RequireAssetManager implements RequireAssetManagerInterface
         $c = ResourceUtils::createConfigResource($package, $file, $this->outputManager);
 
         return new RequireAssetResource($c[0], $c[1], $c[2], $c[3], $c[4]);
+    }
+
+    /**
+     * Load the common assets in the asset manager.
+     *
+     * @param LazyAssetManager                $assetManager
+     * @param RequireAssetResourceInterface[] $resources
+     *
+     * @return RequireAssetResourceInterface[]
+     */
+    protected function loadCommonAssets(LazyAssetManager $assetManager, array $resources)
+    {
+        foreach ($this->commons as $resource) {
+            $assetManager->addResource($resource, 'fxp_require_asset_loader');
+            $resources[] = $resource;
+        }
+
+        return $resources;
     }
 }

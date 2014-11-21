@@ -70,6 +70,19 @@ interface RequireAssetManagerInterface
     public function getCache();
 
     /**
+     * Add the common require asset.
+     *
+     * @param string $name       The forumlae name
+     * @param array  $inputs     The require assets source path
+     * @param string $targetPath The formulae target path
+     * @param array  $filters    The formulae filters
+     * @param array  $options    The formulae filters
+     *
+     * @return self
+     */
+    public function addCommonAsset($name, array $inputs, $targetPath, array $filters = array(), array $options = array());
+
+    /**
      * Add all require asset resources in assetic lazy asset manager.
      *
      * @param LazyAssetManager $assetManager The assetic lazy asset manager
