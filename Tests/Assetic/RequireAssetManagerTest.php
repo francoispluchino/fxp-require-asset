@@ -143,6 +143,23 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(9, $this->lam->getResources());
     }
 
+    public function testAddCommonAssets()
+    {
+        PackageTest::createFixtures();
+
+        $this->assertCount(0, $this->lam->getResources());
+
+        $inputs = array(
+            '@foobar/js/component-a.js',
+            '@foobar/js/component-b.js',
+        );
+
+        $this->ram->addCommonAsset('common_js', $inputs, 'TARGET.js');
+        $this->ram->addAssetResources($this->lam);
+
+        $this->assertCount(1, $this->lam->getResources());
+    }
+
     public function testAddResourcesWhithAssetAndCache()
     {
         PackageTest::createFixtures();
