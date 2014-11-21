@@ -272,7 +272,7 @@ $ram->getPackageManager()->addPackage($configPackage);
 
 ### Add common asset (formulae)
 
-Vous pouvez créer des common assets, qui sont en réalité des "assetic formulae" dédié aux require assets:
+You can create common assets, which are reality the assetic formulae dedicated to the require assets:
 
 ```php
 <?php
