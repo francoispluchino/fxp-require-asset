@@ -33,10 +33,16 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected $manager;
 
+    /**
+     * @var AssetFactory
+     */
+    protected $factory;
+
     protected function setUp()
     {
-        $factory = new AssetFactory('web');
-        $this->manager = new LazyAssetManager($factory);
+        $this->factory = new AssetFactory('web');
+        $this->manager = new LazyAssetManager($this->factory);
+        $this->factory->setAssetManager($this->manager);
         $this->ext = new CoreAssetExtension($this->manager);
     }
 
@@ -97,12 +103,13 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $tag
      * @param string $testFile
+     * @param string $validSuffix
      */
-    public function doValidTagTest($tag, $testFile = 'test')
+    public function doValidTagTest($tag, $testFile = 'test', $validSuffix = '')
     {
         $tpl = $this->getTemplate($tag, $testFile . '.html.twig');
         $content = $tpl->render(array());
-        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/' . $tag . '/' . $testFile . '.valid.template');
+        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/' . $tag . '/' . $testFile . $validSuffix . '.valid.template');
         $valid = str_replace("\r", "", $valid);
 
         $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);

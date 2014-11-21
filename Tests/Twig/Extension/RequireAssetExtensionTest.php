@@ -11,8 +11,6 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
-use Assetic\Asset\AssetInterface;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Tag\RequireScriptTag;
 use Fxp\Component\RequireAsset\Tag\RequireStyleTag;
 
@@ -21,7 +19,7 @@ use Fxp\Component\RequireAsset\Tag\RequireStyleTag;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireAssetExtensionTest extends AbstractAssetExtensionTest
+class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 {
     /**
      * @return array
@@ -92,31 +90,5 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
             array(new RequireScriptTag('asset_source_path')),
             array(new RequireStyleTag('asset_source_path')),
         );
-    }
-
-    /**
-     * Add require asset in assetic manager.
-     *
-     * @param string $source
-     * @param string $target
-     */
-    protected function addAsset($source, $target)
-    {
-        $asset = $this->getMock('Assetic\Asset\AssetInterface');
-        $asset
-            ->expects($this->any())
-            ->method('getTargetPath')
-            ->will($this->returnValue($target));
-        $asset
-            ->expects($this->any())
-            ->method('getVars')
-            ->will($this->returnValue(array()));
-        $asset
-            ->expects($this->any())
-            ->method('getValues')
-            ->will($this->returnValue(array()));
-
-        /* @var AssetInterface $asset */
-        $this->manager->set(Utils::formatName($source), $asset);
     }
 }
