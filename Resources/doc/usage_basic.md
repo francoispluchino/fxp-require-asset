@@ -270,6 +270,25 @@ $configPackage
 $ram->getPackageManager()->addPackage($configPackage);
 ```
 
+### Add common asset (formulae)
+
+Vous pouvez créer des common assets, qui sont en réalité des "assetic formulae" dédié aux require assets:
+
+```php
+<?php
+
+use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+
+$ram = new RequireAssetManager();
+// configure your packages of your require assets
+
+$input = array(
+    '@asset/source/path.js',
+    '@asset/source/path2.js',
+);
+$ram->addCommonAsset('common_js', $inputs, '/common.js', array('?compiler', array('debug' => true));
+```
+
 ### Add asset resources in Assetic Lazy Asset Manager
 
 When all configuration of asset packages is made, you must add all assets in Assetic

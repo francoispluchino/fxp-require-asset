@@ -28,7 +28,8 @@ of each asset. This is for this reason that it must be executed last.
 | `hreflang` | string | `null`        | Specifies the language of the text in the linked document                                           |
 | `sizes`    | int    | `null`        | Specifies the size of the linked resource. Only for rel="icon"                                      |
 
-The twig tag `require_style` required a `string` or a list of `string` containing the link of the source path before the attributes.
+The twig tag `require_style` required a `string` or a list of `string` containing the link of the source path (or name of common asset)
+before the attributes.
 
 #### Twig tag "require_script"
 
@@ -43,7 +44,8 @@ The twig tag `require_style` required a `string` or a list of `string` containin
 | `charset`  | string | `null`        | Specifies the character encoding used in an external script file                                     |
 | `type`     | string | `null`        | Specifies the media type of the script                                                               |
 
-The twig tag `require_script` required a `string` or a list of `string` containing the link of the source path before the attributes.
+The twig tag `require_script` required a `string` or a list of `string` containing the link of the source path (or name of common asset)
+before the attributes.
 
 ### Twig functions
 
@@ -75,6 +77,7 @@ The twig tag `require_script` required a `string` or a list of `string` containi
         {% require_style '@acme_demo/css/asset1.css', '@acme_demo/css/asset2.css' %}
         {% require_script '@acme_demo/js/asset_head.js' async = true position = 'head' %}
         {% require_script '@acme_demo/js/asset1.js', '@acme_demo/js/asset2.js' %}
+        {% require_script '@common_asset_javascript_name' %}
 
         {% set foo: 'bar' %}
         <div id="#{{ foo }}"></div>
