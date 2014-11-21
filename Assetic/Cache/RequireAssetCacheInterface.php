@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Cache;
 
-use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource;
+use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface;
 
 /**
  * Interface of asset resources cache.
@@ -30,7 +30,7 @@ interface RequireAssetCacheInterface
     /**
      * Sets the asset resources.
      *
-     * @param RequireAssetResource[] $assets
+     * @param RequireAssetResourceInterface[] $assets
      *
      * @return self
      */
@@ -39,7 +39,7 @@ interface RequireAssetCacheInterface
     /**
      * Gets the asset resources.
      *
-     * @return array
+     * @return RequireAssetResourceInterface[]
      */
     public function getResources();
 
