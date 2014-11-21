@@ -109,7 +109,7 @@ class RequireTagRenderer implements TagRendererInterface
         if ($this->manager->hasFormula($tag->getAsseticName())) {
             $resource = $this->manager->getFormula($tag->getAsseticName());
 
-            if (isset($resource[2]['fxp_require_common_asset'])) {
+            if (isset($resource[2]['fxp_require_common_asset']) && $resource[2]['fxp_require_common_asset']) {
                 $tag->setInputs($resource[0]);
 
                 return true;
