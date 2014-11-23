@@ -165,8 +165,8 @@ class AssetExtension extends \Twig_Extension
     public function createTagPosition($category, $type, $lineno = -1, $filename = null, $position = null)
     {
         $pos = trim($position, '_');
-        $pos = strlen($pos) > 0 ? '_' . $pos : '';
-        $tag = strtoupper($category . '_' . $type . $pos);
+        $pos = strlen($pos) > 0 ? '_'.$pos : '';
+        $tag = strtoupper($category.'_'.$type.$pos);
 
         if (isset($this->tagPositions[$tag])) {
             throw new AlreadyExistTagPositionException($category, $type, $position, $lineno, $filename);
@@ -302,7 +302,7 @@ class AssetExtension extends \Twig_Extension
      */
     protected function formatTagPosition($category, $type, $position = null)
     {
-        return strtolower($category . ':' . $type . ':' . $position);
+        return strtolower($category.':'.$type.':'.$position);
     }
 
     /**
@@ -314,6 +314,6 @@ class AssetExtension extends \Twig_Extension
      */
     protected function getTagPosition($name)
     {
-        return '{#TAG_POSITION_' . $name . '_'.spl_object_hash($this).'#}';
+        return '{#TAG_POSITION_'.$name.'_'.spl_object_hash($this).'#}';
     }
 }

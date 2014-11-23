@@ -109,7 +109,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
     {
         static::createFixtures();
 
-        $cpkg = new ConfigPackage('NAME', $this->getFixturesDir() . '/foobar');
+        $cpkg = new ConfigPackage('NAME', $this->getFixturesDir().'/foobar');
         $cpkg
             ->addExtension('js')
             ->addExtension('css')
@@ -166,7 +166,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $fs = new Filesystem();
 
         foreach (static::getFixtureFiles() as $filename) {
-            $fs->dumpFile(static::getFixturesDir() . '/' . $filename, '');
+            $fs->dumpFile(static::getFixturesDir().'/'.$filename, '');
         }
     }
 
@@ -183,7 +183,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
      */
     public static function getFixturesDir()
     {
-        return sys_get_temp_dir() . '/fxp-require-asset-fixtures';
+        return sys_get_temp_dir().'/fxp-require-asset-fixtures';
     }
 
     /**

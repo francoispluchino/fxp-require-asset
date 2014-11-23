@@ -100,7 +100,7 @@ class OutputManager implements OutputManagerInterface
             }
         }
 
-        return $this->prefix . '/' . $output;
+        return $this->prefix.'/'.$output;
     }
 
     /**
@@ -118,7 +118,7 @@ class OutputManager implements OutputManagerInterface
         $start = 0 === strpos($pattern, '*') ? '' : '^';
         $end = (strlen($pattern) - 1) === strrpos($pattern, '*') ? '' : '$';
         $pattern = trim($pattern, '*');
-        $pattern = '/' . $start . str_replace('/', '\\/', $pattern) . $end . '/';
+        $pattern = '/'.$start.str_replace('/', '\\/', $pattern).$end.'/';
 
         $output = preg_replace($pattern, trim($outputPattern, '*'), $output);
 
@@ -163,7 +163,7 @@ class OutputManager implements OutputManagerInterface
             $output = $outputPattern;
 
             foreach ($matches as $i => $match) {
-                $output = str_replace('$' . $i, $match, $outputPattern);
+                $output = str_replace('$'.$i, $match, $outputPattern);
             }
         }
 

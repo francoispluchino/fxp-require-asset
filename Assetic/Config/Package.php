@@ -159,7 +159,6 @@ class Package implements PackageInterface
 
         try {
             $finder->in($this->getSourcePath());
-
         } catch (\InvalidArgumentException $ex) {
             throw new InvalidArgumentException(sprintf('The source path ("%s") of the asset package "%s" does not exist', $this->getSourcePath(), $this->getName()));
         }
@@ -179,7 +178,7 @@ class Package implements PackageInterface
     protected function putFileExtensionFilters(Finder $finder, $debug)
     {
         foreach ($this->getExtensions() as $ext) {
-            $pattern = Glob::toRegex('*.' . $ext->getName(), true, false);
+            $pattern = Glob::toRegex('*.'.$ext->getName(), true, false);
             $method = 'name';
 
             if ($ext->isExclude() || ($ext->isDebug() && !$debug)) {
@@ -200,7 +199,6 @@ class Package implements PackageInterface
         foreach ($this->getPatterns() as $pattern) {
             if (0 === strpos($pattern, '!')) {
                 $finder->notPath(Glob::toRegex(substr($pattern, 1), true, false));
-
             } else {
                 $finder->path(Glob::toRegex($pattern, true, false));
             }

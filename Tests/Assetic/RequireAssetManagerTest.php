@@ -95,7 +95,6 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testBasicWithoutConstructor()
     {
-
         $ram = new RequireAssetManager();
 
         $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface', $ram->getFileExtensionManager());
@@ -134,7 +133,7 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
         PackageTest::createFixtures();
 
         $pm = $this->ram->getPackageManager();
-        $pm->addPackage('foobar', PackageTest::getFixturesDir() . '/foobar', array('js', 'css'), array(), false, false);
+        $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', array('js', 'css'), array(), false, false);
 
         $this->assertCount(0, $this->lam->getResources());
 
@@ -166,7 +165,7 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
 
         $cache = new RequireAssetCache(PackageTest::getFixturesDir());
         $pm = $this->ram->getPackageManager();
-        $pm->addPackage('foobar', PackageTest::getFixturesDir() . '/foobar', array('js', 'css'), array(), false, false);
+        $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', array('js', 'css'), array(), false, false);
 
         $this->ram->setCache($cache);
 

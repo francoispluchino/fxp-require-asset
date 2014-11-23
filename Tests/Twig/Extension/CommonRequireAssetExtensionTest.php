@@ -62,6 +62,6 @@ class CommonRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
             '@acme_demo/css/asset4.css',
         ), '/assets/acemodemo/css/not_common.css', false);
 
-        $this->doValidTagTest($tag, 'test', '_' . $env);
+        $this->doValidTagTest($tag, 'test', '_'.$env);
     }
 }

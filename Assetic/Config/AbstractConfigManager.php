@@ -54,7 +54,7 @@ abstract class AbstractConfigManager
     {
         $this->validate();
 
-        $config = call_user_func_array($class . '::createByConfig', $args);
+        $config = call_user_func_array($class.'::createByConfig', $args);
         $prop = &$this->$property;
         $prop[$config->getName()][] = $config;
 

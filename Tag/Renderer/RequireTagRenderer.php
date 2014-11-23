@@ -233,15 +233,15 @@ class RequireTagRenderer implements TagRendererInterface
      */
     protected function doRender(array $attributes, $htmlTag, $shortEndTag)
     {
-        $output = '<' . $htmlTag;
+        $output = '<'.$htmlTag;
 
         foreach ($attributes as $attr => $value) {
             if ($this->isValidValue($value)) {
-                $output .= ' ' . $attr . '="' . $value . '"';
+                $output .= ' '.$attr.'="'.$value.'"';
             }
         }
 
-        $output .= $shortEndTag ? ' />' : '></' . $htmlTag . '>';
+        $output .= $shortEndTag ? ' />' : '></'.$htmlTag.'>';
 
         return $output;
     }

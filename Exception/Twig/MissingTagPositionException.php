@@ -28,10 +28,10 @@ class MissingTagPositionException extends RuntimeException
      */
     public function __construct(TagInterface $asset, \Exception $previous = null)
     {
-        $functionName = $asset->getCategory() . ucfirst($asset->getType()) . 'sPosition';
-        $tagName = $asset->getCategory() . '_' . $asset->getType();
+        $functionName = $asset->getCategory().ucfirst($asset->getType()).'sPosition';
+        $tagName = $asset->getCategory().'_'.$asset->getType();
         $positionName = $asset->getPosition();
-        $positionName = empty($positionName) ? 'without position' : '"' . $positionName . '"';
+        $positionName = empty($positionName) ? 'without position' : '"'.$positionName.'"';
         $message = sprintf('The twig function "%s(%s)" must be defined in the template, because it is required by a twig tag "%s" (%s)', $functionName, $positionName, $tagName, $positionName);
 
         parent::__construct($message, $asset->getLineno(), $asset->getFilename(), $previous);

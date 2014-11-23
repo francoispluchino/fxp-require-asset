@@ -60,7 +60,7 @@ abstract class AbstractTag implements TagInterface
      */
     public function getTagPositionName()
     {
-        return strtolower($this->getCategory() . ':' . $this->getType() . ':' . $this->getPosition());
+        return strtolower($this->getCategory().':'.$this->getType().':'.$this->getPosition());
     }
 
     /**

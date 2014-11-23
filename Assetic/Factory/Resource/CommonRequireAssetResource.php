@@ -41,7 +41,7 @@ class CommonRequireAssetResource extends AbstractRequireAssetResource
         $this->inputs = array();
 
         foreach ($inputs as $input) {
-            $this->inputs[] = '@' . Utils::formatName($input);
+            $this->inputs[] = '@'.Utils::formatName($input);
         }
     }
 

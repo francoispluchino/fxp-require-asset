@@ -54,7 +54,7 @@ class RequireCssRewriteFilter implements FilterInterface, HashableInterface
      */
     public function filterDump(AssetInterface $asset)
     {
-        $sourceFile = FilterUtils::fixRealPath($asset->getSourceRoot() . '/' . $asset->getSourcePath());
+        $sourceFile = FilterUtils::fixRealPath($asset->getSourceRoot().'/'.$asset->getSourcePath());
         $paths = $this->getResourcePaths();
 
         if (!isset($paths[$sourceFile])) {

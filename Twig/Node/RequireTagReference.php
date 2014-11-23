@@ -60,7 +60,7 @@ class RequireTagReference extends \Twig_Node
 
         $compiler
             ->outdent()
-            ->raw(';' . PHP_EOL)
+            ->raw(';'.PHP_EOL)
         ;
     }
 
@@ -84,7 +84,7 @@ class RequireTagReference extends \Twig_Node
                 ->raw(', ')->repr($position)
                 ->raw(', ')->repr($this->getLine())
                 ->raw(', ')->repr($compiler->getFilename())
-                ->raw('))' . PHP_EOL)
+                ->raw('))'.PHP_EOL)
             ;
         }
     }

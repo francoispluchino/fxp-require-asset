@@ -50,7 +50,7 @@ abstract class ResourceUtils
      */
     public static function getAsseticName(PackageInterface $package, SplFileInfo $file)
     {
-        $name = $package->getName() . '/' . static::getPathRelative($package, $file);
+        $name = $package->getName().'/'.static::getPathRelative($package, $file);
 
         return Utils::formatName($name);
     }
@@ -66,7 +66,7 @@ abstract class ResourceUtils
     public static function replaceExtension($output, FileExtensionInterface $ext)
     {
         if (false !== $pos = strrpos($output, '.')) {
-            $output = substr($output, 0, $pos) . '.' . $ext->getOutputExtension();
+            $output = substr($output, 0, $pos).'.'.$ext->getOutputExtension();
         }
 
         return $output;
@@ -88,7 +88,7 @@ abstract class ResourceUtils
         $filters = array();
         $options = array();
         $ext = static::getSplFileExtension($file);
-        $output = $package->getSourceBase() . '/' . $output;
+        $output = $package->getSourceBase().'/'.$output;
 
         if ($package->hasExtension($ext)) {
             $pExt = $package->getExtension($ext);

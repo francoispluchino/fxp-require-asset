@@ -48,7 +48,6 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
                 $this->validateAttributeType($stream, 'value', array('NAME', 'STRING', 'NUMBER'));
 
                 $attributes[$attr] = $this->parser->getExpressionParser()->parseExpression()->getAttribute('value');
-
             } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
         }
 
@@ -69,7 +68,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
         $valid = false;
 
         foreach ($allowed as $aType) {
-            if ($stream->test(constant('\Twig_Token::' . $aType . '_TYPE'))) {
+            if ($stream->test(constant('\Twig_Token::'.$aType.'_TYPE'))) {
                 $valid = true;
                 break;
             }
@@ -113,7 +112,6 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
             $processor = new Processor();
 
             return $processor->process($this->getAttributeNodeConfig(), array($attributes));
-
         } catch (\Exception $e) {
             throw new \Twig_Error_Syntax($this->getFormattedMessageException($e), $lineno, $filename);
         }

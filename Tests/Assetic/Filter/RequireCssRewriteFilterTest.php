@@ -61,7 +61,7 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
 
     protected function getCacheDir()
     {
-        return sys_get_temp_dir() . '/fxp_require_asset-require-css-rewrite-filter-test';
+        return sys_get_temp_dir().'/fxp_require_asset-require-css-rewrite-filter-test';
     }
 
     protected function createFixtures(array $fixtures)
@@ -69,7 +69,7 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
         $fs = new Filesystem();
 
         foreach ($fixtures as $filename => $content) {
-            $fs->dumpFile($this->getCacheDir() . '/' . $filename, $content);
+            $fs->dumpFile($this->getCacheDir().'/'.$filename, $content);
         }
     }
 
@@ -83,7 +83,7 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterDumpWithoutAsseticResource()
     {
-        $asset = new FileAsset($this->getCacheDir() . '/foobar/asset.css');
+        $asset = new FileAsset($this->getCacheDir().'/foobar/asset.css');
 
         $this->rcrf->filterDump($asset);
     }
@@ -118,7 +118,7 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
         );
 
         foreach ($fixtures as $filename => $config) {
-            $path = $this->getCacheDir() . '/' . $filename;
+            $path = $this->getCacheDir().'/'.$filename;
             $rar = new RequireAssetResource(Utils::formatName($filename), $path, $config['target']);
 
             $this->createFixtures(array($filename => $config['content']));

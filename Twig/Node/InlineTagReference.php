@@ -62,7 +62,6 @@ class InlineTagReference extends \Twig_Node
             ->raw(', ')->repr($position)
             ->raw(', ')->repr($this->getLine())
             ->raw(', ')->repr($compiler->getFilename())
-            ->raw('));' . PHP_EOL);
-        ;
+            ->raw('));'.PHP_EOL);
     }
 }

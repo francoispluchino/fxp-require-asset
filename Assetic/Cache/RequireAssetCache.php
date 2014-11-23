@@ -44,7 +44,7 @@ class RequireAssetCache implements RequireAssetCacheInterface
      */
     public function __construct($dir, $filename = 'require-assets')
     {
-        $this->filename = rtrim($dir, '/') . DIRECTORY_SEPARATOR . $filename;
+        $this->filename = rtrim($dir, '/').DIRECTORY_SEPARATOR.$filename;
         $this->fs = new Filesystem();
     }
 

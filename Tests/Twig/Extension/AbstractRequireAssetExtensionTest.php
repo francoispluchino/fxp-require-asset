@@ -67,7 +67,7 @@ abstract class AbstractRequireAssetExtensionTest extends AbstractAssetExtensionT
         );
 
         foreach ($inputs as $input) {
-            $config[0][] = '@' . Utils::formatName($input);
+            $config[0][] = '@'.Utils::formatName($input);
         }
 
         $this->manager->setFormula($name, $config);

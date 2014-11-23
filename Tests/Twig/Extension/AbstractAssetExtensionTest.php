@@ -93,7 +93,7 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTemplate($tag, $file)
     {
-        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../Fixtures/Resources/views/' . $tag);
+        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../Fixtures/Resources/views/'.$tag);
         $twig = new \Twig_Environment($loader, array('debug' => true, 'cache' => false));
         $twig->addExtension($this->ext);
 
@@ -107,9 +107,9 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function doValidTagTest($tag, $testFile = 'test', $validSuffix = '')
     {
-        $tpl = $this->getTemplate($tag, $testFile . '.html.twig');
+        $tpl = $this->getTemplate($tag, $testFile.'.html.twig');
         $content = $tpl->render(array());
-        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/' . $tag . '/' . $testFile . $validSuffix . '.valid.template');
+        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/'.$tag.'/'.$testFile.$validSuffix.'.valid.template');
         $valid = str_replace("\r", "", $valid);
 
         $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
