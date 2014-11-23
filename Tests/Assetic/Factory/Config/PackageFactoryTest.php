@@ -55,7 +55,7 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
             ),
             'replace_default_extensions' => false,
             'patterns' => array(
-                '*/pattern/*'
+                '*/pattern/*',
             ),
             'replace_default_patterns' => false,
         );
@@ -129,7 +129,7 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
             ),
             'replace_default_extensions' => true,
             'patterns' => array(
-                '*/pattern/*'
+                '*/pattern/*',
             ),
             'replace_default_patterns' => true,
         );

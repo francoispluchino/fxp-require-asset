@@ -43,7 +43,7 @@ class PatternManagerTest extends \PHPUnit_Framework_TestCase
 
         $valid = array(
             'pattern1/*',
-            'pattern3/*'
+            'pattern3/*',
         );
         $this->assertSame($valid, $pm->getDefaultPatterns());
     }
