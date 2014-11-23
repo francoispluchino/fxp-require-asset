@@ -143,7 +143,6 @@ abstract class PackageFactory
     {
         if (is_string($confExt)) {
             $confExt = array('name' => $confExt);
-
         } elseif (!array_key_exists('name', $confExt)) {
             $confExt['name'] = $extName;
         }
