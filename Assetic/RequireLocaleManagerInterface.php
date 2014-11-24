@@ -56,7 +56,7 @@ interface RequireLocaleManagerInterface
      * @param string      $asset  The require asset
      * @param string|null $locale The locale
      *
-     * @return string[] Return the require localized assets
+     * @return bool
      */
     public function hasLocalizedAsset($asset, $locale = null);
 

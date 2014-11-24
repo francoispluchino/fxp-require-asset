@@ -199,8 +199,8 @@ class RequireTagRenderer implements TagRendererInterface
      */
     protected function doRenderCommonDebug(RequireTagInterface $tag, $asseticName = null)
     {
-        /* @var AssetCollection $asset */
         $asseticName = null !== $asseticName ? $asseticName : $tag->getAsseticName();
+        /* @var AssetCollection $asset */
         $asset = $this->manager->get($asseticName);
         $iterator = $asset->getIterator();
         $output = '';
