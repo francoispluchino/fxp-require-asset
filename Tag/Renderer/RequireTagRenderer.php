@@ -15,6 +15,7 @@ use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetInterface;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\Util\VarUtils;
+use Fxp\Component\RequireAsset\Assetic\RequireLocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Exception\RequireTagRendererException;
 use Fxp\Component\RequireAsset\Tag\TagInterface;
@@ -39,13 +40,20 @@ class RequireTagRenderer implements TagRendererInterface
     protected $manager;
 
     /**
+     * @var RequireLocaleManagerInterface|null
+     */
+    protected $localeManager;
+
+    /**
      * Constructor.
      *
-     * @param LazyAssetManager $manager
+     * @param LazyAssetManager                   $manager       The lazy assetic manager
+     * @param RequireLocaleManagerInterface|null $localeManager The require locale asset manager
      */
-    public function __construct(LazyAssetManager $manager)
+    public function __construct(LazyAssetManager $manager, RequireLocaleManagerInterface $localeManager = null)
     {
         $this->manager = $manager;
+        $this->localeManager = $localeManager;
         $this->reset();
     }
 
@@ -172,19 +180,37 @@ class RequireTagRenderer implements TagRendererInterface
      */
     protected function preRenderCommonDebug(RequireTagInterface $tag)
     {
+        $output = $this->doRenderCommonDebug($tag);
+
+        foreach ($this->getLocalizedAssets($tag) as $localeAsset) {
+            $output .= $this->doRenderCommonDebug($tag, Utils::formatName($localeAsset));
+        }
+
+        return $output;
+    }
+
+    /**
+     * Do the render of common assets in debug mode and do the render.
+     *
+     * @param RequireTagInterface $tag         The require template tag
+     * @param string|null         $asseticName The assetic name
+     *
+     * @return string The output render
+     */
+    protected function doRenderCommonDebug(RequireTagInterface $tag, $asseticName = null)
+    {
+        /* @var AssetCollection $asset */
+        $asseticName = null !== $asseticName ? $asseticName : $tag->getAsseticName();
+        $asset = $this->manager->get($asseticName);
+        $iterator = $asset->getIterator();
         $output = '';
 
-        /* @var AssetCollection $asset */
-        $asset = $this->manager->get($tag->getAsseticName());
-        $iterator = $asset->getIterator();
-
-        /* @var AssetInterface $child */
         foreach ($iterator as $child) {
             $target = $this->getTargetPath($child);
             $attributes = $tag->getAttributes();
             $attributes[$tag->getLinkAttribute()] = $target;
 
-            $output .= $this->doRender($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
+            $output .= RequireUtil::doRender($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
         }
 
         return $output;
@@ -199,12 +225,31 @@ class RequireTagRenderer implements TagRendererInterface
      */
     protected function preRenderProd(RequireTagInterface $tag)
     {
-        $asset = $this->manager->get($tag->getAsseticName());
+        $attributes = $this->prepareAttributes($tag, $tag->getAsseticName());
+        $output = RequireUtil::doRender($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
+
+        foreach ($this->getLocalizedAssets($tag) as $localeAsset) {
+            $localeAttrs = $this->prepareAttributes($tag, Utils::formatName($localeAsset));
+            $output .= RequireUtil::doRender($localeAttrs, $tag->getHtmlTag(), $tag->shortEndTag());
+        }
+
+        return $output;
+    }
+
+    /**
+     * @param RequireTagInterface $tag         The require tag
+     * @param string              $asseticName The assetic name of asset
+     *
+     * @return array
+     */
+    protected function prepareAttributes(RequireTagInterface $tag, $asseticName)
+    {
+        $asset = $this->manager->get($asseticName);
         $target = $this->getTargetPath($asset);
         $attributes = $tag->getAttributes();
         $attributes[$tag->getLinkAttribute()] = $target;
 
-        return $this->doRender($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
+        return $attributes;
     }
 
     /**
@@ -223,38 +268,20 @@ class RequireTagRenderer implements TagRendererInterface
     }
 
     /**
-     * Do render.
+     * Get localized assets.
      *
-     * @param array  $attributes  The HTML attributes
-     * @param string $htmlTag     The HTML tag name
-     * @param bool   $shortEndTag Check if the end HTML tag must be in a short or long format
+     * @param RequireTagInterface $tag The require tag
      *
-     * @return string The output render
+     * @return string[]
      */
-    protected function doRender(array $attributes, $htmlTag, $shortEndTag)
+    protected function getLocalizedAssets(RequireTagInterface $tag)
     {
-        $output = '<'.$htmlTag;
+        $locales = array();
 
-        foreach ($attributes as $attr => $value) {
-            if ($this->isValidValue($value)) {
-                $output .= ' '.$attr.'="'.$value.'"';
-            }
+        if (null !== $this->localeManager) {
+            $locales = $this->localeManager->getLocalizedAsset($tag->getPath());
         }
 
-        $output .= $shortEndTag ? ' />' : '></'.$htmlTag.'>';
-
-        return $output;
-    }
-
-    /**
-     * Check if the value of attribute can be added in the render.
-     *
-     * @param mixed $value The attribute value
-     *
-     * @return bool
-     */
-    protected function isValidValue($value)
-    {
-        return !empty($value) && is_scalar($value) && !is_bool($value);
+        return $locales;
     }
 }

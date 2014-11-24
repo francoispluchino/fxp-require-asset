@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
 use Assetic\Factory\LazyAssetManager;
+use Fxp\Component\RequireAsset\Assetic\RequireLocaleManagerInterface;
 use Fxp\Component\RequireAsset\Tag\Renderer\InlineTagRenderer;
 use Fxp\Component\RequireAsset\Tag\Renderer\RequireTagRenderer;
 
@@ -25,15 +26,16 @@ class CoreAssetExtension extends AssetExtension
     /**
      * Constructor.
      *
-     * @param LazyAssetManager $manager The lazy assetic manager
+     * @param LazyAssetManager                   $manager       The lazy assetic manager
+     * @param RequireLocaleManagerInterface|null $localeManager The require locale asset manager
      */
-    public function __construct(LazyAssetManager $manager)
+    public function __construct(LazyAssetManager $manager, RequireLocaleManagerInterface $localeManager = null)
     {
         parent::__construct();
 
         $this->setRenderers(array(
             new InlineTagRenderer(),
-            new RequireTagRenderer($manager),
+            new RequireTagRenderer($manager, $localeManager),
         ));
     }
 }
