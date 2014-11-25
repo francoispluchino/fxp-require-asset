@@ -24,6 +24,7 @@ right place in the template, while removing duplicates.
   - the custom asset package
   - the rewrite output path of asset
   - the common assets (assetic formulae dedicated to the require assets)
+  - the locale asset defined by each asset and/or common assets
 - Compiling the final list of asset in cache for increase performance
 - Assetic filters:
   - `requirecssrewrite`: for rewrite the url of another require asset in css file
@@ -33,6 +34,8 @@ right place in the template, while removing duplicates.
     - one only link will be added in the final Twig template (no duplicates)
     - the link will be placed in the right place in the final Twig template (defined in the twig base template)
     - the generated link will corresponding to the link defined by the rewrite rules of assets (the asset target path in Assetic Manager)
+    - automatically add the localized assets after the common assets or individual assets, without duplication
+    - automatically add the localized assets for the inputs of the common asset, even if the common asset does not exist, or that it does not include all the localized inputs
   - tags:
     - `require_script`: for require a script and inject the link in the good place defined in the twig base template
     - `require_style`: for require a style and inject the link in the good place defined in the twig base template
