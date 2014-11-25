@@ -13,6 +13,7 @@ namespace Fxp\Component\RequireAsset\Tag\Renderer;
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetInterface;
+use Assetic\Asset\AssetReference;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\Util\VarUtils;
 use Fxp\Component\RequireAsset\Assetic\RequireLocaleManagerInterface;
@@ -84,7 +85,7 @@ class RequireTagRenderer implements TagRendererInterface
     {
         /* @var RequireTagInterface $tag */
 
-        return $this->canBeRendered($tag)
+        return $this->canBeRendered($tag->getAsseticName())
             ? $this->preRender($tag)
             : '';
     }
@@ -128,28 +129,6 @@ class RequireTagRenderer implements TagRendererInterface
     }
 
     /**
-     * Check if the template tag can be rendered.
-     *
-     * @param RequireTagInterface $tag
-     *
-     * @return bool
-     */
-    protected function canBeRendered(RequireTagInterface $tag)
-    {
-        if (in_array($tag->getAsseticName(), $this->renderedTags)) {
-            return false;
-        }
-
-        $this->renderedTags[] = $tag->getAsseticName();
-
-        foreach ($tag->getInputs() as $input) {
-            $this->renderedTags[] = Utils::formatName($input);
-        }
-
-        return true;
-    }
-
-    /**
      * Prepare the render and do the render.
      *
      * @param RequireTagInterface $tag The require template tag
@@ -182,8 +161,16 @@ class RequireTagRenderer implements TagRendererInterface
     {
         $output = $this->doRenderCommonDebug($tag);
 
-        foreach ($this->getLocalizedAssets($tag) as $localeAsset) {
+        foreach ($this->getLocalizedAssets($tag->getPath()) as $localeAsset) {
             $output .= $this->doRenderCommonDebug($tag, Utils::formatName($localeAsset));
+        }
+
+        // render the individual localized asset if it is not present in the common localized asset
+        foreach ($tag->getInputs() as $input) {
+            foreach ($this->getLocalizedAssets($input) as $localeAsset) {
+                $childName = Utils::formatName($localeAsset);
+                $output .= $this->doRender($tag, $childName);
+            }
         }
 
         return $output;
@@ -205,12 +192,9 @@ class RequireTagRenderer implements TagRendererInterface
         $iterator = $asset->getIterator();
         $output = '';
 
+        /* @var AssetReference $child */
         foreach ($iterator as $child) {
-            $target = $this->getTargetPath($child);
-            $attributes = $tag->getAttributes();
-            $attributes[$tag->getLinkAttribute()] = $target;
-
-            $output .= RequireUtil::doRender($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
+            $output .= $this->doRender($tag, $this->extractAsseticName($child), $child);
         }
 
         return $output;
@@ -225,26 +209,49 @@ class RequireTagRenderer implements TagRendererInterface
      */
     protected function preRenderProd(RequireTagInterface $tag)
     {
-        $attributes = $this->prepareAttributes($tag, $tag->getAsseticName());
-        $output = RequireUtil::doRender($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
+        $output = $this->doRender($tag, $tag->getAsseticName());
 
-        foreach ($this->getLocalizedAssets($tag) as $localeAsset) {
-            $localeAttrs = $this->prepareAttributes($tag, Utils::formatName($localeAsset));
-            $output .= RequireUtil::doRender($localeAttrs, $tag->getHtmlTag(), $tag->shortEndTag());
+        foreach ($this->getLocalizedAssets($tag->getPath()) as $localeAsset) {
+            $childName = Utils::formatName($localeAsset);
+            $output .= $this->doRender($tag, $childName);
         }
+        $this->assetRendered($tag->getInputs());
 
         return $output;
     }
 
     /**
-     * @param RequireTagInterface $tag         The require tag
-     * @param string              $asseticName The assetic name of asset
+     * Do render the HTML tag.
+     *
+     * @param RequireTagInterface $tag
+     * @param string              $asseticName The assetic name
+     * @param AssetInterface|null $asset       The assetic asset (useful for common assets)
+     *
+     * @return string The output render
+     */
+    protected function doRender(RequireTagInterface $tag, $asseticName, AssetInterface $asset = null)
+    {
+        if ($this->canBeRendered($asseticName)) {
+            $asset = null !== $asset ? $asset : $this->manager->get($asseticName);
+            $attributes = $this->prepareAttributes($tag, $asset);
+            $this->assetRendered($asseticName);
+
+            return RequireUtil::renderHtmlTag($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
+        }
+
+        return '';
+    }
+
+    /**
+     * Prepare the attributes of HTML tag.
+     *
+     * @param RequireTagInterface $tag   The require tag
+     * @param AssetInterface      $asset The assetic asset
      *
      * @return array
      */
-    protected function prepareAttributes(RequireTagInterface $tag, $asseticName)
+    protected function prepareAttributes(RequireTagInterface $tag, AssetInterface $asset)
     {
-        $asset = $this->manager->get($asseticName);
         $target = $this->getTargetPath($asset);
         $attributes = $tag->getAttributes();
         $attributes[$tag->getLinkAttribute()] = $target;
@@ -270,18 +277,58 @@ class RequireTagRenderer implements TagRendererInterface
     /**
      * Get localized assets.
      *
-     * @param RequireTagInterface $tag The require tag
+     * @param string $asset The require asset
      *
      * @return string[]
      */
-    protected function getLocalizedAssets(RequireTagInterface $tag)
+    protected function getLocalizedAssets($asset)
     {
-        $locales = array();
-
         if (null !== $this->localeManager) {
-            $locales = $this->localeManager->getLocalizedAsset($tag->getPath());
+            return $this->localeManager->getLocalizedAsset($asset);
         }
 
-        return $locales;
+        return array();
+    }
+
+    /**
+     * Extract the assetic name of the asset reference.
+     *
+     * @param AssetReference $asset The asset
+     *
+     * @return string The assetic name
+     */
+    protected function extractAsseticName(AssetReference $asset)
+    {
+        $ref = new \ReflectionClass($asset);
+        $meth = $ref->getProperty('name');
+        $meth->setAccessible(true);
+
+        return (string) $meth->getValue($asset);
+    }
+
+    /**
+     * Check if the asset can be rendered.
+     *
+     * @param string $asseticName The assetic name
+     *
+     * @return bool
+     */
+    protected function canBeRendered($asseticName)
+    {
+        return !in_array($asseticName, $this->renderedTags);
+    }
+
+    /**
+     * Indicate the asset is rendered.
+     *
+     * @param array|string $assets The asset name or list of asset name
+     */
+    protected function assetRendered($assets)
+    {
+        $assets = (array) $assets;
+
+        foreach ($assets as $asset) {
+            $this->renderedTags[] = Utils::formatName($asset);
+        }
     }
 }

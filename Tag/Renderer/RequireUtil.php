@@ -19,7 +19,7 @@ namespace Fxp\Component\RequireAsset\Tag\Renderer;
 abstract class RequireUtil
 {
     /**
-     * Do render.
+     * Render the HTML tag.
      *
      * @param array  $attributes  The HTML attributes
      * @param string $htmlTag     The HTML tag name
@@ -27,7 +27,7 @@ abstract class RequireUtil
      *
      * @return string The output render
      */
-    public static function doRender(array $attributes, $htmlTag, $shortEndTag)
+    public static function renderHtmlTag(array $attributes, $htmlTag, $shortEndTag)
     {
         $output = '<'.$htmlTag;
 
