@@ -167,10 +167,7 @@ class RequireTagRenderer implements TagRendererInterface
 
         // render the individual localized asset if it is not present in the common localized asset
         foreach ($tag->getInputs() as $input) {
-            foreach ($this->getLocalizedAssets($input) as $localeAsset) {
-                $childName = Utils::formatName($localeAsset);
-                $output .= $this->doRender($tag, $childName);
-            }
+            $output .= $this->preRenderLocalized($tag, $input);
         }
 
         return $output;
@@ -210,12 +207,28 @@ class RequireTagRenderer implements TagRendererInterface
     protected function preRenderProd(RequireTagInterface $tag)
     {
         $output = $this->doRender($tag, $tag->getAsseticName());
+        $output .= $this->preRenderLocalized($tag, $tag->getPath());
+        $this->assetRendered($tag->getInputs());
 
-        foreach ($this->getLocalizedAssets($tag->getPath()) as $localeAsset) {
+        return $output;
+    }
+
+    /**
+     * Pre render the localized assets.
+     *
+     * @param RequireTagInterface $tag   The require template tag
+     * @param string              $asset The asset name
+     *
+     * @return string The output render
+     */
+    protected function preRenderLocalized(RequireTagInterface $tag, $asset)
+    {
+        $output = '';
+
+        foreach ($this->getLocalizedAssets($asset) as $localeAsset) {
             $childName = Utils::formatName($localeAsset);
             $output .= $this->doRender($tag, $childName);
         }
-        $this->assetRendered($tag->getInputs());
 
         return $output;
     }
