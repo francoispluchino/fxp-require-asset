@@ -94,15 +94,16 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
      */
     protected function doRender(RequireTagInterface $tag, $asseticName, AssetInterface $asset = null)
     {
+        $output = '';
+
         if ($this->canBeRendered($asseticName)) {
             $asset = null !== $asset ? $asset : $this->manager->get($asseticName);
             $attributes = $this->prepareAttributes($tag, $asset);
             $this->assetRendered($asseticName);
-
-            return RequireUtil::renderHtmlTag($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
+            $output = RequireUtil::renderHtmlTag($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
         }
 
-        return '';
+        return $output;
     }
 
     /**

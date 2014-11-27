@@ -124,12 +124,7 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
             $output .= $this->doRenderCommonDebug($tag, Utils::formatName($localeAsset));
         }
 
-        // render the individual localized asset if it is not present in the common localized asset
-        foreach ($tag->getInputs() as $input) {
-            $output .= $this->preRenderLocalized($tag, $input);
-        }
-
-        return $output;
+        return $output.$this->includeMissingLocalizedAssets($tag);
     }
 
     /**
@@ -167,7 +162,30 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
     {
         $output = $this->doRender($tag, $tag->getAsseticName());
         $output .= $this->preRenderLocalized($tag, $tag->getPath());
+        $output .= $this->includeMissingLocalizedAssets($tag, !$this->manager->isDebug());
+
         $this->assetRendered($tag->getInputs());
+
+        return $output;
+    }
+
+    /**
+     * Render the individual localized asset if it is not present in the common localized asset.
+     *
+     * @param RequireTagInterface $tag     The require template tag
+     * @param bool                $analyse Check if analyse is required
+     *
+     * @return string The output render
+     */
+    protected function includeMissingLocalizedAssets(RequireTagInterface $tag, $analyse = true)
+    {
+        $output = '';
+
+        if ($analyse) {
+            foreach ($tag->getInputs() as $input) {
+                $output .= $this->preRenderLocalized($tag, $input);
+            }
+        }
 
         return $output;
     }
