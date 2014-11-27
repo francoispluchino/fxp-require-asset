@@ -60,11 +60,15 @@ class LocaleRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
         $this->addAsset('@acme_demo/css/asset4.css', '/assets/acemodemo/css/asset4.css');
 
         // locale require assets
+        $this->addAsset('@acme_demo/js/asset-fr.js', '/assets/acemodemo/js/locale/asset.fr.js');
+        $this->addAsset('@acme_demo/css/asset-fr.css', '/assets/acemodemo/css/locale/asset.fr.css');
         $this->addAsset('@acme_demo/js/asset2-fr.js', '/assets/acemodemo/js/locale/asset2.fr.js');
         $this->addAsset('@acme_demo/css/asset2-fr.css', '/assets/acemodemo/css/locale/asset2.fr.css');
         $this->addAsset('@acme_demo/js/asset3-fr-fr.js', '/assets/acemodemo/js/locale/asset3.fr-fr.js');
         $this->addAsset('@acme_demo/css/asset3-fr-fr.css', '/assets/acemodemo/css/locale/asset3.fr-fr.css');
 
+        $this->localeManager->addLocaliszedAsset('@acme_demo/js/asset.js', 'fr', '@acme_demo/js/asset-fr.js');
+        $this->localeManager->addLocaliszedAsset('@acme_demo/css/asset.css', 'fr', '@acme_demo/css/asset-fr.css');
         $this->localeManager->addLocaliszedAsset('@acme_demo/js/asset3.js', 'fr_FR', '@acme_demo/js/asset3-fr-fr.js');
         $this->localeManager->addLocaliszedAsset('@acme_demo/css/asset3.css', 'fr_FR', '@acme_demo/css/asset3-fr-fr.css');
 
