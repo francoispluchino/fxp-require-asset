@@ -11,7 +11,6 @@
 
 namespace Fxp\Component\RequireAsset\Tag\Renderer;
 
-use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\AssetReference;
 use Assetic\Factory\LazyAssetManager;

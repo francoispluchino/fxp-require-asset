@@ -12,10 +12,7 @@
 namespace Fxp\Component\RequireAsset\Tag\Renderer;
 
 use Assetic\Asset\AssetCollection;
-use Assetic\Asset\AssetInterface;
 use Assetic\Asset\AssetReference;
-use Assetic\Factory\LazyAssetManager;
-use Assetic\Util\VarUtils;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Exception\RequireTagRendererException;
 use Fxp\Component\RequireAsset\Tag\TagInterface;
