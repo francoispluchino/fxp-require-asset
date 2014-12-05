@@ -1,8 +1,7 @@
 Fxp Require Asset
 =================
 
-[![Latest Stable Version](https://poser.pugx.org/fxp/require-asset/v/stable.svg)](https://packagist.org/packages/fxp/require-asset)
-[![Latest Unstable Version](https://poser.pugx.org/fxp/require-asset/v/unstable.svg)](https://packagist.org/packages/fxp/require-asset)
+[![Latest Version](https://img.shields.io/packagist/v/fxp/require-asset.svg)](https://packagist.org/packages/fxp/require-asset)
 [![Build Status](https://travis-ci.org/francoispluchino/fxp-require-asset.svg)](https://travis-ci.org/francoispluchino/fxp-require-asset)
 [![Coverage Status](https://img.shields.io/coveralls/francoispluchino/fxp-require-asset.svg)](https://coveralls.io/r/francoispluchino/fxp-require-asset?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/francoispluchino/fxp-require-asset/badges/quality-score.png)](https://scrutinizer-ci.com/g/francoispluchino/fxp-require-asset)
