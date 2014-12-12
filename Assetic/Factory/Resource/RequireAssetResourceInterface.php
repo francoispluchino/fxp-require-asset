@@ -33,4 +33,32 @@ interface RequireAssetResourceInterface extends ResourceInterface
      * @return string
      */
     public function getPrettyName();
+
+    /**
+     * Get the target path.
+     *
+     * @return string
+     */
+    public function getTargetPath();
+
+    /**
+     * Get the inputs.
+     *
+     * @return array
+     */
+    public function getInputs();
+
+    /**
+     * Get the filters.
+     *
+     * @return array
+     */
+    public function getFilters();
+
+    /**
+     * Get the options.
+     *
+     * @return array
+     */
+    public function getOptions();
 }

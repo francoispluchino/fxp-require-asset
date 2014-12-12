@@ -47,6 +47,13 @@ interface RequireAssetManagerInterface
     public function getOutputManager();
 
     /**
+     * Get the locale manager.
+     *
+     * @return RequireLocaleManagerInterface
+     */
+    public function getLocaleManager();
+
+    /**
      * Get the package manager.
      *
      * @return PackageManagerInterface

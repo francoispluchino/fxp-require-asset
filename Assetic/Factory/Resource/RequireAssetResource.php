@@ -52,7 +52,7 @@ class RequireAssetResource extends AbstractRequireAssetResource
     /**
      * {@inheritdoc}
      */
-    protected function getInputs()
+    public function getInputs()
     {
         return array($this->sourcePath);
     }

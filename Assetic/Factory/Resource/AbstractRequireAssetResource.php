@@ -108,17 +108,34 @@ abstract class AbstractRequireAssetResource implements RequireAssetResourceInter
     /**
      * {@inheritdoc}
      */
+    public function getTargetPath()
+    {
+        return $this->targetPath;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function __toString()
     {
         return $this->name;
     }
-
-    /**
-     * Get the inputs.
-     *
-     * @return array
-     */
-    abstract protected function getInputs();
 
     /**
      * Get the default options.

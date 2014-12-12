@@ -53,6 +53,11 @@ class RequireAssetManager implements RequireAssetManagerInterface
     protected $outputManager;
 
     /**
+     * @var RequireLocaleManagerInterface
+     */
+    protected $localeManager;
+
+    /**
      * @var PackageManagerInterface
      */
     protected $packageManager;
@@ -73,12 +78,12 @@ class RequireAssetManager implements RequireAssetManagerInterface
      * @param FileExtensionManagerInterface $extensionManager The file extension manager
      * @param PatternManagerInterface       $patternManager   The pattern manager
      * @param OutputManagerInterface        $outputManager    The output manager
+     * @param RequireLocaleManagerInterface $localeManager    The locale manager
      */
-    public function __construct(FileExtensionManagerInterface $extensionManager = null, PatternManagerInterface $patternManager = null, OutputManagerInterface $outputManager = null)
+    public function __construct(FileExtensionManagerInterface $extensionManager = null, PatternManagerInterface $patternManager = null, OutputManagerInterface $outputManager = null, RequireLocaleManagerInterface $localeManager = null)
     {
-        $this->extensionManager = $extensionManager ?: new FileExtensionManager();
-        $this->patternManager = $patternManager ?: new PatternManager();
-        $this->outputManager = $outputManager ?: new OutputManager();
+        $this->initManagers($extensionManager, $patternManager);
+        $this->initManagers2($outputManager, $localeManager);
         $this->packageManager = new PackageManager($this->extensionManager, $this->patternManager);
         $this->commons = array();
     }
@@ -105,6 +110,14 @@ class RequireAssetManager implements RequireAssetManagerInterface
     public function getOutputManager()
     {
         return $this->outputManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocaleManager()
+    {
+        return $this->localeManager;
     }
 
     /**
@@ -138,8 +151,7 @@ class RequireAssetManager implements RequireAssetManagerInterface
      */
     public function addCommonAsset($name, array $inputs, $targetPath, array $filters = array(), array $options = array())
     {
-        $targetPath = $this->outputManager->convertOutput(trim($targetPath, '/'));
-        $common = new CommonRequireAssetResource($name, $inputs, $targetPath, $filters, $options);
+        $common = new CommonRequireAssetResource($name, $inputs, $this->convertTargetPath($targetPath), $filters, $options);
         $this->commons[Utils::formatName($name)] = $common;
 
         return $this;
@@ -157,6 +169,30 @@ class RequireAssetManager implements RequireAssetManagerInterface
         }
 
         $this->findAssets($assetManager);
+    }
+
+    /**
+     * Init managers.
+     *
+     * @param FileExtensionManagerInterface $extensionManager
+     * @param PatternManagerInterface       $patternManager
+     */
+    protected function initManagers(FileExtensionManagerInterface $extensionManager = null, PatternManagerInterface $patternManager = null)
+    {
+        $this->extensionManager = $extensionManager ?: new FileExtensionManager();
+        $this->patternManager = $patternManager ?: new PatternManager();
+    }
+
+    /**
+     * Init managers 2.
+     *
+     * @param OutputManagerInterface        $outputManager
+     * @param RequireLocaleManagerInterface $localeManager
+     */
+    protected function initManagers2(OutputManagerInterface $outputManager = null, RequireLocaleManagerInterface $localeManager = null)
+    {
+        $this->outputManager = $outputManager ?: new OutputManager();
+        $this->localeManager = $localeManager ?: new RequireLocaleManager();
     }
 
     /**
@@ -193,7 +229,7 @@ class RequireAssetManager implements RequireAssetManagerInterface
         foreach ($this->packageManager->getPackages() as $package) {
             $resources = array_merge($resources, $this->addPackageAssets($assetManager, $package));
         }
-        $resources = $this->loadCommonAssets($assetManager, $resources);
+        $resources = array_merge($resources, $this->loadCommonAssets($assetManager));
 
         if (null !== $this->cache) {
             $this->cache->setResources($resources);
@@ -239,18 +275,136 @@ class RequireAssetManager implements RequireAssetManagerInterface
     /**
      * Load the common assets in the asset manager.
      *
-     * @param LazyAssetManager                $assetManager
-     * @param RequireAssetResourceInterface[] $resources
+     * @param LazyAssetManager $assetManager
      *
      * @return RequireAssetResourceInterface[]
      */
-    protected function loadCommonAssets(LazyAssetManager $assetManager, array $resources)
+    protected function loadCommonAssets(LazyAssetManager $assetManager)
     {
+        $resources = array();
+
         foreach ($this->commons as $resource) {
             $assetManager->addResource($resource, 'fxp_require_asset_loader');
-            $resources[] = $resource;
+            $resources = array_merge(
+                $resources,
+                array($resource),
+                $this->loadLocalizedCommonAssets($assetManager, $resource)
+            );
         }
 
         return $resources;
+    }
+
+    /**
+     * Load the localized common assets in the asset manager.
+     *
+     * @param LazyAssetManager              $assetManager
+     * @param RequireAssetResourceInterface $resource
+     *
+     * @return RequireAssetResourceInterface[]
+     */
+    protected function loadLocalizedCommonAssets(LazyAssetManager $assetManager, RequireAssetResourceInterface $resource)
+    {
+        $resources = array();
+        $locales = $this->findCommonAssetLocales($resource);
+
+        foreach ($locales as $locale) {
+            $localeResource = $this->createLocaleAssetResource($resource, $locale);
+            $assetManager->addResource($localeResource, 'fxp_require_asset_loader');
+            $resources[] = $localeResource;
+            $this->getLocaleManager()->addLocaliszedAsset($resource->getPrettyName(), $locale, $localeResource->getPrettyName());
+        }
+
+        return $resources;
+    }
+
+    /**
+     * Create the locale common asset.
+     *
+     * @param RequireAssetResourceInterface $resource The require resource
+     * @param string                        $locale   The locale
+     *
+     * @return CommonRequireAssetResource
+     */
+    protected function createLocaleAssetResource(RequireAssetResourceInterface $resource, $locale)
+    {
+        $localeInputs = $this->getLocaleCommonInputs($resource, $locale);
+        $name = $resource->getPrettyName().'__'.strtolower($locale);
+        $targetPath = $this->convertLocaleTartgetPath($resource, $locale);
+        $filters = $resource->getFilters();
+        $options = $resource->getOptions();
+
+        return new CommonRequireAssetResource($name, $localeInputs, $targetPath, $filters, $options);
+    }
+
+    /**
+     * Get the locale common inputs.
+     *
+     * @param RequireAssetResourceInterface $resource The require resource
+     * @param string                        $locale   The locale
+     *
+     * @return string[]
+     */
+    protected function getLocaleCommonInputs(RequireAssetResourceInterface $resource, $locale)
+    {
+        $localeInputs = array();
+
+        foreach ($resource->getInputs() as $input) {
+            $localeInputs = array_merge($localeInputs, $this->getLocaleManager()->getLocalizedAsset($input, $locale));
+        }
+
+        return $localeInputs;
+    }
+
+    /**
+     * Convert the target path to the locale target path.
+     *
+     * @param RequireAssetResourceInterface $resource The require resource
+     * @param string                        $locale   The locale
+     *
+     * @return string
+     */
+    protected function convertLocaleTartgetPath(RequireAssetResourceInterface $resource, $locale)
+    {
+        $targetPath = $this->convertTargetPath($resource->getTargetPath());
+        $pos = strrpos($targetPath, '.');
+
+        if (false !== $pos) {
+            $a = substr($targetPath, 0, $pos);
+            $b = substr($targetPath, $pos);
+            $targetPath = $a.'-'.str_replace('_', '-', strtolower($locale)).$b;
+        }
+
+        return $targetPath;
+    }
+
+    /**
+     * Convert the target path.
+     *
+     * @param string $targetPath The target path
+     *
+     * @return string
+     */
+    protected function convertTargetPath($targetPath)
+    {
+        return $this->outputManager->convertOutput(trim($targetPath, '/'));
+    }
+
+    /**
+     * Fins the locales of common asset.
+     *
+     * @param RequireAssetResourceInterface $resource
+     *
+     * @return string[]
+     */
+    protected function findCommonAssetLocales(RequireAssetResourceInterface $resource)
+    {
+        $locales = array();
+
+        foreach ($resource->getInputs() as $input) {
+            $locales = array_merge($locales, $this->getLocaleManager()->getAssetLocales($input));
+        }
+
+        return array_unique($locales);
     }
 }

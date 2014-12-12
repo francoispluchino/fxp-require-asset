@@ -22,9 +22,11 @@ use Fxp\Component\RequireAsset\Assetic\Config\OutputManager;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource;
 use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
 use Fxp\Component\RequireAsset\Assetic\RequireAssetManagerInterface;
 use Fxp\Component\RequireAsset\Tests\Assetic\Config\PackageTest;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Require Asset Manager Tests.
@@ -159,6 +161,44 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $this->lam->getResources());
     }
 
+    public function testAddLocalizedCommonAssets()
+    {
+        PackageTest::createFixtures();
+        static::createLocalizedFixtures();
+
+        $this->assertCount(0, $this->lam->getResources());
+
+        $this->ram->getLocaleManager()->addLocaliszedAsset('@foobar/js/component-a.js', 'fr', '@foobar/js/component-a-fr.js');
+        $this->ram->getLocaleManager()->addLocaliszedAsset('@foobar/js/component-a.js', 'fr_FR', '@foobar/js/component-a-fr-fr.js');
+        $this->ram->getLocaleManager()->addLocaliszedAsset('@foobar/js/component-a.js', 'en_US', '@foobar/js/component-a-en-us.js');
+        $this->ram->getLocaleManager()->addLocaliszedAsset('@foobar/js/component-b.js', 'fr', '@foobar/js/component-b-fr.js');
+        $this->ram->getLocaleManager()->addLocaliszedAsset('@foobar/js/component-b.js', 'en_US', '@foobar/js/component-b-en-us.js');
+
+        $inputs = array(
+            '@foobar/js/component-a.js',
+            '@foobar/js/component-b.js',
+            '@foobar/js/component-c.js',
+        );
+
+        $this->ram->addCommonAsset('common_js', $inputs, 'TARGET.js');
+        $this->ram->addAssetResources($this->lam);
+
+        $validLocales = array(
+            'fr',
+            'fr_fr',
+            'en_us',
+        );
+        $this->assertSame($validLocales, $this->ram->getLocaleManager()->getAssetLocales());
+
+        $validResources = array(
+            new CommonRequireAssetResource('common_js', $inputs, 'assets/TARGET.js', array(), array()),
+            new CommonRequireAssetResource('common_js__fr', array('@foobar_js_component_a_fr_js', '@foobar_js_component_b_fr_js'), 'assets/assets/TARGET-fr.js', array(), array()),
+            new CommonRequireAssetResource('common_js__fr_fr', array('@foobar_js_component_a_fr_fr_js', '@foobar_js_component_b_fr_js'), 'assets/assets/TARGET-fr-fr.js', array(), array()),
+            new CommonRequireAssetResource('common_js__en_us', array('@foobar_js_component_a_en_us_js', '@foobar_js_component_b_en_us_js'), 'assets/assets/TARGET-en-us.js', array(), array()),
+        );
+        $this->assertEquals($validResources, $this->lam->getResources());
+    }
+
     public function testAddResourcesWhithAssetAndCache()
     {
         PackageTest::createFixtures();
@@ -183,5 +223,28 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $lam->getResources());
         $this->ram->addAssetResources($lam);
         $this->assertEquals($resources, $this->lam->getResources());
+    }
+
+    public static function createLocalizedFixtures()
+    {
+        $fs = new Filesystem();
+
+        foreach (static::getLocalizedFixtureFiles() as $filename) {
+            $fs->dumpFile(PackageTest::getFixturesDir().'/'.$filename, '');
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getLocalizedFixtureFiles()
+    {
+        return array(
+            'foobar/js/component-a-fr.js',
+            'foobar/js/component-a-fr-fr.js',
+            'foobar/js/component-a-en-us.js',
+            'foobar/js/component-b-fr.js',
+            'foobar/js/component-b-en-us.js',
+        );
     }
 }

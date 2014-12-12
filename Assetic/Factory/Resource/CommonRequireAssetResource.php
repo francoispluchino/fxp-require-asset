@@ -48,7 +48,7 @@ class CommonRequireAssetResource extends AbstractRequireAssetResource
     /**
      * {@inheritdoc}
      */
-    protected function getInputs()
+    public function getInputs()
     {
         return $this->inputs;
     }

@@ -101,9 +101,11 @@ interface RequireLocaleManagerInterface
     public function hasAssetLocale($locale);
 
     /**
-     * Get all existing locale.
+     * Get existing locale for all asset or a specific asset.
+     *
+     * @param string|null $asset The require asset
      *
      * @return string[]
      */
-    public function getAssetLocales();
+    public function getAssetLocales($asset = null);
 }

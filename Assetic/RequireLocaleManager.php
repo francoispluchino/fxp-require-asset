@@ -38,6 +38,11 @@ class RequireLocaleManager implements RequireLocaleManagerInterface
     /**
      * @var array
      */
+    protected $mapAssets;
+
+    /**
+     * @var array
+     */
     protected $cache;
 
     /**
@@ -51,6 +56,7 @@ class RequireLocaleManager implements RequireLocaleManagerInterface
         $this->setLocale(null !== $locale ? $locale : \Locale::getDefault());
         $this->setFallbackLocale($fallback);
         $this->assets = array();
+        $this->mapAssets = array();
     }
 
     /**
@@ -107,6 +113,7 @@ class RequireLocaleManager implements RequireLocaleManagerInterface
         $name = Utils::formatName($asset);
         $locale = $this->formatLocale($locale);
         $this->assets[$locale][$name] = (array) $localizedAsset;
+        $this->mapAssets[$name][$locale] = true;
         unset($this->cache[$this->getCacheKey($locale, $name)]);
 
         return $this;
@@ -120,12 +127,9 @@ class RequireLocaleManager implements RequireLocaleManagerInterface
         $name = Utils::formatName($asset);
         $locale = $this->formatLocale($locale);
 
-        unset($this->assets[$locale][$name]);
+        $this->cleanArray('assets', $locale, $name);
+        $this->cleanArray('mapAssets', $name, $locale);
         unset($this->cache[$this->getCacheKey($locale, $name)]);
-
-        if (0 === count($this->assets[$locale])) {
-            unset($this->assets[$locale]);
-        }
 
         return $this;
     }
@@ -159,8 +163,16 @@ class RequireLocaleManager implements RequireLocaleManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function getAssetLocales()
+    public function getAssetLocales($asset = null)
     {
+        if (null !== $asset) {
+            $name = Utils::formatName($asset);
+
+            return isset($this->mapAssets[$name])
+                ? array_keys($this->mapAssets[$name])
+                : array();
+        }
+
         return array_keys($this->assets);
     }
 
@@ -246,5 +258,22 @@ class RequireLocaleManager implements RequireLocaleManagerInterface
     protected function getCacheKey($locale, $asset)
     {
         return $locale.':'.$asset;
+    }
+
+    /**
+     * Clean the array.
+     *
+     * @param string $property The property name
+     * @param string $key      The first key of array
+     * @param string $subKey   The sub key of array
+     */
+    protected function cleanArray($property, $key, $subKey)
+    {
+        $val = &$this->$property;
+        unset($val[$key][$subKey]);
+
+        if (array_key_exists($key, $val) && 0 === count($val[$key])) {
+            unset($val[$key]);
+        }
     }
 }
