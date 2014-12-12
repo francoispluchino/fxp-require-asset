@@ -24,6 +24,7 @@ right place in the template, while removing duplicates.
   - the rewrite output path of asset
   - the common assets (assetic formulae dedicated to the require assets)
   - the locale asset defined by each asset and/or common assets
+- Automatic addition of localized commons assets
 - Compiling the final list of asset in cache for increase performance
 - Assetic filters:
   - `requirecssrewrite`: for rewrite the url of another require asset in css file
