@@ -17,6 +17,7 @@ use Fxp\Component\RequireAsset\Assetic\Factory\Loader\RequireAssetLoader;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface;
+use Fxp\Component\RequireAsset\Assetic\Util\LocaleUtils;
 use Fxp\Component\RequireAsset\Assetic\Util\ResourceUtils;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Symfony\Component\Finder\SplFileInfo;
@@ -164,7 +165,7 @@ class RequireAssetManager extends AbstractRequireAssetManager
     protected function loadLocalizedCommonAssets(LazyAssetManager $assetManager, RequireAssetResourceInterface $resource)
     {
         $resources = array();
-        $locales = $this->findCommonAssetLocales($resource);
+        $locales = LocaleUtils::findCommonAssetLocales($resource->getInputs(), $this->getLocaleManager());
 
         foreach ($locales as $locale) {
             $localeResource = $this->createLocaleAssetResource($resource, $locale);
@@ -186,54 +187,14 @@ class RequireAssetManager extends AbstractRequireAssetManager
      */
     protected function createLocaleAssetResource(RequireAssetResourceInterface $resource, $locale)
     {
-        $localeInputs = $this->getLocaleCommonInputs($resource, $locale);
-        $name = $resource->getPrettyName().'__'.strtolower($locale);
-        $targetPath = $this->convertLocaleTartgetPath($resource, $locale);
+        $localeInputs = LocaleUtils::getLocaleCommonInputs($resource->getInputs(), $locale, $this->getLocaleManager());
+        $name = LocaleUtils::formatLocaleCommonName($resource->getPrettyName(), $locale);
+        $targetPath = LocaleUtils::convertLocaleTartgetPath($resource->getTargetPath(), $locale);
+        $targetPath = $this->convertTargetPath($targetPath);
         $filters = $resource->getFilters();
         $options = $resource->getOptions();
 
         return new CommonRequireAssetResource($name, $localeInputs, $targetPath, $filters, $options);
-    }
-
-    /**
-     * Get the locale common inputs.
-     *
-     * @param RequireAssetResourceInterface $resource The require resource
-     * @param string                        $locale   The locale
-     *
-     * @return string[]
-     */
-    protected function getLocaleCommonInputs(RequireAssetResourceInterface $resource, $locale)
-    {
-        $localeInputs = array();
-
-        foreach ($resource->getInputs() as $input) {
-            $localeInputs = array_merge($localeInputs, $this->getLocaleManager()->getLocalizedAsset($input, $locale));
-        }
-
-        return $localeInputs;
-    }
-
-    /**
-     * Convert the target path to the locale target path.
-     *
-     * @param RequireAssetResourceInterface $resource The require resource
-     * @param string                        $locale   The locale
-     *
-     * @return string
-     */
-    protected function convertLocaleTartgetPath(RequireAssetResourceInterface $resource, $locale)
-    {
-        $targetPath = $this->convertTargetPath($resource->getTargetPath());
-        $pos = strrpos($targetPath, '.');
-
-        if (false !== $pos) {
-            $a = substr($targetPath, 0, $pos);
-            $b = substr($targetPath, $pos);
-            $targetPath = $a.'-'.str_replace('_', '-', strtolower($locale)).$b;
-        }
-
-        return $targetPath;
     }
 
     /**
@@ -246,23 +207,5 @@ class RequireAssetManager extends AbstractRequireAssetManager
     protected function convertTargetPath($targetPath)
     {
         return $this->outputManager->convertOutput(trim($targetPath, '/'));
-    }
-
-    /**
-     * Fins the locales of common asset.
-     *
-     * @param RequireAssetResourceInterface $resource
-     *
-     * @return string[]
-     */
-    protected function findCommonAssetLocales(RequireAssetResourceInterface $resource)
-    {
-        $locales = array();
-
-        foreach ($resource->getInputs() as $input) {
-            $locales = array_merge($locales, $this->getLocaleManager()->getAssetLocales($input));
-        }
-
-        return array_unique($locales);
     }
 }
