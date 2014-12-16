@@ -289,6 +289,62 @@ $input = array(
 $ram->addCommonAsset('common_js', $inputs, '/common.js', array('?compiler', array('debug' => true));
 ```
 
+### Add localized asset
+
+You can add localized assets. Fir this, you must add each localized asset in the Require Asset
+Manager, and set the locale of each asset in the Locale Manager:
+
+```php
+<?php
+
+use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+
+$ram = new RequireAssetManager();
+$lm = $ram->getLocaleManager();
+// configure your packages of your require assets
+
+$lm->addLocaliszedAsset('@package1/asset1.js', 'fr_fr', '@package1/locale/asset1-fr-fr.js');
+$lm->addLocaliszedAsset('@package1/asset1.js', 'fr_ca', '@package1/locale/asset1-fr-ca.js');
+$lm->addLocaliszedAsset('@package1/asset1.js', 'fr', '@package1/locale/asset1-fr.js');
+
+$lm->addLocaliszedAsset('@package2/asset1.js', 'it', array(
+    '@package2/locale/asset1-it-part1.js',
+    '@package2/locale/asset1-it-part2.js',
+));
+```
+
+### Add localized common asset
+
+By default, the localized common assets are automatically added. Each localized common
+asset is added for each local available for each input.
+
+However, you can manually add or overwrite the configuration.
+
+For override the localized config of an common asset, you must named the localized
+common asset with the name of common asset, followed by `__` and the locale in lowercase
+(`fr` or `fr_fr`):
+
+```php
+<?php
+
+use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+
+$ram = new RequireAssetManager();
+// configure your packages of your require assets
+
+$inputs = array(
+    '@asset/source/path.js',
+    '@asset/source/path2.js',
+);
+$ram->addCommonAsset('common_js', $inputs, '/common.js', array('?compiler', array('debug' => true));
+
+$localeInputs = array(
+    '@asset/source/path-fr-fr.js',
+);
+$ram->addCommonAsset('common_js__fr_fr', $localeInputs, '/common-fr-fr.js', array('?compiler', array('debug' => true));
+$ram->getLocaleManager()->addLocaliszedAsset('common_js', 'fr_fr', 'common_js__fr_fr');
+```
+
 ### Add asset resources in Assetic Lazy Asset Manager
 
 When all configuration of asset packages is made, you must add all assets in Assetic
