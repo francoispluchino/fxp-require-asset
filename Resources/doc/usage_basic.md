@@ -432,6 +432,7 @@ use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\FilterManager;
 use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\Filter\RequireCssRewriteFilter;
 
 $fm = new FilterManager();
 $factory = new AssetFactory('web');
@@ -439,10 +440,42 @@ $factory->setFilterManager($fm);
 $lam = new LazyAssetManager($factory);
 $ram = new RequireAssetManager();
 
+// configure your asset packages
+
 $fm->set('requirecssrewrite', new RequireCssRewriteFilter($lam));
 
 $ram->getFileExtensionManager()
     ->addDefaultExtension('css', array(), array('requirecssrewrite'));
+```
+
+### Using the asset package paths in LESS files
+
+You can add the source paths of asset packages in variables to the beginning of the file.
+
+**Example of configuration for used the Less Variable Filter:**
+
+```php
+<?php
+
+use Assetic\Factory\AssetFactory;
+use Assetic\Factory\LazyAssetManager;
+use Assetic\FilterManager;
+use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\Filter\LessVariableFilter;
+use Fxp\Component\RequireAsset\Assetic\Util\PackageUtils;
+
+$fm = new FilterManager();
+$factory = new AssetFactory('web');
+$factory->setFilterManager($fm);
+$lam = new LazyAssetManager($factory);
+$ram = new RequireAssetManager();
+
+// configure your asset packages
+
+$fm->set('lessvariable', new LessVariableFilter(PackageUtils::getPackagePaths($ram->getPackageManager())));
+
+$ram->getFileExtensionManager()
+    ->addDefaultExtension('less', array(), array('lessvariable'));
 ```
 
 ### Using cache of the search of assets
