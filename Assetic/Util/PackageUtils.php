@@ -13,6 +13,7 @@ namespace Fxp\Component\RequireAsset\Assetic\Util;
 
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackageInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\PackageFactory;
 
 /**
@@ -54,5 +55,23 @@ abstract class PackageUtils
         }
 
         return $name;
+    }
+
+    /**
+     * Get the paths of asset packages.
+     *
+     * @param PackageManagerInterface $manager The package manager
+     *
+     * @return array The map of package name and source path
+     */
+    public static function getPackagePaths(PackageManagerInterface $manager)
+    {
+        $packages = array();
+
+        foreach ($manager->getPackages() as $package) {
+            $packages[$package->getName()] = $package->getSourcePath();
+        }
+
+        return $packages;
     }
 }
