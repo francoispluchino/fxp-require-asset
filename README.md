@@ -28,6 +28,7 @@ right place in the template, while removing duplicates.
 - Compiling the final list of asset in cache for increase performance
 - Assetic filters:
   - `requirecssrewrite`: for rewrite the url of another require asset in css file
+  - `lessvariable`: for inject the asset package paths as variables
 - Twig features:
   - possibility to defined the asset in one or more template Twig:
     - reference to the source file of the asset in the Twig template, and not the target path of the asset defined in the Assetic Manager
