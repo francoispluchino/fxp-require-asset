@@ -101,7 +101,8 @@ abstract class FilterUtils
      */
     protected static function getRealPath($sourceBase, $url)
     {
-        $path = $sourceBase.'/'.$url;
+        $fs = new Filesystem();
+        $path = $fs->isAbsolutePath($url) ? static::fixRealPath($url) : $sourceBase.'/'.$url;
         $path = static::cleanPath($path, '?');
         $path = static::cleanPath($path, '#');
         $path = static::fixRealPath($path);
