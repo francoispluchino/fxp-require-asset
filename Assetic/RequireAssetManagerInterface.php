@@ -13,6 +13,7 @@ namespace Fxp\Component\RequireAsset\Assetic;
 
 use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\AsseticConfigResourcesInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
@@ -27,11 +28,29 @@ use Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface;
 interface RequireAssetManagerInterface
 {
     /**
+     * Set the file extension manager.
+     *
+     * @param FileExtensionManagerInterface $extensionManager The file extension manager
+     *
+     * @return self
+     */
+    public function setFileExtensionManager(FileExtensionManagerInterface $extensionManager);
+
+    /**
      * Get the file extension manager.
      *
      * @return FileExtensionManagerInterface
      */
     public function getFileExtensionManager();
+
+    /**
+     * set the pattern manager.
+     *
+     * @param PatternManagerInterface $patternManager The pattern manager
+     *
+     * @return self
+     */
+    public function setPatternManager(PatternManagerInterface $patternManager);
 
     /**
      * Get the pattern manager.
@@ -41,6 +60,15 @@ interface RequireAssetManagerInterface
     public function getPatternManager();
 
     /**
+     * Set the output rewrite manager.
+     *
+     * @param OutputManagerInterface $outputManager The output rewrite manager.
+     *
+     * @return self
+     */
+    public function setOutputManager(OutputManagerInterface $outputManager);
+
+    /**
      * Get the output rewrite manager.
      *
      * @return OutputManagerInterface
@@ -48,11 +76,29 @@ interface RequireAssetManagerInterface
     public function getOutputManager();
 
     /**
+     * Set the locale manager.
+     *
+     * @param LocaleManagerInterface $localeManager The locale manager
+     *
+     * @return self
+     */
+    public function setLocaleManager(LocaleManagerInterface $localeManager);
+
+    /**
      * Get the locale manager.
      *
      * @return LocaleManagerInterface
      */
     public function getLocaleManager();
+
+    /**
+     * set the package manager.
+     *
+     * @param PackageManagerInterface $packageManager The package manager
+     *
+     * @return self
+     */
+    public function setPackageManager(PackageManagerInterface $packageManager);
 
     /**
      * Get the package manager.
@@ -98,4 +144,13 @@ interface RequireAssetManagerInterface
      * @return void
      */
     public function addAssetResources(LazyAssetManager $assetManager);
+
+    /**
+     * Get the configs of the require assets.
+     *
+     * @param bool $debug The assetic debug mode
+     *
+     * @return AsseticConfigResourcesInterface
+     */
+    public function getAsseticConfigResources($debug);
 }

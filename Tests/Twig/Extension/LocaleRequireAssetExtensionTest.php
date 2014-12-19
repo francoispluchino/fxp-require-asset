@@ -67,10 +67,10 @@ class LocaleRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
         $this->addAsset('@acme_demo/js/asset3-fr-fr.js', '/assets/acemodemo/js/locale/asset3.fr-fr.js');
         $this->addAsset('@acme_demo/css/asset3-fr-fr.css', '/assets/acemodemo/css/locale/asset3.fr-fr.css');
 
-        $this->localeManager->addLocaliszedAsset('@acme_demo/js/asset.js', 'fr', '@acme_demo/js/asset-fr.js');
-        $this->localeManager->addLocaliszedAsset('@acme_demo/css/asset.css', 'fr', '@acme_demo/css/asset-fr.css');
-        $this->localeManager->addLocaliszedAsset('@acme_demo/js/asset3.js', 'fr_FR', '@acme_demo/js/asset3-fr-fr.js');
-        $this->localeManager->addLocaliszedAsset('@acme_demo/css/asset3.css', 'fr_FR', '@acme_demo/css/asset3-fr-fr.css');
+        $this->localeManager->addLocalizedAsset('@acme_demo/js/asset.js', 'fr', '@acme_demo/js/asset-fr.js');
+        $this->localeManager->addLocalizedAsset('@acme_demo/css/asset.css', 'fr', '@acme_demo/css/asset-fr.css');
+        $this->localeManager->addLocalizedAsset('@acme_demo/js/asset3.js', 'fr_FR', '@acme_demo/js/asset3-fr-fr.js');
+        $this->localeManager->addLocalizedAsset('@acme_demo/css/asset3.css', 'fr_FR', '@acme_demo/css/asset3-fr-fr.css');
 
         // common require assets
         $this->addFormulaeAsset('common_js', array(
@@ -92,8 +92,8 @@ class LocaleRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
                 '@acme_demo/css/asset2-fr.css',
             ), '/assets/acemodemo/css/common_fr.css');
 
-        $this->localeManager->addLocaliszedAsset('@common_js', 'fr', '@common_js_fr');
-        $this->localeManager->addLocaliszedAsset('@common_css', 'fr', '@common_css_fr');
+        $this->localeManager->addLocalizedAsset('@common_js', 'fr', '@common_js_fr');
+        $this->localeManager->addLocalizedAsset('@common_css', 'fr', '@common_css_fr');
 
         $this->doValidTagTest($tag, 'test', '_'.$env);
     }

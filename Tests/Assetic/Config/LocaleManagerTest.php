@@ -30,6 +30,7 @@ class LocaleManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $rlm->getLocalizedAsset('@asset/source/path.ext'));
         $this->assertFalse($rlm->hasAssetLocale(\Locale::getDefault()));
         $this->assertCount(0, $rlm->getAssetLocales());
+        $this->assertCount(0, $rlm->getLocalizedAssets());
 
         // cache
         $this->assertCount(0, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -42,7 +43,7 @@ class LocaleManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $rlm = new LocaleManager();
-        $rlm->addLocaliszedAsset('@asset/source/path.ext', \Locale::getDefault(), $valid[0]);
+        $rlm->addLocalizedAsset('@asset/source/path.ext', \Locale::getDefault(), $valid[0]);
 
         $this->assertTrue($rlm->hasLocalizedAsset('@asset/source/path.ext'));
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -60,7 +61,7 @@ class LocaleManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $rlm = new LocaleManager();
-        $rlm->addLocaliszedAsset('@asset/source/path.ext', \Locale::getDefault(), $valid);
+        $rlm->addLocalizedAsset('@asset/source/path.ext', \Locale::getDefault(), $valid);
 
         $this->assertTrue($rlm->hasLocalizedAsset('@asset/source/path.ext'));
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -79,7 +80,7 @@ class LocaleManagerTest extends \PHPUnit_Framework_TestCase
 
         $rlm = new LocaleManager();
         $rlm->setLocale('fr_FR');
-        $rlm->addLocaliszedAsset('@asset/source/path.ext', 'fr', $valid);
+        $rlm->addLocalizedAsset('@asset/source/path.ext', 'fr', $valid);
 
         $this->assertFalse($rlm->hasLocalizedAsset('@asset/source/path.ext'));
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -100,7 +101,7 @@ class LocaleManagerTest extends \PHPUnit_Framework_TestCase
         $rlm = new LocaleManager();
         $rlm->setLocale('fr_FR');
         $rlm->setFallbackLocale('en_US');
-        $rlm->addLocaliszedAsset('@asset/source/path.ext', 'en', $valid);
+        $rlm->addLocalizedAsset('@asset/source/path.ext', 'en', $valid);
 
         $this->assertFalse($rlm->hasLocalizedAsset('@asset/source/path.ext'));
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -121,7 +122,7 @@ class LocaleManagerTest extends \PHPUnit_Framework_TestCase
 
         $rlm = new LocaleManager();
         $rlm->setLocale('fr_FR');
-        $rlm->addLocaliszedAsset('@asset/source/path.ext', 'en', $valid);
+        $rlm->addLocalizedAsset('@asset/source/path.ext', 'en', $valid);
 
         $this->assertFalse($rlm->hasLocalizedAsset('@asset/source/path.ext'));
         $this->assertCount(0, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -137,18 +138,18 @@ class LocaleManagerTest extends \PHPUnit_Framework_TestCase
     {
         $rlm = new LocaleManager();
 
-        $rlm->addLocaliszedAsset('@asset/source/path.ext', 'en', '@asset/source/path/locale/en.ext');
+        $rlm->addLocalizedAsset('@asset/source/path.ext', 'en', '@asset/source/path/locale/en.ext');
         $this->assertTrue($rlm->hasAssetLocale('en'));
         $this->assertCount(1, $rlm->getAssetLocales());
 
-        $rlm->addLocaliszedAsset('@asset/source/path2.ext', 'en', '@asset/source/path2/locale/en.ext');
+        $rlm->addLocalizedAsset('@asset/source/path2.ext', 'en', '@asset/source/path2/locale/en.ext');
         $this->assertTrue($rlm->hasAssetLocale('en'));
         $this->assertCount(1, $rlm->getAssetLocales());
 
-        $rlm->removeLocaliszedAsset('@asset/source/path2.ext', 'en');
+        $rlm->removeLocalizedAsset('@asset/source/path2.ext', 'en');
         $this->assertCount(1, $rlm->getAssetLocales());
 
-        $rlm->removeLocaliszedAsset('@asset/source/path.ext', 'en');
+        $rlm->removeLocalizedAsset('@asset/source/path.ext', 'en');
         $this->assertCount(0, $rlm->getAssetLocales());
     }
 }

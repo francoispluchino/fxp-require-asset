@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Assetic;
 
 use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\AssetResourceInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManager;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\LocaleManager;
@@ -22,7 +23,6 @@ use Fxp\Component\RequireAsset\Assetic\Config\PackageManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface;
-use Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource;
 
 /**
  * Abstract class for Require asset package.
@@ -57,7 +57,7 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
     protected $packageManager;
 
     /**
-     * @var CommonRequireAssetResource[]
+     * @var AssetResourceInterface[]
      */
     protected $commons;
 
@@ -67,19 +67,27 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
     protected $cache;
 
     /**
-     * Constructor.
-     *
-     * @param FileExtensionManagerInterface $extensionManager The file extension manager
-     * @param PatternManagerInterface       $patternManager   The pattern manager
-     * @param OutputManagerInterface        $outputManager    The output manager
-     * @param LocaleManagerInterface        $localeManager    The locale manager
+     * @var bool
      */
-    public function __construct(FileExtensionManagerInterface $extensionManager = null, PatternManagerInterface $patternManager = null, OutputManagerInterface $outputManager = null, LocaleManagerInterface $localeManager = null)
+    protected $initialized;
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
     {
-        $this->initManagers($extensionManager, $patternManager);
-        $this->initManagers2($outputManager, $localeManager);
-        $this->packageManager = new PackageManager($this->extensionManager, $this->patternManager);
+        $this->initialized = false;
         $this->commons = array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setFileExtensionManager(FileExtensionManagerInterface $extensionManager)
+    {
+        $this->extensionManager = $extensionManager;
+
+        return $this;
     }
 
     /**
@@ -87,7 +95,19 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
      */
     public function getFileExtensionManager()
     {
+        $this->init();
+
         return $this->extensionManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPatternManager(PatternManagerInterface $patternManager)
+    {
+        $this->patternManager = $patternManager;
+
+        return $this;
     }
 
     /**
@@ -95,7 +115,19 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
      */
     public function getPatternManager()
     {
+        $this->init();
+
         return $this->patternManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOutputManager(OutputManagerInterface $outputManager)
+    {
+        $this->outputManager = $outputManager;
+
+        return $this;
     }
 
     /**
@@ -103,7 +135,19 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
      */
     public function getOutputManager()
     {
+        $this->init();
+
         return $this->outputManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLocaleManager(LocaleManagerInterface $localeManager)
+    {
+        $this->localeManager = $localeManager;
+
+        return $this;
     }
 
     /**
@@ -111,7 +155,19 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
      */
     public function getLocaleManager()
     {
+        $this->init();
+
         return $this->localeManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPackageManager(PackageManagerInterface $packageManager)
+    {
+        $this->packageManager = $packageManager;
+
+        return $this;
     }
 
     /**
@@ -119,6 +175,8 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
      */
     public function getPackageManager()
     {
+        $this->init();
+
         return $this->packageManager;
     }
 
@@ -141,26 +199,17 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
     }
 
     /**
-     * Init managers.
-     *
-     * @param FileExtensionManagerInterface $extensionManager
-     * @param PatternManagerInterface       $patternManager
+     * Initialize the manager.
      */
-    protected function initManagers(FileExtensionManagerInterface $extensionManager = null, PatternManagerInterface $patternManager = null)
+    protected function init()
     {
-        $this->extensionManager = $extensionManager ?: new FileExtensionManager();
-        $this->patternManager = $patternManager ?: new PatternManager();
-    }
-
-    /**
-     * Init managers 2.
-     *
-     * @param OutputManagerInterface $outputManager
-     * @param LocaleManagerInterface $localeManager
-     */
-    protected function initManagers2(OutputManagerInterface $outputManager = null, LocaleManagerInterface $localeManager = null)
-    {
-        $this->outputManager = $outputManager ?: new OutputManager();
-        $this->localeManager = $localeManager ?: new LocaleManager();
+        if (!$this->initialized) {
+            $this->extensionManager = $this->extensionManager ?: new FileExtensionManager();
+            $this->patternManager = $this->patternManager ?: new PatternManager();
+            $this->outputManager = $this->outputManager ?: new OutputManager();
+            $this->localeManager = $this->localeManager ?: new LocaleManager();
+            $this->packageManager = $this->packageManager ?: new PackageManager($this->extensionManager, $this->patternManager);
+            $this->initialized = true;
+        }
     }
 }

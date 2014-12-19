@@ -21,6 +21,23 @@ use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 abstract class LocaleUtils
 {
     /**
+     * Format the locale.
+     *
+     * @param string|null $locale The locale
+     *
+     * @return string
+     */
+    public static function formatLocale($locale)
+    {
+        if (is_string($locale)) {
+            $locale = strtolower($locale);
+            $locale = str_replace('-', '_', $locale);
+        }
+
+        return $locale;
+    }
+
+    /**
      * Format the locale common name.
      *
      * @param string $name   The common asset name
@@ -30,7 +47,7 @@ abstract class LocaleUtils
      */
     public static function formatLocaleCommonName($name, $locale)
     {
-        return $name.'__'.strtolower($locale);
+        return $name.'__'.static::formatLocale($locale);
     }
 
     /**

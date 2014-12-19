@@ -48,11 +48,9 @@ abstract class ResourceUtils
      *
      * @return string
      */
-    public static function getAsseticName(PackageInterface $package, SplFileInfo $file)
+    public static function getPackageFilename(PackageInterface $package, SplFileInfo $file)
     {
-        $name = $package->getName().'/'.static::getPathRelative($package, $file);
-
-        return Utils::formatName($name);
+        return $package->getName().'/'.static::getPathRelative($package, $file);
     }
 
     /**
@@ -83,7 +81,7 @@ abstract class ResourceUtils
      */
     public static function createConfigResource(PackageInterface $package, SplFileInfo $file, OutputManagerInterface $outputManager)
     {
-        $name = static::getAsseticName($package, $file);
+        $name = static::getPackageFilename($package, $file);
         $output = static::getPathRelative($package, $file);
         $filters = array();
         $options = array();

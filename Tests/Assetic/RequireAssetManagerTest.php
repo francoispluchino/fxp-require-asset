@@ -18,8 +18,10 @@ use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCache;
 use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManager;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\LocaleManager;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManager;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\PackageManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource;
@@ -81,7 +83,12 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
         $this->fem = new FileExtensionManager();
         $this->ptm = new PatternManager();
         $this->om = new OutputManager();
-        $this->ram = new RequireAssetManager($this->fem, $this->ptm, $this->om);
+        $this->ram = new RequireAssetManager();
+        $this->ram->setFileExtensionManager($this->fem);
+        $this->ram->setPatternManager($this->ptm);
+        $this->ram->setOutputManager($this->om);
+        $this->ram->setLocaleManager(new LocaleManager());
+        $this->ram->setPackageManager(new PackageManager($this->fem, $this->ptm));
     }
 
     protected function tearDown()
@@ -168,11 +175,11 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(0, $this->lam->getResources());
 
-        $this->ram->getLocaleManager()->addLocaliszedAsset('@foobar/js/component-a.js', 'fr', '@foobar/js/component-a-fr.js');
-        $this->ram->getLocaleManager()->addLocaliszedAsset('@foobar/js/component-a.js', 'fr_FR', '@foobar/js/component-a-fr-fr.js');
-        $this->ram->getLocaleManager()->addLocaliszedAsset('@foobar/js/component-a.js', 'en_US', '@foobar/js/component-a-en-us.js');
-        $this->ram->getLocaleManager()->addLocaliszedAsset('@foobar/js/component-b.js', 'fr', '@foobar/js/component-b-fr.js');
-        $this->ram->getLocaleManager()->addLocaliszedAsset('@foobar/js/component-b.js', 'en_US', '@foobar/js/component-b-en-us.js');
+        $this->ram->getLocaleManager()->addLocalizedAsset('@foobar/js/component-a.js', 'fr', '@foobar/js/component-a-fr.js');
+        $this->ram->getLocaleManager()->addLocalizedAsset('@foobar/js/component-a.js', 'fr_FR', '@foobar/js/component-a-fr-fr.js');
+        $this->ram->getLocaleManager()->addLocalizedAsset('@foobar/js/component-a.js', 'en_US', '@foobar/js/component-a-en-us.js');
+        $this->ram->getLocaleManager()->addLocalizedAsset('@foobar/js/component-b.js', 'fr', '@foobar/js/component-b-fr.js');
+        $this->ram->getLocaleManager()->addLocalizedAsset('@foobar/js/component-b.js', 'en_US', '@foobar/js/component-b-en-us.js');
 
         $inputs = array(
             '@foobar/js/component-a.js',
@@ -181,6 +188,7 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->ram->addCommonAsset('common_js', $inputs, 'TARGET.js');
+        $this->ram->addCommonAsset('common_js__fr_fr', array('@foobar_js_component_a_fr_fr_js', '@foobar_js_component_b_fr_js'), 'TARGET-fr-fr-custom.js');
         $this->ram->addAssetResources($this->lam);
 
         $validLocales = array(
@@ -192,9 +200,9 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
 
         $validResources = array(
             new CommonRequireAssetResource('common_js', $inputs, 'assets/TARGET.js', array(), array()),
-            new CommonRequireAssetResource('common_js__fr', array('@foobar_js_component_a_fr_js', '@foobar_js_component_b_fr_js'), 'assets/assets/TARGET-fr.js', array(), array()),
-            new CommonRequireAssetResource('common_js__fr_fr', array('@foobar_js_component_a_fr_fr_js', '@foobar_js_component_b_fr_js'), 'assets/assets/TARGET-fr-fr.js', array(), array()),
-            new CommonRequireAssetResource('common_js__en_us', array('@foobar_js_component_a_en_us_js', '@foobar_js_component_b_en_us_js'), 'assets/assets/TARGET-en-us.js', array(), array()),
+            new CommonRequireAssetResource('common_js__fr', array('@foobar_js_component_a_fr_js', '@foobar_js_component_b_fr_js'), 'assets/TARGET-fr.js', array(), array()),
+            new CommonRequireAssetResource('common_js__en_us', array('@foobar_js_component_a_en_us_js', '@foobar_js_component_b_en_us_js'), 'assets/TARGET-en-us.js', array(), array()),
+            new CommonRequireAssetResource('common_js__fr_fr', array('@foobar_js_component_a_fr_fr_js', '@foobar_js_component_b_fr_js'), 'assets/TARGET-fr-fr-custom.js', array(), array()),
         );
         $this->assertEquals($validResources, $this->lam->getResources());
     }

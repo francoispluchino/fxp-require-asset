@@ -11,6 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
+use Fxp\Component\RequireAsset\Assetic\Util\LocaleUtils;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 
 /**
@@ -64,7 +65,7 @@ class LocaleManager implements LocaleManagerInterface
      */
     public function setLocale($locale)
     {
-        $this->locale = $this->formatLocale($locale);
+        $this->locale = LocaleUtils::formatLocale($locale);
 
         return $this;
     }
@@ -82,7 +83,7 @@ class LocaleManager implements LocaleManagerInterface
      */
     public function setFallbackLocale($locale)
     {
-        $this->fallback = $this->formatLocale($locale);
+        $this->fallback = LocaleUtils::formatLocale($locale);
 
         return $this;
     }
@@ -108,10 +109,10 @@ class LocaleManager implements LocaleManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function addLocaliszedAsset($asset, $locale, $localizedAsset)
+    public function addLocalizedAsset($asset, $locale, $localizedAsset)
     {
         $name = Utils::formatName($asset);
-        $locale = $this->formatLocale($locale);
+        $locale = LocaleUtils::formatLocale($locale);
         $this->assets[$locale][$name] = (array) $localizedAsset;
         $this->mapAssets[$name][$locale] = true;
         unset($this->cache[$this->getCacheKey($locale, $name)]);
@@ -122,10 +123,10 @@ class LocaleManager implements LocaleManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function removeLocaliszedAsset($asset, $locale)
+    public function removeLocalizedAsset($asset, $locale)
     {
         $name = Utils::formatName($asset);
-        $locale = $this->formatLocale($locale);
+        $locale = LocaleUtils::formatLocale($locale);
 
         $this->cleanArray('assets', $locale, $name);
         $this->cleanArray('mapAssets', $name, $locale);
@@ -150,6 +151,14 @@ class LocaleManager implements LocaleManagerInterface
         $this->cache[$cacheKey] = $this->findLocalizedAsset($locale, $name);
 
         return $this->cache[$cacheKey];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocalizedAssets()
+    {
+        return $this->assets;
     }
 
     /**
@@ -226,25 +235,8 @@ class LocaleManager implements LocaleManagerInterface
     protected function getCurrentLocale($locale = null)
     {
         return null !== $locale
-            ? $this->formatLocale($locale)
+            ? LocaleUtils::formatLocale($locale)
             : $this->getLocale();
-    }
-
-    /**
-     * Format the locale.
-     *
-     * @param string|null $locale
-     *
-     * @return string
-     */
-    protected function formatLocale($locale)
-    {
-        if (is_string($locale)) {
-            $locale = strtolower($locale);
-            $locale = str_replace('-', '_', $locale);
-        }
-
-        return $locale;
     }
 
     /**

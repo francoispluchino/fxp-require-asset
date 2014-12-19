@@ -12,10 +12,13 @@
 namespace Fxp\Component\RequireAsset\Assetic;
 
 use Assetic\Factory\LazyAssetManager;
+use Fxp\Component\RequireAsset\Assetic\Config\AsseticConfigResources;
+use Fxp\Component\RequireAsset\Assetic\Config\AsseticConfigResourcesInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\AssetResource;
+use Fxp\Component\RequireAsset\Assetic\Config\AssetResourceInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageInterface;
 use Fxp\Component\RequireAsset\Assetic\Factory\Loader\RequireAssetLoader;
-use Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource;
-use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface;
 use Fxp\Component\RequireAsset\Assetic\Util\LocaleUtils;
 use Fxp\Component\RequireAsset\Assetic\Util\ResourceUtils;
@@ -34,8 +37,11 @@ class RequireAssetManager extends AbstractRequireAssetManager
      */
     public function addCommonAsset($name, array $inputs, $targetPath, array $filters = array(), array $options = array())
     {
-        $common = new CommonRequireAssetResource($name, $inputs, $this->convertTargetPath($targetPath), $filters, $options);
-        $this->commons[Utils::formatName($name)] = $common;
+        $classname = 'Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource';
+        $args = array($name, $inputs, $this->convertTargetPath($targetPath), $filters, $options);
+        $resource = $this->createAssetResource($name, $classname, $args);
+
+        $this->commons[Utils::formatName($name)] = $resource;
 
         return $this;
     }
@@ -51,7 +57,27 @@ class RequireAssetManager extends AbstractRequireAssetManager
             return;
         }
 
-        $this->findAssets($assetManager);
+        $configs = $this->getAsseticConfigResources($assetManager->isDebug());
+        $asseticResources = $this->addConfigAsseticResources($configs->getResources(), $assetManager);
+
+        if (null !== $this->cache) {
+            $this->cache->setResources($asseticResources);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAsseticConfigResources($debug)
+    {
+        $configs = new AsseticConfigResources();
+
+        foreach ($this->getPackageManager()->getPackages() as $package) {
+            $this->addPackageAssets($configs, $package, $debug);
+        }
+        $this->addCommonAssets($configs);
+
+        return $configs;
     }
 
     /**
@@ -77,124 +103,100 @@ class RequireAssetManager extends AbstractRequireAssetManager
     }
 
     /**
-     * Find the require assets.
+     * Add the assetic asset resources in assetic asset manager.
      *
-     * @param LazyAssetManager $assetManager
+     * @param AssetResourceInterface[] $configResources The config asset resources
+     * @param LazyAssetManager         $assetManager    The assetic asset manager
+     *
+     * @return RequireAssetResourceInterface[]
      */
-    protected function findAssets(LazyAssetManager $assetManager)
+    protected function addConfigAsseticResources(array $configResources, LazyAssetManager $assetManager)
     {
-        $resources = array();
+        $asseticResources = array();
 
-        foreach ($this->packageManager->getPackages() as $package) {
-            $resources = array_merge($resources, $this->addPackageAssets($assetManager, $package));
+        foreach ($configResources as $configResource) {
+            $resource = $configResource->getNewInstance();
+            $assetManager->addResource($resource, $configResource->getLoader());
+            $asseticResources[] = $resource;
         }
-        $resources = array_merge($resources, $this->loadCommonAssets($assetManager));
 
-        if (null !== $this->cache) {
-            $this->cache->setResources($resources);
-        }
+        return $asseticResources;
     }
 
     /**
      * Adds the assets of packages.
      *
-     * @param LazyAssetManager $assetManager The asset manager
-     * @param PackageInterface $package      The asset package instance
-     *
-     * @return RequireAssetResource[]
+     * @param AsseticConfigResourcesInterface $configs The assetic config resources
+     * @param PackageInterface                $package The asset package instance
+     * @param bool                            $debug   The assetic debug mode
      */
-    protected function addPackageAssets(LazyAssetManager $assetManager, PackageInterface $package)
+    protected function addPackageAssets(AsseticConfigResourcesInterface $configs, PackageInterface $package, $debug = false)
     {
-        $resources = array();
-
-        foreach ($package->getFiles($assetManager->isDebug()) as $file) {
-            $resource = $this->createAssetResource($package, $file);
-            $resources[] = $resource;
-            $assetManager->addResource($resource, 'fxp_require_asset_loader');
+        foreach ($package->getFiles($debug) as $file) {
+            $resource = $this->createAssetResourceByPackage($package, $file, $this->getOutputManager());
+            $configs->addResource($resource);
         }
-
-        return $resources;
     }
 
     /**
-     * Creates the asset resource.
+     * Add the common assets in the asset manager.
      *
-     * @param PackageInterface $package The asset package instance
-     * @param SplFileInfo      $file    The Spo file info instance
-     *
-     * @return RequireAssetResource
+     * @param AsseticConfigResourcesInterface $configs The assetic config resources
      */
-    protected function createAssetResource(PackageInterface $package, SplFileInfo $file)
+    protected function addCommonAssets(AsseticConfigResourcesInterface $configs)
     {
-        $c = ResourceUtils::createConfigResource($package, $file, $this->outputManager);
-
-        return new RequireAssetResource($c[0], $c[1], $c[2], $c[3], $c[4]);
-    }
-
-    /**
-     * Load the common assets in the asset manager.
-     *
-     * @param LazyAssetManager $assetManager
-     *
-     * @return RequireAssetResourceInterface[]
-     */
-    protected function loadCommonAssets(LazyAssetManager $assetManager)
-    {
-        $resources = array();
-
         foreach ($this->commons as $resource) {
-            $assetManager->addResource($resource, 'fxp_require_asset_loader');
-            $resources = array_merge(
-                $resources,
-                array($resource),
-                $this->loadLocalizedCommonAssets($assetManager, $resource)
-            );
-        }
+            $configs->addResource($resource);
+            $commonName = $resource->getPrettyName();
 
-        return $resources;
+            if (!preg_match('/__[A-Za-z]{2}$|__[A-Za-z]{2}_[A-Za-z]{2}$/', $commonName)) {
+                $this->addLocaleCommonAssets($configs, $resource);
+            } else {
+                $name = substr($commonName, 0, strrpos($commonName, '__'));
+                $locale = substr($commonName, strrpos($commonName, '__') + 2);
+                $this->getLocaleManager()->addLocalizedAsset($name, $locale, array($resource->getPrettyName()));
+            }
+        }
     }
 
     /**
      * Load the localized common assets in the asset manager.
      *
-     * @param LazyAssetManager              $assetManager
-     * @param RequireAssetResourceInterface $resource
-     *
-     * @return RequireAssetResourceInterface[]
+     * @param AsseticConfigResourcesInterface $configs  The assetic config resources
+     * @param AssetResourceInterface          $resource The config of asset resource
      */
-    protected function loadLocalizedCommonAssets(LazyAssetManager $assetManager, RequireAssetResourceInterface $resource)
+    protected function addLocaleCommonAssets(AsseticConfigResourcesInterface $configs, AssetResourceInterface $resource)
     {
-        $resources = array();
-        $locales = LocaleUtils::findCommonAssetLocales($resource->getInputs(), $this->getLocaleManager());
+        $instance = $resource->getNewInstance();
+        $locales = LocaleUtils::findCommonAssetLocales($instance->getInputs(), $this->getLocaleManager());
 
         foreach ($locales as $locale) {
-            $localeResource = $this->createLocaleAssetResource($resource, $locale);
-            $assetManager->addResource($localeResource, 'fxp_require_asset_loader');
-            $resources[] = $localeResource;
-            $this->getLocaleManager()->addLocaliszedAsset($resource->getPrettyName(), $locale, $localeResource->getPrettyName());
+            $localeName = LocaleUtils::formatLocaleCommonName($instance->getPrettyName(), $locale);
+            if (!isset($this->commons[$localeName])) {
+                $localeResource = $this->createLocaleAssetResource($instance, $locale);
+                $configs->addResource($localeResource);
+                $this->getLocaleManager()->addLocalizedAsset($instance->getPrettyName(), $locale, $localeResource->getPrettyName());
+            }
         }
-
-        return $resources;
     }
 
     /**
-     * Create the locale common asset.
+     * Create the locale common asset resource.
      *
      * @param RequireAssetResourceInterface $resource The require resource
      * @param string                        $locale   The locale
      *
-     * @return CommonRequireAssetResource
+     * @return AssetResourceInterface
      */
     protected function createLocaleAssetResource(RequireAssetResourceInterface $resource, $locale)
     {
         $localeInputs = LocaleUtils::getLocaleCommonInputs($resource->getInputs(), $locale, $this->getLocaleManager());
         $name = LocaleUtils::formatLocaleCommonName($resource->getPrettyName(), $locale);
         $targetPath = LocaleUtils::convertLocaleTartgetPath($resource->getTargetPath(), $locale);
-        $targetPath = $this->convertTargetPath($targetPath);
-        $filters = $resource->getFilters();
-        $options = $resource->getOptions();
+        $classname = 'Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource';
+        $args = array($name, $localeInputs, $targetPath, $resource->getFilters(), $resource->getOptions());
 
-        return new CommonRequireAssetResource($name, $localeInputs, $targetPath, $filters, $options);
+        return $this->createAssetResource($name, $classname, $args);
     }
 
     /**
@@ -206,6 +208,37 @@ class RequireAssetManager extends AbstractRequireAssetManager
      */
     protected function convertTargetPath($targetPath)
     {
-        return $this->outputManager->convertOutput(trim($targetPath, '/'));
+        return $this->getOutputManager()->convertOutput(trim($targetPath, '/'));
+    }
+
+    /**
+     * Creates the asset resource.
+     *
+     * @param PackageInterface       $package       The asset package instance
+     * @param SplFileInfo            $file          The Spo file info instance
+     * @param OutputManagerInterface $outputManager The output manager
+     *
+     * @return AssetResourceInterface
+     */
+    protected function createAssetResourceByPackage(PackageInterface $package, SplFileInfo $file, OutputManagerInterface $outputManager)
+    {
+        $classname = 'Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource';
+        $args = ResourceUtils::createConfigResource($package, $file, $outputManager);
+
+        return $this->createAssetResource($args[0], $classname, $args);
+    }
+
+    /**
+     * Create the config asset resource.
+     *
+     * @param string $name      The require asset name
+     * @param string $classname The classname
+     * @param array  $arguments The arguments
+     *
+     * @return AssetResource
+     */
+    protected function createAssetResource($name, $classname, array $arguments)
+    {
+        return new AssetResource($name, $classname, 'fxp_require_asset_loader', $arguments);
     }
 }

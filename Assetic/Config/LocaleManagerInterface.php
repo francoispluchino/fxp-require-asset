@@ -69,7 +69,7 @@ interface LocaleManagerInterface
      *
      * @return self
      */
-    public function addLocaliszedAsset($asset, $locale, $localizedAsset);
+    public function addLocalizedAsset($asset, $locale, $localizedAsset);
 
     /**
      * Remove the require localized asset.
@@ -79,7 +79,7 @@ interface LocaleManagerInterface
      *
      * @return self
      */
-    public function removeLocaliszedAsset($asset, $locale);
+    public function removeLocalizedAsset($asset, $locale);
 
     /**
      * Get the require localized asset.
@@ -90,6 +90,13 @@ interface LocaleManagerInterface
      * @return string[] Return the require localized assets
      */
     public function getLocalizedAsset($asset, $locale = null);
+
+    /**
+     * Get the require localized assets.
+     *
+     * @return array Return the map of locale and localized assets
+     */
+    public function getLocalizedAssets();
 
     /**
      * Check if the locale exists.

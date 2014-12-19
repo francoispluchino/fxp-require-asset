@@ -105,7 +105,7 @@ class RequireCssRewriteFilter implements FilterInterface, HashableInterface
 
         foreach ($this->manager->getResources() as $resource) {
             if ($resource instanceof RequireAssetResource) {
-                $resources[FilterUtils::fixRealPath($resource->getSourcePath())] = $resource->getPrettyName();
+                $resources[FilterUtils::fixRealPath($resource->getSourcePath())] = (string) $resource;
             }
         }
 
