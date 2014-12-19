@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Assetic;
+namespace Fxp\Component\RequireAsset\Assetic\Config;
 
 /**
  * Interface of require locale asset manager.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-interface RequireLocaleManagerInterface
+interface LocaleManagerInterface
 {
     /**
      * Set the locale.

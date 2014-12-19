@@ -14,6 +14,8 @@ namespace Fxp\Component\RequireAsset\Assetic;
 use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManager;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\LocaleManager;
+use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManager;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageManager;
@@ -45,7 +47,7 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
     protected $outputManager;
 
     /**
-     * @var RequireLocaleManagerInterface
+     * @var LocaleManagerInterface
      */
     protected $localeManager;
 
@@ -70,9 +72,9 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
      * @param FileExtensionManagerInterface $extensionManager The file extension manager
      * @param PatternManagerInterface       $patternManager   The pattern manager
      * @param OutputManagerInterface        $outputManager    The output manager
-     * @param RequireLocaleManagerInterface $localeManager    The locale manager
+     * @param LocaleManagerInterface        $localeManager    The locale manager
      */
-    public function __construct(FileExtensionManagerInterface $extensionManager = null, PatternManagerInterface $patternManager = null, OutputManagerInterface $outputManager = null, RequireLocaleManagerInterface $localeManager = null)
+    public function __construct(FileExtensionManagerInterface $extensionManager = null, PatternManagerInterface $patternManager = null, OutputManagerInterface $outputManager = null, LocaleManagerInterface $localeManager = null)
     {
         $this->initManagers($extensionManager, $patternManager);
         $this->initManagers2($outputManager, $localeManager);
@@ -153,12 +155,12 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
     /**
      * Init managers 2.
      *
-     * @param OutputManagerInterface        $outputManager
-     * @param RequireLocaleManagerInterface $localeManager
+     * @param OutputManagerInterface $outputManager
+     * @param LocaleManagerInterface $localeManager
      */
-    protected function initManagers2(OutputManagerInterface $outputManager = null, RequireLocaleManagerInterface $localeManager = null)
+    protected function initManagers2(OutputManagerInterface $outputManager = null, LocaleManagerInterface $localeManager = null)
     {
         $this->outputManager = $outputManager ?: new OutputManager();
-        $this->localeManager = $localeManager ?: new RequireLocaleManager();
+        $this->localeManager = $localeManager ?: new LocaleManager();
     }
 }

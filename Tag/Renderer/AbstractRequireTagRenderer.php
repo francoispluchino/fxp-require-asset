@@ -15,7 +15,7 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Asset\AssetReference;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\Util\VarUtils;
-use Fxp\Component\RequireAsset\Assetic\RequireLocaleManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Tag\RequireTagInterface;
 
@@ -38,17 +38,17 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
     protected $manager;
 
     /**
-     * @var RequireLocaleManagerInterface|null
+     * @var LocaleManagerInterface|null
      */
     protected $localeManager;
 
     /**
      * Constructor.
      *
-     * @param LazyAssetManager                   $manager       The lazy assetic manager
-     * @param RequireLocaleManagerInterface|null $localeManager The require locale asset manager
+     * @param LazyAssetManager            $manager       The lazy assetic manager
+     * @param LocaleManagerInterface|null $localeManager The require locale asset manager
      */
-    public function __construct(LazyAssetManager $manager, RequireLocaleManagerInterface $localeManager = null)
+    public function __construct(LazyAssetManager $manager, LocaleManagerInterface $localeManager = null)
     {
         $this->manager = $manager;
         $this->localeManager = $localeManager;

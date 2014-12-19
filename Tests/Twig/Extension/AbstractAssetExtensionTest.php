@@ -13,7 +13,7 @@ namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
-use Fxp\Component\RequireAsset\Assetic\RequireLocaleManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 use Fxp\Component\RequireAsset\Twig\Extension\CoreAssetExtension;
 
@@ -40,7 +40,7 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
     protected $factory;
 
     /**
-     * @var RequireLocaleManagerInterface
+     * @var LocaleManagerInterface
      */
     protected $localeManager;
 

@@ -14,6 +14,7 @@ namespace Fxp\Component\RequireAsset\Assetic;
 use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface;
@@ -49,7 +50,7 @@ interface RequireAssetManagerInterface
     /**
      * Get the locale manager.
      *
-     * @return RequireLocaleManagerInterface
+     * @return LocaleManagerInterface
      */
     public function getLocaleManager();
 

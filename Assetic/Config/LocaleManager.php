@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Assetic;
+namespace Fxp\Component\RequireAsset\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 
@@ -18,7 +18,7 @@ use Fxp\Component\RequireAsset\Assetic\Util\Utils;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireLocaleManager implements RequireLocaleManagerInterface
+class LocaleManager implements LocaleManagerInterface
 {
     /**
      * @var string

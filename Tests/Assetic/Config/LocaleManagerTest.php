@@ -9,20 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Tests\Assetic;
+namespace Fxp\Component\RequireAsset\Tests\Assetic\Config;
 
-use Fxp\Component\RequireAsset\Assetic\RequireLocaleManager;
+use Fxp\Component\RequireAsset\Assetic\Config\LocaleManager;
 
 /**
  * Require Locale Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireLocaleManagerTest extends \PHPUnit_Framework_TestCase
+class LocaleManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function testBasicWithoutAsset()
     {
-        $rlm = new RequireLocaleManager();
+        $rlm = new LocaleManager();
 
         $this->assertSame(strtolower(\Locale::getDefault()), $rlm->getLocale());
         $this->assertNull($rlm->getFallbackLocale());
@@ -41,7 +41,7 @@ class RequireLocaleManagerTest extends \PHPUnit_Framework_TestCase
             '@asset/source/path/locale/'.\Locale::getDefault().'.ext',
         );
 
-        $rlm = new RequireLocaleManager();
+        $rlm = new LocaleManager();
         $rlm->addLocaliszedAsset('@asset/source/path.ext', \Locale::getDefault(), $valid[0]);
 
         $this->assertTrue($rlm->hasLocalizedAsset('@asset/source/path.ext'));
@@ -59,7 +59,7 @@ class RequireLocaleManagerTest extends \PHPUnit_Framework_TestCase
             '@asset/source/path/locale/'.\Locale::getDefault().'.ext',
         );
 
-        $rlm = new RequireLocaleManager();
+        $rlm = new LocaleManager();
         $rlm->addLocaliszedAsset('@asset/source/path.ext', \Locale::getDefault(), $valid);
 
         $this->assertTrue($rlm->hasLocalizedAsset('@asset/source/path.ext'));
@@ -77,7 +77,7 @@ class RequireLocaleManagerTest extends \PHPUnit_Framework_TestCase
             '@asset/source/path/locale/fr.ext',
         );
 
-        $rlm = new RequireLocaleManager();
+        $rlm = new LocaleManager();
         $rlm->setLocale('fr_FR');
         $rlm->addLocaliszedAsset('@asset/source/path.ext', 'fr', $valid);
 
@@ -97,7 +97,7 @@ class RequireLocaleManagerTest extends \PHPUnit_Framework_TestCase
             '@asset/source/path/locale/en.ext',
         );
 
-        $rlm = new RequireLocaleManager();
+        $rlm = new LocaleManager();
         $rlm->setLocale('fr_FR');
         $rlm->setFallbackLocale('en_US');
         $rlm->addLocaliszedAsset('@asset/source/path.ext', 'en', $valid);
@@ -119,7 +119,7 @@ class RequireLocaleManagerTest extends \PHPUnit_Framework_TestCase
             '@asset/source/path/locale/en.ext',
         );
 
-        $rlm = new RequireLocaleManager();
+        $rlm = new LocaleManager();
         $rlm->setLocale('fr_FR');
         $rlm->addLocaliszedAsset('@asset/source/path.ext', 'en', $valid);
 
@@ -135,7 +135,7 @@ class RequireLocaleManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveLocalizedAsset()
     {
-        $rlm = new RequireLocaleManager();
+        $rlm = new LocaleManager();
 
         $rlm->addLocaliszedAsset('@asset/source/path.ext', 'en', '@asset/source/path/locale/en.ext');
         $this->assertTrue($rlm->hasAssetLocale('en'));

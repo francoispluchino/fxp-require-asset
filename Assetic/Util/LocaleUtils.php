@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Util;
 
-use Fxp\Component\RequireAsset\Assetic\RequireLocaleManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 
 /**
  * Assetic Locale Utils.
@@ -36,13 +36,13 @@ abstract class LocaleUtils
     /**
      * Get the locale common inputs.
      *
-     * @param array                         $inputs        The formulae inputs
-     * @param string                        $locale        The locale
-     * @param RequireLocaleManagerInterface $localeManager The locale manager
+     * @param array                  $inputs        The formulae inputs
+     * @param string                 $locale        The locale
+     * @param LocaleManagerInterface $localeManager The locale manager
      *
      * @return string[]
      */
-    public static function getLocaleCommonInputs(array $inputs, $locale, RequireLocaleManagerInterface $localeManager)
+    public static function getLocaleCommonInputs(array $inputs, $locale, LocaleManagerInterface $localeManager)
     {
         $localeInputs = array();
 
@@ -77,12 +77,12 @@ abstract class LocaleUtils
     /**
      * Finds the locales of common asset.
      *
-     * @param array                         $inputs        The formulae inputs
-     * @param RequireLocaleManagerInterface $localeManager The locale manager
+     * @param array                  $inputs        The formulae inputs
+     * @param LocaleManagerInterface $localeManager The locale manager
      *
      * @return string[]
      */
-    public static function findCommonAssetLocales(array $inputs, RequireLocaleManagerInterface $localeManager)
+    public static function findCommonAssetLocales(array $inputs, LocaleManagerInterface $localeManager)
     {
         $locales = array();
 

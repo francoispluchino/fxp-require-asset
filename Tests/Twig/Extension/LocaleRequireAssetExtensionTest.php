@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
-use Fxp\Component\RequireAsset\Assetic\RequireLocaleManager;
+use Fxp\Component\RequireAsset\Assetic\Config\LocaleManager;
 
 /**
  * Locale Require Asset Extension Tests.
@@ -22,7 +22,7 @@ class LocaleRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 {
     protected function setUp()
     {
-        $this->localeManager = new RequireLocaleManager();
+        $this->localeManager = new LocaleManager();
 
         parent::setUp();
     }
