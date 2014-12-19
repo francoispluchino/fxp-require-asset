@@ -303,11 +303,11 @@ $ram = new RequireAssetManager();
 $lm = $ram->getLocaleManager();
 // configure your packages of your require assets
 
-$lm->addLocaliszedAsset('@package1/asset1.js', 'fr_fr', '@package1/locale/asset1-fr-fr.js');
-$lm->addLocaliszedAsset('@package1/asset1.js', 'fr_ca', '@package1/locale/asset1-fr-ca.js');
-$lm->addLocaliszedAsset('@package1/asset1.js', 'fr', '@package1/locale/asset1-fr.js');
+$lm->addLocalizedAsset('@package1/asset1.js', 'fr_fr', '@package1/locale/asset1-fr-fr.js');
+$lm->addLocalizedAsset('@package1/asset1.js', 'fr_ca', '@package1/locale/asset1-fr-ca.js');
+$lm->addLocalizedAsset('@package1/asset1.js', 'fr', '@package1/locale/asset1-fr.js');
 
-$lm->addLocaliszedAsset('@package2/asset1.js', 'it', array(
+$lm->addLocalizedAsset('@package2/asset1.js', 'it', array(
     '@package2/locale/asset1-it-part1.js',
     '@package2/locale/asset1-it-part2.js',
 ));
@@ -342,7 +342,7 @@ $localeInputs = array(
     '@asset/source/path-fr-fr.js',
 );
 $ram->addCommonAsset('common_js__fr_fr', $localeInputs, '/common-fr-fr.js', array('?compiler', array('debug' => true));
-$ram->getLocaleManager()->addLocaliszedAsset('common_js', 'fr_fr', 'common_js__fr_fr');
+$ram->getLocaleManager()->addLocalizedAsset('common_js', 'fr_fr', 'common_js__fr_fr');
 ```
 
 ### Add asset resources in Assetic Lazy Asset Manager
