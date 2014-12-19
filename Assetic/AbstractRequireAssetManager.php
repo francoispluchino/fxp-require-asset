@@ -199,17 +199,33 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
     }
 
     /**
-     * Initialize the manager.
+     * Initialize the managers.
      */
     protected function init()
     {
         if (!$this->initialized) {
-            $this->extensionManager = $this->extensionManager ?: new FileExtensionManager();
-            $this->patternManager = $this->patternManager ?: new PatternManager();
-            $this->outputManager = $this->outputManager ?: new OutputManager();
-            $this->localeManager = $this->localeManager ?: new LocaleManager();
+            $this->initManagers1();
+            $this->initManagers2();
             $this->packageManager = $this->packageManager ?: new PackageManager($this->extensionManager, $this->patternManager);
             $this->initialized = true;
         }
+    }
+
+    /**
+     * Initialize the managers step 1.
+     */
+    private function initManagers1()
+    {
+        $this->extensionManager = $this->extensionManager ?: new FileExtensionManager();
+        $this->patternManager = $this->patternManager ?: new PatternManager();
+    }
+
+    /**
+     * Initialize the managers step 2.
+     */
+    private function initManagers2()
+    {
+        $this->outputManager = $this->outputManager ?: new OutputManager();
+        $this->localeManager = $this->localeManager ?: new LocaleManager();
     }
 }
