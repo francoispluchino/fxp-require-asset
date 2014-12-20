@@ -36,7 +36,7 @@ class RequireAssetManager extends AbstractRequireAssetManager
     {
         $classname = 'Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource';
         $args = array($name, $inputs, $this->convertTargetPath($targetPath), $filters, $options);
-        $resource = AssetResourceUtils::createAssetResource($name, $classname, $args);
+        $resource = AssetResourceUtils::createAssetResource($name, $classname, $args, 0);
 
         $this->commons[Utils::formatName($name)] = $resource;
 
@@ -73,6 +73,7 @@ class RequireAssetManager extends AbstractRequireAssetManager
             $this->addPackageAssets($configs, $package, $debug);
         }
         $this->addCommonAssets($configs);
+        $this->replaceAssets($configs);
 
         return $configs;
     }
@@ -174,6 +175,20 @@ class RequireAssetManager extends AbstractRequireAssetManager
                 $configs->addResource($localeResource);
                 $this->getLocaleManager()->addLocalizedAsset($instance->getPrettyName(), $locale, $localeResource->getPrettyName());
             }
+        }
+    }
+
+    /**
+     * Replace the config asset resource by a new config asset resource.
+     *
+     * @param AsseticConfigResourcesInterface $configs The assetic config resources
+     */
+    protected function replaceAssets(AsseticConfigResourcesInterface $configs)
+    {
+        foreach ($this->getAssetReplacementManager()->getReplacements() as $asset => $replacement) {
+            $replace = $configs->getResource($replacement);
+            $configs->addResource(AssetResourceUtils::createReplaceAsset($asset, $replace));
+            $configs->removeResource($replacement);
         }
     }
 

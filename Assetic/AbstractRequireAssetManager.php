@@ -12,6 +12,8 @@
 namespace Fxp\Component\RequireAsset\Assetic;
 
 use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManager;
+use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\AssetResourceInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManager;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
@@ -55,6 +57,11 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
      * @var PackageManagerInterface
      */
     protected $packageManager;
+
+    /**
+     * @var AssetReplacementManagerInterface
+     */
+    protected $replacementManager;
 
     /**
      * @var AssetResourceInterface[]
@@ -183,6 +190,26 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
     /**
      * {@inheritdoc}
      */
+    public function setAssetReplacementManager(AssetReplacementManagerInterface $replacementManager)
+    {
+        $this->replacementManager = $replacementManager;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAssetReplacementManager()
+    {
+        $this->init();
+
+        return $this->replacementManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setCache(RequireAssetCacheInterface $cache)
     {
         $this->cache = $cache;
@@ -206,7 +233,7 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
         if (!$this->initialized) {
             $this->initManagers1();
             $this->initManagers2();
-            $this->packageManager = $this->packageManager ?: new PackageManager($this->extensionManager, $this->patternManager);
+            $this->initManagers3();
             $this->initialized = true;
         }
     }
@@ -227,5 +254,14 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
     {
         $this->outputManager = $this->outputManager ?: new OutputManager();
         $this->localeManager = $this->localeManager ?: new LocaleManager();
+    }
+
+    /**
+     * Initialize the managers step 3.
+     */
+    private function initManagers3()
+    {
+        $this->replacementManager = $this->replacementManager ?: new AssetReplacementManager();
+        $this->packageManager = $this->packageManager ?: new PackageManager($this->extensionManager, $this->patternManager);
     }
 }

@@ -14,6 +14,7 @@ namespace Fxp\Component\RequireAsset\Assetic;
 use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\AsseticConfigResourcesInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
@@ -106,6 +107,22 @@ interface RequireAssetManagerInterface
      * @return PackageManagerInterface
      */
     public function getPackageManager();
+
+    /**
+     * Set the asset replacement manager.
+     *
+     * @param AssetReplacementManagerInterface $replacementManager The asset replacement manager
+     *
+     * @return self
+     */
+    public function setAssetReplacementManager(AssetReplacementManagerInterface $replacementManager);
+
+    /**
+     * Get the asset replacement manager.
+     *
+     * @return AssetReplacementManagerInterface
+     */
+    public function getAssetReplacementManager();
 
     /**
      * Set the require asset cache.

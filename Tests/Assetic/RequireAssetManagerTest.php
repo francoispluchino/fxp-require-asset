@@ -16,6 +16,7 @@ use Assetic\Factory\LazyAssetManager;
 use Assetic\FilterManager;
 use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCache;
 use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
+use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManager;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManager;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\LocaleManager;
@@ -89,6 +90,7 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
         $this->ram->setOutputManager($this->om);
         $this->ram->setLocaleManager(new LocaleManager());
         $this->ram->setPackageManager(new PackageManager($this->fem, $this->ptm));
+        $this->ram->setAssetReplacementManager(new AssetReplacementManager());
     }
 
     protected function tearDown()
@@ -231,6 +233,33 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $lam->getResources());
         $this->ram->addAssetResources($lam);
         $this->assertEquals($resources, $this->lam->getResources());
+    }
+
+    public function testReplaceAsset()
+    {
+        PackageTest::createFixtures();
+
+        $pm = $this->ram->getPackageManager();
+        $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', array('js', 'less'), array(), false, false);
+
+        $arm = $this->ram->getAssetReplacementManager();
+        $arm->addReplacement('@foobar/less/foobar.less', '@foobar/less/foobar-theme.less');
+
+        $this->assertCount(0, $this->lam->getResources());
+
+        $this->ram->addAssetResources($this->lam);
+
+        $this->assertCount(10, $this->lam->getResources());
+    }
+
+    public function testNonexistentAssetReplacement()
+    {
+        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidArgumentException', 'The "@foobar/less/foobar-theme.less" config of asset resource does not exist');
+
+        $arm = $this->ram->getAssetReplacementManager();
+        $arm->addReplacement('@foobar/less/foobar.less', '@foobar/less/foobar-theme.less');
+
+        $this->ram->addAssetResources($this->lam);
     }
 
     public static function createLocalizedFixtures()
