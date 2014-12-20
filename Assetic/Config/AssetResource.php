@@ -48,18 +48,25 @@ class AssetResource implements AssetResourceInterface
     protected $arguments;
 
     /**
-     * @param string $name      The require asset name
-     * @param string $classname The classname of resource
-     * @param string $loader    The assetic loader of resource
-     * @param array  $arguments The arguments of class constructor
+     * @var int|null
      */
-    public function __construct($name, $classname, $loader, array $arguments)
+    protected $namePosition;
+
+    /**
+     * @param string   $name         The require asset name
+     * @param string   $classname    The classname of resource
+     * @param string   $loader       The assetic loader of resource
+     * @param array    $arguments    The arguments of class constructor
+     * @param int|null $namePosition The position of asset name in arguments
+     */
+    public function __construct($name, $classname, $loader, array $arguments, $namePosition = null)
     {
         $this->name = Utils::formatName($name);
         $this->prettyName = $name;
         $this->classname = $classname;
         $this->loader = $loader;
         $this->arguments = $arguments;
+        $this->namePosition = $namePosition;
     }
 
     /**
@@ -105,15 +112,39 @@ class AssetResource implements AssetResourceInterface
     /**
      * {@inheritdoc}
      */
+    public function getArgumentNamePosition()
+    {
+        return $this->namePosition;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getNewInstance()
     {
         $ref = new \ReflectionClass($this->getClassname());
-        $instance = $ref->newInstanceArgs($this->getArguments());
+        $instance = $ref->newInstanceArgs($this->getValidArguments());
 
         if (!$instance instanceof RequireAssetResourceInterface) {
             throw new InvalidConfigurationException(sprintf('The "%s" class must extends the "Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface" interface', $this->getClassname()));
         }
 
         return $instance;
+    }
+
+    /**
+     * Get the arguments with new configuration.
+     *
+     * @return array
+     */
+    protected function getValidArguments()
+    {
+        $args = $this->getArguments();
+
+        if (is_int($this->getArgumentNamePosition())) {
+            $args[$this->getArgumentNamePosition()] = $this->getPrettyName();
+        }
+
+        return $args;
     }
 }

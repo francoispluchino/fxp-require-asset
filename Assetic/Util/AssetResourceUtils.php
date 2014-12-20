@@ -28,15 +28,16 @@ abstract class AssetResourceUtils
     /**
      * Create the config asset resource.
      *
-     * @param string $name      The require asset name
-     * @param string $classname The classname
-     * @param array  $arguments The arguments
+     * @param string   $name         The require asset name
+     * @param string   $classname    The classname
+     * @param array    $arguments    The arguments
+     * @param int|null $namePosition The position of asset name in arguments
      *
      * @return AssetResource
      */
-    public static function createAssetResource($name, $classname, array $arguments)
+    public static function createAssetResource($name, $classname, array $arguments, $namePosition = null)
     {
-        return new AssetResource($name, $classname, 'fxp_require_asset_loader', $arguments);
+        return new AssetResource($name, $classname, 'fxp_require_asset_loader', $arguments, $namePosition);
     }
 
     /**
@@ -53,7 +54,7 @@ abstract class AssetResourceUtils
         $classname = 'Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource';
         $args = ResourceUtils::createConfigResource($package, $file, $outputManager);
 
-        return static::createAssetResource($args[0], $classname, $args);
+        return static::createAssetResource($args[0], $classname, $args, 0);
     }
 
     /**
@@ -73,6 +74,6 @@ abstract class AssetResourceUtils
         $classname = 'Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource';
         $args = array($name, $localeInputs, $targetPath, $resource->getFilters(), $resource->getOptions());
 
-        return static::createAssetResource($name, $classname, $args);
+        return static::createAssetResource($name, $classname, $args, 0);
     }
 }

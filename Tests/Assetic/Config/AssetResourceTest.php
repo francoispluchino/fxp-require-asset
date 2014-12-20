@@ -24,7 +24,7 @@ class AssetResourceTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidConfigurationException', 'The "DateTime" class must extends the "Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface" interface');
 
-        $ar = new AssetResource('name', 'DateTime', 'loader', array());
+        $ar = new AssetResource('now', 'DateTime', 'loader', array('name'), 0);
 
         $ar->getNewInstance();
     }

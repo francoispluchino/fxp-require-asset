@@ -57,6 +57,13 @@ interface AssetResourceInterface
     public function getArguments();
 
     /**
+     * Get the position of the asset name in arguments.
+     *
+     * @return int|null
+     */
+    public function getArgumentNamePosition();
+
+    /**
      * Get the instance of the asset resource defined by the class.
      *
      * @return RequireAssetResourceInterface
