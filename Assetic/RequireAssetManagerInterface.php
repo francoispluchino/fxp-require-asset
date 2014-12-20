@@ -92,7 +92,7 @@ interface RequireAssetManagerInterface
     public function getLocaleManager();
 
     /**
-     * set the package manager.
+     * Set the package manager.
      *
      * @param PackageManagerInterface $packageManager The package manager
      *
