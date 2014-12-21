@@ -93,8 +93,8 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
         return array(
             array('url("https://example.tld/web/assets/img/bg.jpg")', 'url("https://example.tld/web/assets/img/bg.jpg")'),
             array('url("/web/assets/img/bg.jpg")',                    'url("/web/assets/img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg")',                   '../img/bg.jpg'),
-            array('url("../../static/img/bg.jpg?foo=bar")',           '../img/bg.jpg?foo=bar'),
+            array('url("../../static/img/bg.jpg")',                   'url("../img/bg.jpg")'),
+            array('url("../../static/img/bg.jpg?foo=bar")',           'url("../img/bg.jpg?foo=bar")'),
         );
     }
 
@@ -140,8 +140,8 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
         return array(
             array('url("https://example.tld/web/assets/img/bg.jpg")', 'url("https://example.tld/web/assets/img/bg.jpg")'),
             array('url("/foobar/static/img/bg.jpg")',                 'url("https://foobar.tld/foobar/static/img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg")',                   '../img/bg.jpg'),
-            array('url("../../static/img/bg.jpg?foo=bar")',           '../img/bg.jpg?foo=bar'),
+            array('url("../../static/img/bg.jpg")',                   'url("../img/bg.jpg")'),
+            array('url("../../static/img/bg.jpg?foo=bar")',           'url("../img/bg.jpg?foo=bar")'),
         );
     }
 
@@ -186,8 +186,8 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
         return array(
             array('url("https://example.tld/web/assets/img/bg.jpg")', 'url("https://example.tld/web/assets/img/bg.jpg")'),
             array('url("/foobar/static/img/bg.jpg")',                 'url("https://foobar.tld/foobar/static/img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg")',                   'https://foobar.tld/foobar/static/img/bg.jpg'),
-            array('url("../../static/img/bg.jpg?foo=bar")',           'https://foobar.tld/foobar/static/img/bg.jpg?foo=bar'),
+            array('url("../../static/img/bg.jpg")',                   'url("https://foobar.tld/foobar/static/img/bg.jpg")'),
+            array('url("../../static/img/bg.jpg?foo=bar")',           'url("https://foobar.tld/foobar/static/img/bg.jpg?foo=bar")'),
         );
     }
 

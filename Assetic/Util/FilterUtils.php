@@ -46,7 +46,7 @@ abstract class FilterUtils
         }
 
         // document relative
-        return static::getReferenceUrl($manager, $paths, $sourceBase, $targetBase, $matches['url']);
+        return static::getReferenceUrl($manager, $paths, $sourceBase, $targetBase, $matches['url'], $matches[0]);
     }
 
     /**
@@ -71,11 +71,13 @@ abstract class FilterUtils
      * @param string           $sourceBase The source base
      * @param string           $targetBase The target base
      * @param string           $url        The relative url
+     * @param string           $content    The full content of matched pattern
      *
      * @return string The new url
      */
-    protected static function getReferenceUrl(LazyAssetManager $manager, array $paths, $sourceBase, $targetBase, $url)
+    protected static function getReferenceUrl(LazyAssetManager $manager, array $paths, $sourceBase, $targetBase, $url, $content)
     {
+        $search = $url;
         $fullpath = static::getRealPath($sourceBase, $url);
         $urlOptions = substr(basename($url), strlen(basename($fullpath)));
 
@@ -88,7 +90,7 @@ abstract class FilterUtils
             $url = $fullpath.$urlOptions;
         }
 
-        return $url;
+        return str_replace($search, $url, $content);
     }
 
     /**
