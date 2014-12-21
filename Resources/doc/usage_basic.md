@@ -345,6 +345,23 @@ $ram->addCommonAsset('common_js__fr_fr', $localeInputs, '/common-fr-fr.js', arra
 $ram->getLocaleManager()->addLocalizedAsset('common_js', 'fr_fr', 'common_js__fr_fr');
 ```
 
+### Replace an asset by another asset
+
+You can indicate to the require asset manager that an asset to be replaced by another asset:
+
+```php
+<?php
+
+use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+
+$ram = new RequireAssetManager();
+// configure your packages of your require assets
+
+$ram->getAssetReplacementManager()->addReplacement('@asset1/path.ext', '@asset5/path.ext');
+```
+
+For this example, the `@asset1/path.ext` will be replace by the `@asset5/path.ext`.
+
 ### Add asset resources in Assetic Lazy Asset Manager
 
 When all configuration of asset packages is made, you must add all assets in Assetic
