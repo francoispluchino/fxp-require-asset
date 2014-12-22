@@ -71,6 +71,7 @@ abstract class FileExtensionUtils
             'jpg'  => array(),
             'jpeg' => array(),
             'png'  => array(),
+            'gif'  => array(),
             'webp' => array(),
             'mp3'  => array(),
             'aac'  => array(),
