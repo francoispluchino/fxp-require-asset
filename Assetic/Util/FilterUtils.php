@@ -40,7 +40,7 @@ abstract class FilterUtils
             return (string) $matches[0];
         }
 
-        if (isset($matches['url'][0]) && '/' == $matches['url'][0]) {
+        if (isset($matches['url'][0]) && '/' === $matches['url'][0]) {
             // root relative
             return (string) str_replace($matches['url'], rtrim($host, '/').'/'.ltrim($matches['url'], '/'), $matches[0]);
         }
@@ -78,19 +78,36 @@ abstract class FilterUtils
     protected static function getReferenceUrl(LazyAssetManager $manager, array $paths, $sourceBase, $targetBase, $url, $content)
     {
         $search = $url;
-        $fullpath = static::getRealPath($sourceBase, $url);
-        $urlOptions = substr(basename($url), strlen(basename($fullpath)));
+        $fullPath = static::getRealPath($sourceBase, $url);
+        $target = $targetBase.'/'.$url;
 
-        if (isset($paths[$fullpath])) {
-            $fs = new Filesystem();
-            $target = $manager->get($paths[$fullpath])->getTargetPath();
-            $targetBase = $fs->makePathRelative(dirname($target), $targetBase);
-            $url = $targetBase.basename($target).$urlOptions;
-        } else {
-            $url = $fullpath.$urlOptions;
+        if (isset($paths[$fullPath])) {
+            $urlOptions = substr(basename($url), strlen(basename($fullPath)));
+            $target = $manager->get($paths[$fullPath])->getTargetPath().$urlOptions;
         }
 
-        return str_replace($search, $url, $content);
+        return str_replace($search, static::getRealTargetUrl($targetBase, $target), $content);
+    }
+
+    /**
+     * Get the real relative url.
+     *
+     * @param string $targetBase The target base of asset
+     * @param string $target     The target of asset
+     *
+     * @return string
+     */
+    protected static function getRealTargetUrl($targetBase, $target)
+    {
+        $fs = new Filesystem();
+        $targetBase = $fs->makePathRelative(dirname($target), $targetBase);
+        $url = $targetBase.basename($target);
+
+        if (0 === strpos($url, './')) {
+            $url = substr($url, 2);
+        }
+
+        return $url;
     }
 
     /**

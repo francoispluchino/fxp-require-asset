@@ -186,8 +186,8 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
         return array(
             array('url("https://example.tld/web/assets/img/bg.jpg")', 'url("https://example.tld/web/assets/img/bg.jpg")'),
             array('url("/foobar/static/img/bg.jpg")',                 'url("https://foobar.tld/foobar/static/img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg")',                   'url("https://foobar.tld/foobar/static/img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg?foo=bar")',           'url("https://foobar.tld/foobar/static/img/bg.jpg?foo=bar")'),
+            array('url("../../static/img/bg.jpg")',                   'url("../../static/img/bg.jpg")'),
+            array('url("../../static/img/bg.jpg?foo=bar")',           'url("../../static/img/bg.jpg?foo=bar")'),
         );
     }
 
