@@ -193,7 +193,7 @@ class AssetExtension extends \Twig_Extension
     {
         $output = ob_get_contents();
         $start = 0;
-        preg_match_all('/(<!--|\/\*)#tag-position:([a-z_:]+):[\w0-9]+#(-->|\*\/)/', $output, $matches, PREG_OFFSET_CAPTURE);
+        preg_match_all('/(<!--|\/\*)#tag-position:([\w0-9_:-]+):[\w0-9]+#(-->|\*\/)/', $output, $matches, PREG_OFFSET_CAPTURE);
         ob_clean();
 
         $this->renderContents($output, $matches, $start);
