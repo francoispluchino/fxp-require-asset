@@ -21,7 +21,6 @@ use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInte
 use Fxp\Component\RequireAsset\Assetic\Util\AssetResourceUtils;
 use Fxp\Component\RequireAsset\Assetic\Util\LocaleUtils;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
-use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 
 /**
  * Require asset package.
@@ -187,12 +186,10 @@ class RequireAssetManager extends AbstractRequireAssetManager
     protected function replaceAssets(AsseticConfigResourcesInterface $configs)
     {
         foreach ($this->getAssetReplacementManager()->getReplacements() as $asset => $replacement) {
-            try {
+            if ($configs->hasResource($replacement)) {
                 $replace = $configs->getResource($replacement);
                 $configs->addResource(AssetResourceUtils::createReplaceAsset($asset, $replace));
                 $configs->removeResource($replacement);
-            } catch (InvalidArgumentException $ex) {
-                // no action
             }
         }
     }
