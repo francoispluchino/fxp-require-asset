@@ -254,12 +254,14 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testNonexistentAssetReplacement()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidArgumentException', 'The "@foobar/less/foobar-theme.less" config of asset resource does not exist');
-
         $arm = $this->ram->getAssetReplacementManager();
         $arm->addReplacement('@foobar/less/foobar.less', '@foobar/less/foobar-theme.less');
 
+        $this->assertCount(0, $this->lam->getResources());
+
         $this->ram->addAssetResources($this->lam);
+
+        $this->assertCount(0, $this->lam->getResources());
     }
 
     public static function createLocalizedFixtures()
