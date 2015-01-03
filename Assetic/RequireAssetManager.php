@@ -194,7 +194,6 @@ class RequireAssetManager extends AbstractRequireAssetManager
             } catch (InvalidArgumentException $ex) {
                 // no action
             }
-
         }
     }
 
