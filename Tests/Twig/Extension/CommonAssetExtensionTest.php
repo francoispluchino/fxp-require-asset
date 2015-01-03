@@ -64,7 +64,7 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
             ->will($this->returnValue('type'));
 
         /* @var TagInterface $tag */
-        $ext->createTagPosition('category', 'type', -1, null, 'position');
+        echo $ext->createTagPosition('category', 'type', -1, null, 'position');
         $ext->addTag($tag);
         $ext->renderTags();
     }

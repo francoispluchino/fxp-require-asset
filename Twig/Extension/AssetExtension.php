@@ -164,17 +164,15 @@ class AssetExtension extends \Twig_Extension
      */
     public function createTagPosition($category, $type, $lineno = -1, $filename = null, $position = null)
     {
-        $pos = trim($position, '_');
-        $pos = strlen($pos) > 0 ? '_'.$pos : '';
-        $tag = strtoupper($category.'_'.$type.$pos);
+        $tag = $this->formatTagPosition($category, $type, $position);
 
-        if (isset($this->tagPositions[$tag])) {
+        if (in_array($tag, $this->tagPositions)) {
             throw new AlreadyExistTagPositionException($category, $type, $position, $lineno, $filename);
         }
 
-        $this->tagPositions[$tag] = $this->formatTagPosition($category, $type, $position);
+        $this->tagPositions[] = $tag;
 
-        return $this->getTagPosition($tag);
+        return $this->getTagPosition($tag, $category);
     }
 
     /**
@@ -185,13 +183,17 @@ class AssetExtension extends \Twig_Extension
     public function renderTags()
     {
         $output = ob_get_contents();
-
-        foreach ($this->tagPositions as $name => $contentType) {
-            $output = $this->doRenderTags($name, $contentType, $output);
-        }
-
+        $start = 0;
+        preg_match_all('/(<!--|\/\*)#tag-position:([a-z_:]+):[\w0-9]+#(-->|\*\/)/', $output, $matches, PREG_OFFSET_CAPTURE);
         ob_clean();
-        echo $output;
+
+        foreach ($matches[0] as $i => $match) {
+            $end = $match[1] - $start;
+            $contentType = $matches[2][$i][0];
+            echo substr($output, $start, $end).$this->doRenderTags($contentType);
+            $start = $match[1] + strlen($match[0]);
+        }
+        echo substr($output, $start);
 
         $this->validateRenderTags();
         $this->resetRenderers();
@@ -200,13 +202,11 @@ class AssetExtension extends \Twig_Extension
     /**
      * Do render the tags by type.
      *
-     * @param string $name
      * @param string $contentType
-     * @param string $output
      *
-     * @return string The output with replaced asset tag position
+     * @return string The full content of tag position
      */
-    protected function doRenderTags($name, $contentType, $output)
+    protected function doRenderTags($contentType)
     {
         $content = '';
 
@@ -218,7 +218,7 @@ class AssetExtension extends \Twig_Extension
             unset($this->contents[$contentType]);
         }
 
-        return str_replace($this->getTagPosition($name), $content, $output);
+        return $content;
     }
 
     /**
@@ -308,12 +308,17 @@ class AssetExtension extends \Twig_Extension
     /**
      * Get the tag position of inline tag.
      *
-     * @param string $name The tag position name
+     * @param string $name     The tag position name
+     * @param string $category The tag category
      *
      * @return string The tag position for the template
      */
-    protected function getTagPosition($name)
+    protected function getTagPosition($name, $category)
     {
-        return '{#TAG_POSITION_'.$name.'_'.spl_object_hash($this).'#}';
+        $pattern = 'inline' === $category
+            ? '/*%s*/'
+            : '<!--%s-->';
+
+        return sprintf($pattern, '#tag-position:'.$name.':'.spl_object_hash($this).'#');
     }
 }
