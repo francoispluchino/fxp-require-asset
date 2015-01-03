@@ -187,38 +187,42 @@ class AssetExtension extends \Twig_Extension
         preg_match_all('/(<!--|\/\*)#tag-position:([a-z_:]+):[\w0-9]+#(-->|\*\/)/', $output, $matches, PREG_OFFSET_CAPTURE);
         ob_clean();
 
-        foreach ($matches[0] as $i => $match) {
-            $end = $match[1] - $start;
-            $contentType = $matches[2][$i][0];
-            echo substr($output, $start, $end).$this->doRenderTags($contentType);
-            $start = $match[1] + strlen($match[0]);
-        }
-        echo substr($output, $start);
-
+        $this->renderContents($output, $matches, $start);
         $this->validateRenderTags();
         $this->resetRenderers();
     }
 
     /**
+     * @param string $output  The output
+     * @param array  $matches The matches of tag position
+     * @param int    $start   The start position for sub string
+     */
+    protected function renderContents($output, array $matches, &$start)
+    {
+        foreach ($matches[0] as $i => $match) {
+            $end = $match[1] - $start;
+            $contentType = $matches[2][$i][0];
+            echo substr($output, $start, $end);
+            $this->doRenderTags($contentType);
+            $start = $match[1] + strlen($match[0]);
+        }
+        echo substr($output, $start);
+    }
+
+    /**
      * Do render the tags by type.
      *
-     * @param string $contentType
-     *
-     * @return string The full content of tag position
+     * @param string $contentType The content type
      */
     protected function doRenderTags($contentType)
     {
-        $content = '';
-
         if (isset($this->contents[$contentType])) {
             $renderer = $this->findRenderer(current($this->contents[$contentType]));
             foreach ($renderer->order($this->contents[$contentType]) as $tag) {
-                $content .= $this->renderTag($renderer, $tag);
+                echo $this->renderTag($renderer, $tag);
             }
             unset($this->contents[$contentType]);
         }
-
-        return $content;
     }
 
     /**
