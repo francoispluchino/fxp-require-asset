@@ -12,7 +12,6 @@
 namespace Fxp\Component\RequireAsset\Assetic\Util;
 
 use Fxp\Component\RequireAsset\Assetic\Config\AssetResource;
-use Fxp\Component\RequireAsset\Assetic\Config\AssetResourceInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageInterface;
@@ -56,24 +55,6 @@ abstract class AssetResourceUtils
         $args = ResourceUtils::createConfigResource($package, $file, $outputManager);
 
         return static::createAssetResource($args[0], $classname, $args, 0);
-    }
-
-    /**
-     * Create the new asset resource with previous asset resource.
-     *
-     * @param string                 $asset   The name of the asset that must be replaced
-     * @param AssetResourceInterface $replace The config of asset resource that replace the asset
-     *
-     * @return AssetResource The new config of asset resource
-     */
-    public static function createReplaceAsset($asset, AssetResourceInterface $replace)
-    {
-        $args = $replace->getArguments();
-        if (is_int($replace->getArgumentNamePosition())) {
-            $args[$replace->getArgumentNamePosition()] = $asset;
-        }
-
-        return new AssetResource($asset, $replace->getClassname(), $replace->getLoader(), $args, $replace->getArgumentNamePosition());
     }
 
     /**

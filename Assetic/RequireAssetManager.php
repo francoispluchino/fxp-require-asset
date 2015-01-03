@@ -187,9 +187,7 @@ class RequireAssetManager extends AbstractRequireAssetManager
     {
         foreach ($this->getAssetReplacementManager()->getReplacements() as $asset => $replacement) {
             if ($configs->hasResource($replacement)) {
-                $replace = $configs->getResource($replacement);
-                $configs->addResource(AssetResourceUtils::createReplaceAsset($asset, $replace));
-                $configs->removeResource($replacement);
+                $configs->removeResource($asset);
             }
         }
     }

@@ -11,6 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
+use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Twig\Node\RequireTagReference;
 
 /**
@@ -20,6 +21,21 @@ use Fxp\Component\RequireAsset\Twig\Node\RequireTagReference;
  */
 abstract class AbstractRequireTokenParser extends AbstractTokenParser
 {
+    /**
+     * @var AssetReplacementManagerInterface|null
+     */
+    protected $replacementManager;
+
+    /**
+     * Constructor.
+     *
+     * @param AssetReplacementManagerInterface|null $replacementManager The asset replacement manager
+     */
+    public function __construct(AssetReplacementManagerInterface $replacementManager = null)
+    {
+        $this->replacementManager = $replacementManager;
+    }
+
     /**
      * Parses a token and returns a node.
      *
@@ -37,7 +53,7 @@ abstract class AbstractRequireTokenParser extends AbstractTokenParser
         $assets = array();
 
         while ($stream->test(\Twig_Token::STRING_TYPE)) {
-            $assets[] = $stream->next()->getValue();
+            $assets[] = $this->getRealAssetName($stream->next()->getValue());
 
             if ($stream->test(\Twig_Token::PUNCTUATION_TYPE)) {
                 $stream->next();
@@ -54,5 +70,21 @@ abstract class AbstractRequireTokenParser extends AbstractTokenParser
         $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
         return new RequireTagReference($name, $this->getTagClass(), $assets, $attributes, $lineno, $position);
+    }
+
+    /**
+     * Get the real asset name.
+     *
+     * @param string $assetName The asset name required
+     *
+     * @return string
+     */
+    protected function getRealAssetName($assetName)
+    {
+        if (null !== $this->replacementManager && $this->replacementManager->hasReplacement($assetName)) {
+            $assetName = $this->replacementManager->getReplacement($assetName);
+        }
+
+        return $assetName;
     }
 }

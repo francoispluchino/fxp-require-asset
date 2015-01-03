@@ -11,6 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
+use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Exception\TagRendererExceptionInterface;
 use Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistTagPositionException;
 use Fxp\Component\RequireAsset\Exception\Twig\RuntimeTagRendererException;
@@ -32,6 +33,11 @@ use Fxp\Component\RequireAsset\Twig\TwigFunction\TagPositionFunction;
 class AssetExtension extends \Twig_Extension
 {
     /**
+     * @var AssetReplacementManagerInterface|null
+     */
+    protected $replacementManager;
+
+    /**
      * @var TagRendererInterface[]
      */
     protected $renderers;
@@ -48,9 +54,12 @@ class AssetExtension extends \Twig_Extension
 
     /**
      * Constructor.
+     *
+     * @param AssetReplacementManagerInterface|null $replacementManager The asset replacement manager
      */
-    public function __construct()
+    public function __construct(AssetReplacementManagerInterface $replacementManager = null)
     {
+        $this->replacementManager = $replacementManager;
         $this->renderers = array();
         $this->contents = array();
         $this->tagPositions = array();
@@ -78,8 +87,8 @@ class AssetExtension extends \Twig_Extension
         $tokens = array(
             new InlineScriptTokenParser(),
             new InlineStyleTokenParser(),
-            new RequireScriptTokenParser(),
-            new RequireStyleTokenParser(),
+            new RequireScriptTokenParser($this->replacementManager),
+            new RequireStyleTokenParser($this->replacementManager),
         );
 
         return $tokens;
