@@ -98,12 +98,8 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
      */
     protected function preRender(RequireTagInterface $tag)
     {
-        if (!$this->manager->has($tag->getAsseticName())) {
-            if ($tag->isOptional()) {
-                return '';
-            }
-
-            throw new RequireTagRendererException($tag, sprintf('The %s %s "%s" is not managed by the Assetic Manager', $tag->getCategory(), $tag->getType(), $tag->getPath()));
+        if ($this->isNonExistentOptionalTag($tag)) {
+            return '';
         }
 
         if ($this->manager->isDebug() && count($tag->getInputs()) > 0) {
@@ -111,6 +107,26 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
         }
 
         return $this->preRenderProd($tag);
+    }
+
+    /**
+     * Check if the tag is a non existent optional require asset.
+     *
+     * @param RequireTagInterface $tag The require template tag
+     *
+     * @return bool
+     */
+    protected function isNonExistentOptionalTag(RequireTagInterface $tag)
+    {
+        if (!$this->manager->has($tag->getAsseticName())) {
+            if ($tag->isOptional()) {
+                return true;
+            }
+
+            throw new RequireTagRendererException($tag, sprintf('The %s %s "%s" is not managed by the Assetic Manager', $tag->getCategory(), $tag->getType(), $tag->getPath()));
+        }
+
+        return false;
     }
 
     /**
