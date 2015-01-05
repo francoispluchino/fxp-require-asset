@@ -98,6 +98,18 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
         $this->doValidTagTest($tag, 'test_replacement_asset');
     }
 
+    /**
+     * @dataProvider getRequireTwigTags
+     * @param string $tag
+     */
+    public function testOptionalAsset($tag)
+    {
+        $this->addAsset('@acme_demo/js/asset.js', '/assets/acemodemo/js/asset.js');
+        $this->addAsset('@acme_demo/css/asset.css', '/assets/acemodemo/css/asset.css');
+
+        $this->doValidTagTest($tag, 'test_optional_asset');
+    }
+
     public function getRequireTwigAsset()
     {
         return array(

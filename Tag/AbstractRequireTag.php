@@ -41,6 +41,11 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
     protected $inputs;
 
     /**
+     * @var bool
+     */
+    protected $optional;
+
+    /**
      *
      * @param string      $assetPath  The asset source path
      * @param array       $attributes The HTML attributes
@@ -52,6 +57,8 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
     {
         parent::__construct($position, $lineno, $filename);
 
+        $this->optional = false;
+        $assetPath = $this->checkOptionalPath($assetPath);
         $this->assetPath = $assetPath;
         $this->asseticName = Utils::formatName($assetPath);
         $this->attributes = $attributes;
@@ -106,5 +113,33 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
     public function getInputs()
     {
         return $this->inputs;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOptional($optional)
+    {
+        $this->optional = $optional;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isOptional()
+    {
+        return $this->optional;
+    }
+
+    protected function checkOptionalPath($assetPath)
+    {
+        if (0 === strpos($assetPath, '?')) {
+            $assetPath = ltrim($assetPath, '?');
+            $this->setOptional(true);
+        }
+
+        return $assetPath;
     }
 }

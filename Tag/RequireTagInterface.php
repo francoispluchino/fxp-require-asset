@@ -77,4 +77,20 @@ interface RequireTagInterface extends TagInterface
      * @return string
      */
     public function getLinkAttribute();
+
+    /**
+     * Set if the tag is optional.
+     *
+     * @param bool $optional The optional require tag
+     *
+     * @return self
+     */
+    public function setOptional($optional);
+
+    /**
+     * Check if the tag is optional.
+     *
+     * @return bool
+     */
+    public function isOptional();
 }

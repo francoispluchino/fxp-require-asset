@@ -99,6 +99,10 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
     protected function preRender(RequireTagInterface $tag)
     {
         if (!$this->manager->has($tag->getAsseticName())) {
+            if ($tag->isOptional()) {
+                return '';
+            }
+
             throw new RequireTagRendererException($tag, sprintf('The %s %s "%s" is not managed by the Assetic Manager', $tag->getCategory(), $tag->getType(), $tag->getPath()));
         }
 
