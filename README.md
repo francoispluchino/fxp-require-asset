@@ -36,6 +36,7 @@ right place in the template, while removing duplicates.
     - one only link will be added in the final Twig template (no duplicates)
     - the link will be placed in the right place in the final Twig template (defined in the twig base template)
     - the generated link will corresponding to the link defined by the rewrite rules of assets (the asset target path in Assetic Manager)
+    - ability to define an require asset as an optional (compatible with common assets)
     - automatically add the localized assets after the common assets or individual assets, without duplication
     - automatically add the localized assets for the inputs of the common asset, even if the common asset does not exist, or that it does not include all the localized inputs
   - tags:
