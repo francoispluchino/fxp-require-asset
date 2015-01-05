@@ -133,6 +133,13 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
         return $this->optional;
     }
 
+    /**
+     * Check optional asset path.
+     *
+     * @param string $assetPath The asset path
+     *
+     * @return string The asset path without '?'
+     */
     protected function checkOptionalPath($assetPath)
     {
         if (0 === strpos($assetPath, '?')) {
