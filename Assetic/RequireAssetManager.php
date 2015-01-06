@@ -131,7 +131,7 @@ class RequireAssetManager extends AbstractRequireAssetManager
     protected function addPackageAssets(AsseticConfigResourcesInterface $configs, PackageInterface $package, $debug = false)
     {
         foreach ($package->getFiles($debug) as $file) {
-            $resource = AssetResourceUtils::createAssetResourceByPackage($package, $file, $this->getOutputManager());
+            $resource = AssetResourceUtils::createAssetResourceByPackage($package, $file, $this->getOutputManager(), $debug);
             $configs->addResource($resource);
         }
     }

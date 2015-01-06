@@ -76,10 +76,11 @@ abstract class ResourceUtils
      * @param PackageInterface       $package       The asset package instance
      * @param SplFileInfo            $file          The Spo file info instance
      * @param OutputManagerInterface $outputManager The output manager
+     * @param bool                   $debug         The debug mode
      *
      * @return array The list of parameters: name, source link, output path, formulae filters, formulae options
      */
-    public static function createConfigResource(PackageInterface $package, SplFileInfo $file, OutputManagerInterface $outputManager)
+    public static function createConfigResource(PackageInterface $package, SplFileInfo $file, OutputManagerInterface $outputManager, $debug = false)
     {
         $name = static::getPackageFilename($package, $file);
         $output = static::getPathRelative($package, $file);
@@ -90,7 +91,7 @@ abstract class ResourceUtils
 
         if ($package->hasExtension($ext)) {
             $pExt = $package->getExtension($ext);
-            $filters = $pExt->getFilters();
+            $filters = static::cleanDebugFilters($pExt->getFilters(), $debug);
             $options = $pExt->getOptions();
             $output = static::replaceExtension($output, $pExt);
         }
@@ -98,6 +99,27 @@ abstract class ResourceUtils
         $output = $outputManager->convertOutput($output);
 
         return array($name, $file->getRealPath(), $output, $filters, $options);
+    }
+
+    /**
+     * Remove filters should not be used in debug mode.
+     *
+     * @param array $filters The filters
+     * @param bool  $debug   The debug mode
+     *
+     * @return array
+     */
+    public static function cleanDebugFilters(array $filters, $debug = false)
+    {
+        $news = array();
+
+        foreach ($filters as $filter) {
+            if (!$debug || ($debug && false === strpos($filter, '?'))) {
+                $news[] = ltrim($filter, '?');
+            }
+        }
+
+        return $news;
     }
 
     /**

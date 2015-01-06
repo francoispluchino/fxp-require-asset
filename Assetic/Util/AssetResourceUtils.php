@@ -46,13 +46,14 @@ abstract class AssetResourceUtils
      * @param PackageInterface       $package       The asset package instance
      * @param SplFileInfo            $file          The Spo file info instance
      * @param OutputManagerInterface $outputManager The output manager
+     * @param bool                   $debug         The debug mode
      *
      * @return AssetResource
      */
-    public static function createAssetResourceByPackage(PackageInterface $package, SplFileInfo $file, OutputManagerInterface $outputManager)
+    public static function createAssetResourceByPackage(PackageInterface $package, SplFileInfo $file, OutputManagerInterface $outputManager, $debug = false)
     {
         $classname = 'Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource';
-        $args = ResourceUtils::createConfigResource($package, $file, $outputManager);
+        $args = ResourceUtils::createConfigResource($package, $file, $outputManager, $debug);
 
         return static::createAssetResource($args[0], $classname, $args, 0);
     }
