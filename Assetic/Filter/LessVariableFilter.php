@@ -27,6 +27,11 @@ class LessVariableFilter implements FilterInterface
     protected $packages;
 
     /**
+     * @var array
+     */
+    protected $variables;
+
+    /**
      * @var string|null
      */
     private $cache;
@@ -34,11 +39,13 @@ class LessVariableFilter implements FilterInterface
     /**
      * Constructor.
      *
-     * @param array $packages The map of asset package name and path
+     * @param array $packages  The map of asset package name and path
+     * @param array $variables The map of custom variable and value
      */
-    public function __construct(array $packages = array())
+    public function __construct(array $packages = array(), array $variables = array())
     {
         $this->packages = $packages;
+        $this->variables = $variables;
     }
 
     /**
@@ -66,25 +73,29 @@ class LessVariableFilter implements FilterInterface
     private function getContent()
     {
         if (null === $this->cache) {
-            $this->cache = $this->getContentAssetPackagePaths($this->packages);
+            $this->cache = $this->getContentVariables($this->packages, $this->variables);
         }
 
         return $this->cache;
     }
 
     /**
-     * get content variables of the asset package paths.
+     * Get the content variables.
      *
-     * @param array $packages The asset package paths
+     * @param array $packages  The asset package paths
+     * @param array $variables The variables
      *
      * @return string
      */
-    protected function getContentAssetPackagePaths(array $packages)
+    protected function getContentVariables(array $packages, array $variables)
     {
         $content = '';
 
         foreach ($packages as $name => $path) {
             $content .= $this->dumpVariable($name, $path, '-path').PHP_EOL;
+        }
+        foreach ($variables as $name => $value) {
+            $content .= $this->dumpVariable($name, $value).PHP_EOL;
         }
 
         return $content;

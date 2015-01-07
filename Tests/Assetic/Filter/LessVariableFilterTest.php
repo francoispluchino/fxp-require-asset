@@ -29,13 +29,19 @@ class LessVariableFilterTest extends \PHPUnit_Framework_TestCase
             '@asset/package2'     => 'path_to_package2',
             'vendor_asset_bundle' => 'path_to_bundle',
         );
-        $filter = new LessVariableFilter($packages);
+        $customVariables = array(
+            'custom-variable1' => '@{asset-package1-path}/value1',
+            'custom-variable2' => '@{asset-package2-path}/value2',
+        );
+        $filter = new LessVariableFilter($packages, $customVariables);
         $asset = new StringAsset($content, array($filter));
         $asset->dump();
 
         $validContent = '@asset-package1-path: "path_to_package1";'.PHP_EOL
             .'@asset-package2-path: "path_to_package2";'.PHP_EOL
             .'@vendor-asset-bundle-path: "path_to_bundle";'.PHP_EOL
+            .'@custom-variable1: "@{asset-package1-path}/value1";'.PHP_EOL
+            .'@custom-variable2: "@{asset-package2-path}/value2";'.PHP_EOL
             .$content;
 
         $this->assertEquals($validContent, $asset->getContent());
