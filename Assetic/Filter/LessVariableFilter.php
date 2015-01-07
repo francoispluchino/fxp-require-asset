@@ -92,7 +92,7 @@ class LessVariableFilter implements FilterInterface
         $content = '';
 
         foreach ($packages as $name => $path) {
-            $content .= $this->dumpVariable($name, $path, '-path').PHP_EOL;
+            $content .= $this->dumpVariable($name, $this->fixDirectorySeparator($path), '-path').PHP_EOL;
         }
         foreach ($variables as $name => $value) {
             $content .= $this->dumpVariable($name, $value).PHP_EOL;
@@ -116,5 +116,17 @@ class LessVariableFilter implements FilterInterface
         $name = trim($name, '@');
 
         return '@'.$name.$suffix.': "'.(string) $value.'";';
+    }
+
+    /**
+     * Fix the windows directory separator.
+     *
+     * @param string $value The value
+     *
+     * @return string
+     */
+    protected function fixDirectorySeparator($value)
+    {
+        return str_replace('\\', '/', (string) $value);
     }
 }
