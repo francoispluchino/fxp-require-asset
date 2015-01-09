@@ -81,10 +81,13 @@ abstract class AbstractRequireTokenParser extends AbstractTokenParser
      */
     protected function getRealAssetName($assetName)
     {
+        $prefix = 0 === strpos($assetName, '?') ? '?' : '';
+        $assetName = ltrim($assetName, '?');
+
         if (null !== $this->replacementManager && $this->replacementManager->hasReplacement($assetName)) {
             $assetName = $this->replacementManager->getReplacement($assetName);
         }
 
-        return $assetName;
+        return $prefix.$assetName;
     }
 }
