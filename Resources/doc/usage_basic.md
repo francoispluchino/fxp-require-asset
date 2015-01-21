@@ -74,6 +74,7 @@ With this list, only files below are copied:
 - `svg`
 - `ttf`
 - `woff`
+- `woff2`
 - `jpg`
 - `jpeg`
 - `png`
