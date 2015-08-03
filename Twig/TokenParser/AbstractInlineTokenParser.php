@@ -97,7 +97,7 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
             $body = new \Twig_Node(array($body), array(), $lineno);
         }
 
-        $this->removeTagContent($body, 0, '/(|\ \\t|\\n|\\n\ \\t)<[a-zA-Z\=\'\"\ \/]+>(\\n?|\\r?)/');
+        $this->removeTagContent($body, 0, '/(|\ \\t|\\n|\\n\ \\t)<([a-zA-Z0-9]+)[a-zA-Z\=\'\"\ \/]+>(\\n?|\\r?)/');
         $this->removeTagContent($body, count($body) - 1, '/(|\ \\t|\\n|\\n\ \\t|\\n)<\/[a-zA-Z]+>/');
 
         return $body;
