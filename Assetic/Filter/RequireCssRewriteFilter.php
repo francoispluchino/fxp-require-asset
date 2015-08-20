@@ -124,7 +124,7 @@ class RequireCssRewriteFilter implements FilterInterface, HashableInterface
         // learn how to get from the target back to the source
         if (false !== strpos($sourceFile, '://')) {
             list($scheme, $url) = explode('://', $sourceFile, 2);
-            list($host,) = explode('/', $url, 2);
+            list($host) = explode('/', $url, 2);
 
             return $scheme.'://'.$host.'/';
         }
