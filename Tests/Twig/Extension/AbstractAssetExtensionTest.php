@@ -127,7 +127,7 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
         $tpl = $this->getTemplate($tag, $testFile.'.html.twig');
         $content = $tpl->render(array());
         $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/'.$tag.'/'.$testFile.$validSuffix.'.valid.template');
-        $valid = str_replace("\r", "", $valid);
+        $valid = str_replace("\r", '', $valid);
 
         $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
     }
