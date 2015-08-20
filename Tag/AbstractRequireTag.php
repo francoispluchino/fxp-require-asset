@@ -46,7 +46,6 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
     protected $optional;
 
     /**
-     *
      * @param string      $assetPath  The asset source path
      * @param array       $attributes The HTML attributes
      * @param string|null $position   The position in the template
