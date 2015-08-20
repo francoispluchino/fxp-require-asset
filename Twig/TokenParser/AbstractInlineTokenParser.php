@@ -68,7 +68,7 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
      *
      * @param \Twig_Token $token
      *
-     * @return boolean
+     * @return bool
      */
     public function decideBlockEnd(\Twig_Token $token)
     {
