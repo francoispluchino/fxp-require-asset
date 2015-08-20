@@ -42,6 +42,7 @@ class LocaleRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 
     /**
      * @dataProvider getLocaleRequireTwigTags
+     *
      * @param string $tag
      * @param string $env
      */

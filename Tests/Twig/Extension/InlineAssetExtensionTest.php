@@ -20,6 +20,7 @@ class InlineAssetExtensionTest extends AbstractAssetExtensionTest
 {
     /**
      * @dataProvider getInlineTwigTags
+     *
      * @param string $tag
      */
     public function testEmptyBody($tag)
@@ -29,6 +30,7 @@ class InlineAssetExtensionTest extends AbstractAssetExtensionTest
 
     /**
      * @dataProvider getInlineTwigTags
+     *
      * @param string $tag
      */
     public function testTwigTags($tag)

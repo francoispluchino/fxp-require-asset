@@ -71,6 +71,7 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
 
     /**
      * @dataProvider getTwigTags
+     *
      * @param string $tag
      */
     public function testInvalidTypeAttributeName($tag)
@@ -81,6 +82,7 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
 
     /**
      * @dataProvider getTwigTags
+     *
      * @param string $tag
      */
     public function testInvalidTypeAttributeValue($tag)
@@ -91,6 +93,7 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
 
     /**
      * @dataProvider getTwigTags
+     *
      * @param string $tag
      */
     public function testInvalidConfigTypeAttributeValue($tag)
@@ -101,6 +104,7 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
 
     /**
      * @dataProvider getTwigTags
+     *
      * @param string $tag
      */
     public function testInvalidAttributeName($tag)
@@ -111,6 +115,7 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
 
     /**
      * @dataProvider getTwigTags
+     *
      * @param string $tag
      */
     public function testInvalidAttributeOperator($tag)

@@ -33,6 +33,7 @@ class CommonRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 
     /**
      * @dataProvider getCommonRequireTwigTags
+     *
      * @param string $tag
      * @param string $env
      */

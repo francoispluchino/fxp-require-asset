@@ -28,6 +28,7 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
 {
     /**
      * The list of already rendered tags.
+     *
      * @var array
      */
     protected $renderedTags;

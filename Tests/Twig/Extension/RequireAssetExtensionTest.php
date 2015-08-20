@@ -39,6 +39,7 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 
     /**
      * @dataProvider getRequireTwigTags
+     *
      * @param string $tag
      */
     public function testAssetIsNotManagedByAsseticManager($tag)
@@ -50,6 +51,7 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 
     /**
      * @dataProvider getRequireTwigTags
+     *
      * @param string $tag
      */
     public function testTwigTags($tag)
@@ -62,6 +64,7 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 
     /**
      * @dataProvider getRequireTwigTags
+     *
      * @param string $tag
      */
     public function testTwigTagsWithMultiAsset($tag)
@@ -76,6 +79,7 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 
     /**
      * @dataProvider getRequireTwigTags
+     *
      * @param string $tag
      */
     public function testTwigTagsWithoutAssetInTag($tag)
@@ -86,6 +90,7 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 
     /**
      * @dataProvider getRequireTwigTags
+     *
      * @param string $tag
      */
     public function testReplacementAsset($tag)
@@ -100,6 +105,7 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 
     /**
      * @dataProvider getRequireTwigTags
+     *
      * @param string $tag
      */
     public function testOptionalAsset($tag)
