@@ -90,7 +90,7 @@ abstract class Utils
     }
 
     /**
-     * Add string filed in array config
+     * Add string filed in array config.
      *
      * @param array           $value  The array config
      * @param string          $field  The field name
@@ -106,7 +106,7 @@ abstract class Utils
     }
 
     /**
-     * Add array filed in array config
+     * Add array filed in array config.
      *
      * @param array           $value      The array config
      * @param string          $field      The field name
@@ -123,7 +123,7 @@ abstract class Utils
     }
 
     /**
-     * Add bool filed in array config
+     * Add bool filed in array config.
      *
      * @param array           $value     The array config
      * @param string          $field     The field name
