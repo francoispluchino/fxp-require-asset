@@ -49,8 +49,6 @@ interface TagRendererInterface
 
     /**
      * Reset the renderer.
-     *
-     * @return void
      */
     public function reset();
 }

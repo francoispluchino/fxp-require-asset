@@ -294,8 +294,6 @@ class AssetExtension extends \Twig_Extension
 
     /**
      * Reset all renderers.
-     *
-     * @return void
      */
     protected function resetRenderers()
     {

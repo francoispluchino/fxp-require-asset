@@ -157,8 +157,6 @@ interface RequireAssetManagerInterface
      * Add all require asset resources in assetic lazy asset manager.
      *
      * @param LazyAssetManager $assetManager The assetic lazy asset manager
-     *
-     * @return void
      */
     public function addAssetResources(LazyAssetManager $assetManager);
 
