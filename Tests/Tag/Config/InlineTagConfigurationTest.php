@@ -33,7 +33,7 @@ class InlineTagConfigurationTest extends \PHPUnit_Framework_TestCase
             ),
         );
         $validConfig = array(
-            'position'      => 'head',
+            'position' => 'head',
             'keep_html_tag' => false,
         );
 

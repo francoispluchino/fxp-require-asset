@@ -66,12 +66,12 @@ class FileExtensionFactoryTest extends \PHPUnit_Framework_TestCase
         $ext = new FileExtension('NAME');
         $config = $ext = FileExtensionFactory::convertToArray($ext, true);
         $valid = array(
-            'name'      => 'NAME',
-            'options'   => array(),
-            'filters'   => array(),
+            'name' => 'NAME',
+            'options' => array(),
+            'filters' => array(),
             'extension' => null,
-            'debug'     => false,
-            'exclude'   => false,
+            'debug' => false,
+            'exclude' => false,
         );
 
         $this->assertTrue(is_array($config));
@@ -83,10 +83,10 @@ class FileExtensionFactoryTest extends \PHPUnit_Framework_TestCase
         $ext = new FileExtension('NAME', array(), array('filter'), 'ext', false, true);
         $config = $ext = FileExtensionFactory::convertToArray($ext);
         $valid = array(
-            'name'      => 'NAME',
-            'filters'   => array('filter'),
+            'name' => 'NAME',
+            'filters' => array('filter'),
             'extension' => 'ext',
-            'exclude'   => true,
+            'exclude' => true,
         );
 
         $this->assertTrue(is_array($config));
@@ -98,12 +98,12 @@ class FileExtensionFactoryTest extends \PHPUnit_Framework_TestCase
         $ext = new FileExtension('NAME', array(), array('filter'), 'ext', false, true);
         $config = $ext = FileExtensionFactory::convertToArray($ext, true);
         $valid = array(
-            'name'      => 'NAME',
-            'options'   => array(),
-            'filters'   => array('filter'),
+            'name' => 'NAME',
+            'options' => array(),
+            'filters' => array('filter'),
             'extension' => 'ext',
-            'debug'     => false,
-            'exclude'   => true,
+            'debug' => false,
+            'exclude' => true,
         );
 
         $this->assertTrue(is_array($config));

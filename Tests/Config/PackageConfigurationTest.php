@@ -31,7 +31,7 @@ class PackageConfigurationTest extends \PHPUnit_Framework_TestCase
                 ),
                 'package2' => array(
                     'source_path' => 'PACKAGE2_PATH',
-                    'extensions'  => array(
+                    'extensions' => array(
                         'js' => array(),
                         'less' => array(
                             'extension' => 'css',
@@ -41,7 +41,7 @@ class PackageConfigurationTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 'package2' => array(
-                    'extensions'  => array(
+                    'extensions' => array(
                         'less' => array(
                             'filters' => array('lessphp'),
                         ),
@@ -51,35 +51,35 @@ class PackageConfigurationTest extends \PHPUnit_Framework_TestCase
         );
         $validConfig = array(
             'package1' => array(
-                'source_path'                => 'PACKAGE1_PATH',
-                'source_base'                => null,
+                'source_path' => 'PACKAGE1_PATH',
+                'source_base' => null,
                 'replace_default_extensions' => false,
-                'replace_default_patterns'   => false,
-                'extensions'                 => array(),
-                'patterns'                   => array(),
+                'replace_default_patterns' => false,
+                'extensions' => array(),
+                'patterns' => array(),
             ),
             'package2' => array(
-                'source_path'                => 'PACKAGE2_PATH',
-                'source_base'                => null,
+                'source_path' => 'PACKAGE2_PATH',
+                'source_base' => null,
                 'replace_default_extensions' => false,
-                'replace_default_patterns'   => false,
-                'extensions'                 => array(
-                    'js'  => array(
-                        'filters'   => array(),
-                        'options'   => array(),
+                'replace_default_patterns' => false,
+                'extensions' => array(
+                    'js' => array(
+                        'filters' => array(),
+                        'options' => array(),
                         'extension' => null,
-                        'debug'     => false,
-                        'exclude'   => false,
+                        'debug' => false,
+                        'exclude' => false,
                     ),
                     'less' => array(
-                        'filters'   => array('lessphp'),
-                        'options'   => array(),
+                        'filters' => array('lessphp'),
+                        'options' => array(),
                         'extension' => 'css',
-                        'debug'     => false,
-                        'exclude'   => false,
+                        'debug' => false,
+                        'exclude' => false,
                     ),
                 ),
-                'patterns'                   => array(),
+                'patterns' => array(),
             ),
         );
 

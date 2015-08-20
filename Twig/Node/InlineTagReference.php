@@ -30,7 +30,7 @@ class InlineTagReference extends \Twig_Node
     public function __construct($name, $tagClass, $lineno, $position = null, $tag = null)
     {
         $twigAttributes = array(
-            'name'     => $name,
+            'name' => $name,
             'tagClass' => $tagClass,
             'position' => $position,
         );

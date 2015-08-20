@@ -225,12 +225,12 @@ class ConfigPackageTest extends \PHPUnit_Framework_TestCase
     protected function getFileExtensionConfig1()
     {
         return array(
-            'name'      => 'ext',
-            'options'   => array('option1' => 'value1'),
-            'filters'   => array('filter1'),
+            'name' => 'ext',
+            'options' => array('option1' => 'value1'),
+            'filters' => array('filter1'),
             'extension' => null,
-            'debug'     => false,
-            'exclude'   => true,
+            'debug' => false,
+            'exclude' => true,
         );
     }
 
@@ -240,12 +240,12 @@ class ConfigPackageTest extends \PHPUnit_Framework_TestCase
     protected function getFileExtensionConfig2()
     {
         return array(
-            'name'      => 'ext',
-            'options'   => array('option2' => 'value2'),
-            'filters'   => array('filter2'),
+            'name' => 'ext',
+            'options' => array('option2' => 'value2'),
+            'filters' => array('filter2'),
             'extension' => 'otherext',
-            'debug'     => true,
-            'exclude'   => false,
+            'debug' => true,
+            'exclude' => false,
         );
     }
 }

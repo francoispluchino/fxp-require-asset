@@ -35,11 +35,11 @@ class RequireScriptTagConfigurationTest extends \PHPUnit_Framework_TestCase
         );
         $validConfig = array(
             'position' => 'head',
-            'async'    => 'async',
-            'defer'    => null,
-            'src'      => null,
-            'charset'  => null,
-            'type'     => null,
+            'async' => 'async',
+            'defer' => null,
+            'src' => null,
+            'charset' => null,
+            'type' => null,
         );
 
         $res = $process->process(RequireScriptTagConfiguration::getNode(), $configs);

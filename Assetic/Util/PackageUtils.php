@@ -41,13 +41,13 @@ abstract class PackageUtils
         if (!$name instanceof ConfigPackageInterface) {
             $config = is_array($name) ? $name
                 : array(
-                    'name'                       => $name,
-                    'source_path'                => $sourcePath,
-                    'extensions'                 => $extensions,
-                    'patterns'                   => $patterns,
+                    'name' => $name,
+                    'source_path' => $sourcePath,
+                    'extensions' => $extensions,
+                    'patterns' => $patterns,
                     'replace_default_extensions' => $replaceDefaultExts,
-                    'replace_default_patterns'   => $replaceDefaultPatterns,
-                    'source_base'                => $sourceBase,
+                    'replace_default_patterns' => $replaceDefaultPatterns,
+                    'source_base' => $sourceBase,
                 )
             ;
 

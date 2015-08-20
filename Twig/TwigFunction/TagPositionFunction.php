@@ -31,9 +31,9 @@ class TagPositionFunction extends \Twig_SimpleFunction
 
         $this->options = array_merge($this->options, array(
             'node_class' => 'Fxp\Component\RequireAsset\Twig\Node\TagPositionFunctionNode',
-            'is_safe'    => array('html'),
-            'category'   => null,
-            'type'       => null,
+            'is_safe' => array('html'),
+            'category' => null,
+            'type' => null,
         ), $options);
     }
 

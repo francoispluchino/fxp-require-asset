@@ -38,12 +38,12 @@ abstract class FileExtensionUtils
         if (!$name instanceof FileExtensionInterface) {
             $config = is_array($name) ? $name
                 : array(
-                    'name'      => $name,
-                    'options'   => $options,
-                    'filters'   => $filters,
+                    'name' => $name,
+                    'options' => $options,
+                    'filters' => $filters,
                     'extension' => $extension === $name ? null : $extension,
-                    'debug'     => $debug,
-                    'exclude'   => $exclude,
+                    'debug' => $debug,
+                    'exclude' => $exclude,
                 )
             ;
 
@@ -61,26 +61,26 @@ abstract class FileExtensionUtils
     public static function getDefaultConfigs()
     {
         return array(
-            'map'   => array('debug' => true),
-            'js'    => array(),
-            'css'   => array(),
-            'eot'   => array(),
-            'svg'   => array(),
-            'ttf'   => array(),
-            'woff'  => array(),
+            'map' => array('debug' => true),
+            'js' => array(),
+            'css' => array(),
+            'eot' => array(),
+            'svg' => array(),
+            'ttf' => array(),
+            'woff' => array(),
             'woff2' => array(),
-            'jpg'   => array(),
-            'jpeg'  => array(),
-            'png'   => array(),
-            'gif'   => array(),
-            'webp'  => array(),
-            'mp3'   => array(),
-            'aac'   => array(),
-            'wav'   => array(),
-            'ogg'   => array(),
-            'webm'  => array(),
-            'mp4'   => array(),
-            'ogv'   => array(),
+            'jpg' => array(),
+            'jpeg' => array(),
+            'png' => array(),
+            'gif' => array(),
+            'webp' => array(),
+            'mp3' => array(),
+            'aac' => array(),
+            'wav' => array(),
+            'ogg' => array(),
+            'webm' => array(),
+            'mp4' => array(),
+            'ogv' => array(),
         );
     }
 }

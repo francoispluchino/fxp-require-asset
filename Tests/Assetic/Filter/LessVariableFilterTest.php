@@ -25,8 +25,8 @@ class LessVariableFilterTest extends \PHPUnit_Framework_TestCase
     {
         $content = '@content = "content";';
         $packages = array(
-            '@asset/package1'     => 'path_to_package1',
-            '@asset/package2'     => 'path_to_package2',
+            '@asset/package1' => 'path_to_package1',
+            '@asset/package2' => 'path_to_package2',
             'vendor_asset_bundle' => 'path_to_bundle',
         );
         $customVariables = array(

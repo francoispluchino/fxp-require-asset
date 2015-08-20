@@ -35,12 +35,12 @@ class RequireStyleTagConfigurationTest extends \PHPUnit_Framework_TestCase
         );
         $validConfig = array(
             'position' => 'head',
-            'media'    => 'all',
+            'media' => 'all',
             'hreflang' => 'en',
-            'href'     => null,
-            'rel'      => 'stylesheet',
-            'type'     => null,
-            'sizes'    => null,
+            'href' => null,
+            'rel' => 'stylesheet',
+            'type' => null,
+            'sizes' => null,
         );
 
         $res = $process->process(RequireStyleTagConfiguration::getNode(), $configs);

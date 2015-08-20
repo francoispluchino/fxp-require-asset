@@ -38,19 +38,19 @@ class FileExtensionConfigurationTest extends \PHPUnit_Framework_TestCase
             ),
         );
         $validConfig = array(
-            'js'  => array(
-                'filters'   => array(),
-                'options'   => array(),
+            'js' => array(
+                'filters' => array(),
+                'options' => array(),
                 'extension' => null,
-                'debug'     => false,
-                'exclude'   => false,
+                'debug' => false,
+                'exclude' => false,
             ),
             'less' => array(
-                'filters'   => array('lessphp'),
-                'options'   => array(),
+                'filters' => array('lessphp'),
+                'options' => array(),
                 'extension' => 'css',
-                'debug'     => false,
-                'exclude'   => false,
+                'debug' => false,
+                'exclude' => false,
             ),
         );
 

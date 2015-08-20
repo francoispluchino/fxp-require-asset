@@ -28,7 +28,7 @@ class CommonAssetConfigurationTest extends \PHPUnit_Framework_TestCase
              array(
                 'common_asset_1' => array(
                     'output' => 'OUTPUT_1.ext',
-                    'debug'  => true,
+                    'debug' => true,
                 ),
                  'common_asset_2' => array(
                      'output' => 'OUTPUT_2.ext',
@@ -40,12 +40,12 @@ class CommonAssetConfigurationTest extends \PHPUnit_Framework_TestCase
             'common_asset_1' => array(
                 'output' => 'OUTPUT_1.ext',
                 'options' => array('debug' => true),
-                'inputs'  => array(),
+                'inputs' => array(),
                 'filters' => array(),
             ),
             'common_asset_2' => array(
                 'output' => 'OUTPUT_2.ext',
-                'inputs'  => array('@asset/source/path.ext'),
+                'inputs' => array('@asset/source/path.ext'),
                 'filters' => array(),
                 'options' => array(),
             ),
