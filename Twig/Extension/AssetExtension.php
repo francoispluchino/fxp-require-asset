@@ -187,9 +187,11 @@ class AssetExtension extends \Twig_Extension
     /**
      * Render all template tags.
      *
+     * @param bool $allPosition Check if all asset position must be rendered.
+     *
      * Replaces the current buffer with the new edited buffer content.
      */
-    public function renderTags()
+    public function renderTags($allPosition = true)
     {
         $output = ob_get_contents();
         $start = 0;
@@ -197,7 +199,7 @@ class AssetExtension extends \Twig_Extension
         ob_clean();
 
         $this->renderContents($output, $matches, $start);
-        $this->validateRenderTags();
+        $this->validateRenderTags($allPosition);
         $this->resetRenderers();
     }
 
@@ -281,11 +283,13 @@ class AssetExtension extends \Twig_Extension
     /**
      * Validate the renderTags method.
      *
+     * @param bool $allPosition Check if all asset position must be rendered.
+     *
      * @throws MissingTagPositionException When the tag positions are not injected in the template
      */
-    protected function validateRenderTags()
+    protected function validateRenderTags($allPosition = true)
     {
-        if (!empty($this->contents)) {
+        if ($allPosition && !empty($this->contents)) {
             $keys = array_keys($this->contents);
 
             throw new MissingTagPositionException($this->contents[$keys[0]][0]);
