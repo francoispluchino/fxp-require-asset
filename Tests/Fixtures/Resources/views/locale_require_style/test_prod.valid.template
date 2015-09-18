@@ -1,6 +1,6 @@
 <html>
 <head>
-<link href="/assets/acemodemo/css/common.css" rel="stylesheet" /><link href="/assets/acemodemo/css/common_fr.css" rel="stylesheet" /><link href="/assets/acemodemo/css/locale/asset.fr.css" rel="stylesheet" /><link href="/assets/acemodemo/css/asset3.css" rel="stylesheet" /><link href="/assets/acemodemo/css/locale/asset3.fr-fr.css" rel="stylesheet" />
+<link href="/assets/acemodemo/css/common.css" rel="stylesheet" /><link href="/assets/acemodemo/css/common_fr.css" rel="stylesheet" /><link href="/assets/acemodemo/css/asset3.css" rel="stylesheet" /><link href="/assets/acemodemo/css/locale/asset3.fr-fr.css" rel="stylesheet" />
 </head>
 <body>
 <div id="myblock">Hello world</div>

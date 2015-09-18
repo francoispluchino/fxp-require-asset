@@ -181,10 +181,14 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
     protected function preRenderProd(RequireTagInterface $tag)
     {
         $output = $this->doRender($tag, $tag->getAsseticName());
-        $output .= $this->preRenderLocalized($tag, $tag->getPath());
-        $output .= $this->includeMissingLocalizedAssets($tag, !$this->manager->isDebug());
-
         $this->assetRendered($tag->getInputs());
+
+        $output .= $this->preRenderLocalized($tag, $tag->getPath());
+        foreach ($tag->getInputs() as $input) {
+            $this->assetRendered($this->getLocalizedAssets($input));
+        }
+
+        $output .= $this->includeMissingLocalizedAssets($tag, !$this->manager->isDebug());
 
         return $output;
     }
