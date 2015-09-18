@@ -51,13 +51,18 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected $replacementManager;
 
+    /**
+     * @var array
+     */
+    protected $debugCommonAssets = array();
+
     protected function setUp()
     {
         $this->factory = new AssetFactory('web');
         $this->manager = new LazyAssetManager($this->factory);
         $this->replacementManager = new AssetReplacementManager();
         $this->factory->setAssetManager($this->manager);
-        $this->ext = new CoreAssetExtension($this->manager, $this->localeManager, $this->replacementManager);
+        $this->ext = new CoreAssetExtension($this->manager, $this->localeManager, $this->replacementManager, $this->debugCommonAssets);
     }
 
     protected function tearDown()

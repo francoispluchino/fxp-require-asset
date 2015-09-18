@@ -30,14 +30,17 @@ class CoreAssetExtension extends AssetExtension
      * @param LazyAssetManager                      $manager            The lazy assetic manager
      * @param LocaleManagerInterface|null           $localeManager      The require locale asset manager
      * @param AssetReplacementManagerInterface|null $replacementManager The asset replacement manager
+     * @param array                                 $debugCommonAssets  The common assets for debug mode without assetic common parts
      */
-    public function __construct(LazyAssetManager $manager, LocaleManagerInterface $localeManager = null, AssetReplacementManagerInterface $replacementManager = null)
+    public function __construct(LazyAssetManager $manager, LocaleManagerInterface $localeManager = null,
+                                AssetReplacementManagerInterface $replacementManager = null,
+                                array $debugCommonAssets = array())
     {
         parent::__construct($replacementManager);
 
         $this->setRenderers(array(
             new InlineTagRenderer(),
-            new RequireTagRenderer($manager, $localeManager),
+            new RequireTagRenderer($manager, $localeManager, $debugCommonAssets),
         ));
     }
 }

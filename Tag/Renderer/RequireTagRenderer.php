@@ -102,6 +102,10 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
             return '';
         }
 
+        if (isset($this->debugCommonAssets[$tag->getAsseticName()])) {
+            $tag->setInputs($this->debugCommonAssets[$tag->getAsseticName()]);
+        }
+
         if ($this->manager->isDebug() && count($tag->getInputs()) > 0) {
             return $this->preRenderCommonDebug($tag);
         }
@@ -121,9 +125,9 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
         if (!$this->manager->has($tag->getAsseticName())) {
             if ($tag->isOptional()) {
                 return true;
+            } elseif (!isset($this->debugCommonAssets[$tag->getAsseticName()])) {
+                throw new RequireTagRendererException($tag, sprintf('The %s %s "%s" is not managed by the Assetic Manager', $tag->getCategory(), $tag->getType(), $tag->getPath()));
             }
-
-            throw new RequireTagRendererException($tag, sprintf('The %s %s "%s" is not managed by the Assetic Manager', $tag->getCategory(), $tag->getType(), $tag->getPath()));
         }
 
         return false;
@@ -158,14 +162,21 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
     protected function doRenderCommonDebug(RequireTagInterface $tag, $asseticName = null)
     {
         $asseticName = null !== $asseticName ? $asseticName : $tag->getAsseticName();
-        /* @var AssetCollection $asset */
-        $asset = $this->manager->get($asseticName);
-        $iterator = $asset->getIterator();
         $output = '';
 
-        /* @var AssetReference $child */
-        foreach ($iterator as $child) {
-            $output .= $this->doRender($tag, $this->extractAsseticName($child), $child);
+        if (!$this->manager->has($asseticName)) {
+            foreach ($tag->getInputs() as $input) {
+                $output .= $this->doRender($tag, Utils::formatName($input));
+            }
+        } else {
+            /* @var AssetCollection $asset */
+            $asset = $this->manager->get($asseticName);
+            $iterator = $asset->getIterator();
+
+            /* @var AssetReference $child */
+            foreach ($iterator as $child) {
+                $output .= $this->doRender($tag, $this->extractAsseticName($child), $child);
+            }
         }
 
         return $output;

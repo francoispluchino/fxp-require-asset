@@ -44,15 +44,23 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
     protected $localeManager;
 
     /**
+     * @var array
+     */
+    protected $debugCommonAssets;
+
+    /**
      * Constructor.
      *
-     * @param LazyAssetManager            $manager       The lazy assetic manager
-     * @param LocaleManagerInterface|null $localeManager The require locale asset manager
+     * @param LazyAssetManager            $manager           The lazy assetic manager
+     * @param LocaleManagerInterface|null $localeManager     The require locale asset manager
+     * @param array                       $debugCommonAssets The common assets for debug mode without assetic common parts
      */
-    public function __construct(LazyAssetManager $manager, LocaleManagerInterface $localeManager = null)
+    public function __construct(LazyAssetManager $manager, LocaleManagerInterface $localeManager = null,
+                                array $debugCommonAssets = array())
     {
         $this->manager = $manager;
         $this->localeManager = $localeManager;
+        $this->debugCommonAssets = $debugCommonAssets;
         $this->reset();
     }
 
@@ -101,6 +109,7 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
             $asset = null !== $asset ? $asset : $this->manager->get($asseticName);
             $attributes = $this->prepareAttributes($tag, $asset);
             $this->assetRendered($asseticName);
+
             $output = RequireUtil::renderHtmlTag($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
         }
 
