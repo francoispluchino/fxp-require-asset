@@ -66,7 +66,7 @@ class RequireAssetExtension extends \Twig_Extension
         $searchAsset = Utils::formatName($asset);
 
         return null !== $this->manager && $this->manager->has($searchAsset)
-            ? '/'.str_replace('_controller/', '', $this->manager->get($searchAsset)->getTargetPath())
+            ? str_replace('_controller/', '/', $this->manager->get($searchAsset)->getTargetPath())
             : $asset;
     }
 }
