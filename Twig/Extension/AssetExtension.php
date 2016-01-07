@@ -201,6 +201,16 @@ class AssetExtension extends \Twig_Extension
         $this->renderContents($output, $matches, $start);
         $this->validateRenderTags($allPosition);
         $this->resetRenderers();
+        $this->resetTagPosition();
+    }
+
+    /**
+     * Reset tag positions and her contents.
+     */
+    public function resetTagPosition()
+    {
+        $this->contents = array();
+        $this->tagPositions = array();
     }
 
     /**
@@ -331,7 +341,7 @@ class AssetExtension extends \Twig_Extension
     protected function getTagPosition($name, $category)
     {
         $pattern = 'inline' === $category
-            ? '/*%s*/'
+            ? '/*'.'%s'.'*/'
             : '<!--%s-->';
 
         return sprintf($pattern, '#tag-position:'.$name.':'.spl_object_hash($this).'#');
