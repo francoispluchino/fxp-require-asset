@@ -11,6 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
+use Assetic\Asset\AssetInterface;
 use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 
@@ -66,7 +67,25 @@ class RequireAssetExtension extends \Twig_Extension
         $searchAsset = Utils::formatName($asset);
 
         return null !== $this->manager && $this->manager->has($searchAsset)
-            ? str_replace('_controller/', '/', $this->manager->get($searchAsset)->getTargetPath())
+            ? $this->formatTargetPath($this->manager->get($searchAsset))
             : $asset;
+    }
+
+    /**
+     * Format the target path.
+     *
+     * @param AssetInterface $asset
+     *
+     * @return string
+     */
+    protected function formatTargetPath(AssetInterface $asset)
+    {
+        $target = str_replace('_controller/', '', $asset->getTargetPath());
+
+        if (false === strpos($target, '://')) {
+            $target = '/'.ltrim($target, '/');
+        }
+
+        return $target;
     }
 }
