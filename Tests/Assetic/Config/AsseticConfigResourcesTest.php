@@ -40,10 +40,12 @@ class AsseticConfigResourcesTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resource, $configs->getResource($name));
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The "@asset/path.ext" config of asset resource does not exist
+     */
     public function testGetResourceWithInvalidResourceName()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidArgumentException', 'The "@asset/path.ext" config of asset resource does not exist');
-
         $configs = new AsseticConfigResources();
         $configs->getResource('@asset/path.ext');
     }

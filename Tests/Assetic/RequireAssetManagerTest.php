@@ -118,7 +118,7 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
     public function testBascic()
     {
         /* @var RequireAssetCacheInterface $cache */
-        $cache = $this->getMock('Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface');
+        $cache = $this->getMockBuilder('Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface')->getMock();
 
         $this->assertSame($this->fem, $this->ram->getFileExtensionManager());
         $this->assertSame($this->ptm, $this->ram->getPatternManager());

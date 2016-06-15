@@ -20,10 +20,12 @@ use Fxp\Component\RequireAsset\Assetic\Config\AssetResource;
  */
 class AssetResourceTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage The "DateTime" class must extends the "Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface" interface
+     */
     public function testBasic()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidConfigurationException', 'The "DateTime" class must extends the "Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface" interface');
-
         $ar = new AssetResource('now', 'DateTime', 'loader', array('name'), 0);
 
         $ar->getNewInstance();

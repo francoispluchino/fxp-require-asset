@@ -98,37 +98,41 @@ class PackageManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($valid, $this->pm->getPackages());
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testAddPackageWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $this->assertSame(array(), $this->pm->getPackages());
 
         $this->pm->addPackage('package');
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testAddPackagesWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $this->assertSame(array(), $this->pm->getPackages());
 
         $this->pm->addPackages(array('package'));
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testRemovePackageWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $this->assertSame(array(), $this->pm->getPackages());
 
         $this->pm->removePackage('package');
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidConfigurationException
+     */
     public function testGetPackageWithNonexistingPackage()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidConfigurationException');
-
         $this->assertSame(array(), $this->pm->getPackages());
 
         $this->pm->getPackage('package');

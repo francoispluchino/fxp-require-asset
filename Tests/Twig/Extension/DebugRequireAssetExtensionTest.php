@@ -40,10 +40,8 @@ class DebugRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
     public function getDebugRequireTwigTags()
     {
         return array(
-            array('debug_require_script', 'debug'),
-            array('debug_require_script', 'prod'),
-            array('debug_require_style',  'debug'),
-            array('debug_require_style',  'prod'),
+            array('debug_require_script'),
+            array('debug_require_style'),
         );
     }
 
@@ -51,13 +49,33 @@ class DebugRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
      * @dataProvider getDebugRequireTwigTags
      *
      * @param string $tag
-     * @param string $env
      */
-    public function testDebugRequireAsset($tag, $env)
+    public function testDebugRequireAsset($tag)
     {
-        $this->factory->setDebug('debug' === $env);
+        $this->factory->setDebug(true);
+        $this->addRequireAssets();
+        $this->doValidTagTest($tag, 'test', '_debug');
+    }
 
-        // require assets
+    /**
+     * @dataProvider getDebugRequireTwigTags
+     *
+     * @param string $tag
+     *
+     * @expectedException \Twig_Error_Runtime
+     */
+    public function testDebugRequireAssetInProd($tag)
+    {
+        $this->factory->setDebug(false);
+        $this->addRequireAssets();
+        $this->doValidTagTest($tag, 'test', '_prod');
+    }
+
+    /**
+     * Add the require assets.
+     */
+    private function addRequireAssets()
+    {
         $this->addAsset('@acme_demo/js/asset.js', '/assets/acemodemo/js/asset.js');
         $this->addAsset('@acme_demo/js/asset2.js', '/assets/acemodemo/js/asset2.js');
         $this->addAsset('@acme_demo/js/asset3.js', '/assets/acemodemo/js/asset3.js');
@@ -65,12 +83,5 @@ class DebugRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
         $this->addAsset('@acme_demo/css/asset2.css', '/assets/acemodemo/css/asset2.css');
         $this->addAsset('@acme_demo/css/asset3.css', '/assets/acemodemo/css/asset3.css');
         $this->addAsset('@acme_demo/css/asset4.css', '/assets/acemodemo/css/asset4.css');
-
-        if ('debug' !== $env) {
-            // exception because the common asset is not added as formulae asset
-            $this->setExpectedException('\Twig_Error_Runtime');
-        }
-
-        $this->doValidTagTest($tag, 'test', '_'.$env);
     }
 }

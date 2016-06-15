@@ -11,6 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
+use Assetic\Asset\AssetInterface;
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
@@ -78,7 +79,7 @@ class RequireAssetExtensionUrlTest extends \PHPUnit_Framework_TestCase
      */
     protected function addAsset($source, $target)
     {
-        $asset = $this->getMock('Assetic\Asset\AssetInterface');
+        $asset = $this->getMockBuilder('Assetic\Asset\AssetInterface')->getMock();
         $asset
             ->expects($this->any())
             ->method('getTargetPath')

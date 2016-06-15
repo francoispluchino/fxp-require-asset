@@ -84,60 +84,66 @@ class ConfigPackageTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($cpkg->replaceDefaultPatterns());
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testAddExtensionWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $cpkg = new ConfigPackage('NAME', 'SOURCE_PATH');
         $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageInterface', $cpkg->getPackage());
 
         $cpkg->addExtension('ext');
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testRemoveExtensionWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $cpkg = new ConfigPackage('NAME', 'SOURCE_PATH');
         $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageInterface', $cpkg->getPackage());
 
         $cpkg->removeExtension('ext');
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testAddPatternWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $cpkg = new ConfigPackage('NAME', 'SOURCE_PATH');
         $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageInterface', $cpkg->getPackage());
 
         $cpkg->addPattern('pattern');
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testRemovePatternWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $cpkg = new ConfigPackage('NAME', 'SOURCE_PATH');
         $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageInterface', $cpkg->getPackage());
 
         $cpkg->removePattern('pattern');
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testReplaceDefaultExtensionsWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $cpkg = new ConfigPackage('NAME', 'SOURCE_PATH');
         $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageInterface', $cpkg->getPackage());
 
         $cpkg->setReplaceDefaultExtensions(true);
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testReplaceDefaultPatternsWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $cpkg = new ConfigPackage('NAME', 'SOURCE_PATH');
         $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageInterface', $cpkg->getPackage());
 

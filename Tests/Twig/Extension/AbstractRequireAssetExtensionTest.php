@@ -29,7 +29,7 @@ abstract class AbstractRequireAssetExtensionTest extends AbstractAssetExtensionT
      */
     protected function addAsset($source, $target)
     {
-        $asset = $this->getMock('Assetic\Asset\AssetInterface');
+        $asset = $this->getMockBuilder('Assetic\Asset\AssetInterface')->getMock();
         $asset
             ->expects($this->any())
             ->method('getTargetPath')

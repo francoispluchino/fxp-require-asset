@@ -21,10 +21,11 @@ use Fxp\Component\RequireAsset\Assetic\Factory\Config\FileExtensionFactory;
  */
 class FileExtensionFactoryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
+     */
     public function testCreateWhithoutName()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidArgumentException');
-
         FileExtensionFactory::create(array());
     }
 

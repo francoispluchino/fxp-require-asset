@@ -28,10 +28,11 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $this->cleanFixtures();
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
+     */
     public function testInvalidSourcePath()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidArgumentException');
-
         new Package(new ConfigPackage('NAME'));
     }
 
@@ -61,10 +62,11 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('source', $pkg->getSourceBase());
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidConfigurationException
+     */
     public function testNonExistentFileExtension()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidConfigurationException');
-
         $cpkg = new ConfigPackage('NAME', 'SOURCE_PATH');
         $pkg = new Package($cpkg);
         $pkg->getExtension('ext1');
@@ -92,10 +94,11 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
+     */
     public function testGetFilesWithInvalidSourcePath()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidArgumentException');
-
         $cpkg = new ConfigPackage('NAME', 'SOURCE_PATH');
         $pkg = new Package($cpkg);
 

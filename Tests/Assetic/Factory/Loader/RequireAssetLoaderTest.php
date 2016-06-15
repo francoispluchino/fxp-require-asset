@@ -42,7 +42,7 @@ class RequireAssetLoaderTest extends \PHPUnit_Framework_TestCase
     public function testLoadWithResource()
     {
         /* @var ResourceInterface|\PHPUnit_Framework_MockObject_MockObject $resource */
-        $resource = $this->getMock('Assetic\Factory\Resource\ResourceInterface');
+        $resource = $this->getMockBuilder('Assetic\Factory\Resource\ResourceInterface')->getMock();
         $loader = new RequireAssetLoader();
 
         $this->assertSame(array(), $loader->load($resource));

@@ -43,10 +43,12 @@ class AssetReplacementManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('@asset5/path2.ext', $arm->getReplacement('@asset1/path2.ext'));
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
+     * @expectedExceptionMessage The "@asset1/path1.ext" asset replacement does not exist in require asset manager
+     */
     public function testInvalidGetReplacement()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidArgumentException', 'The "@asset1/path1.ext" asset replacement does not exist in require asset manager');
-
         $arm = new AssetReplacementManager();
         $arm->getReplacement('@asset1/path1.ext');
     }

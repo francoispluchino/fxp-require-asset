@@ -48,30 +48,33 @@ class PatternManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($valid, $pm->getDefaultPatterns());
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testAddDefaultPatternWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $pm = new PatternManager();
         $this->assertSame(array(), $pm->getDefaultPatterns());
 
         $pm->addDefaultPattern('pattern');
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testAddDefaultPatternsWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $pm = new PatternManager();
         $this->assertSame(array(), $pm->getDefaultPatterns());
 
         $pm->addDefaultPatterns(array('pattern'));
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testAddRemovePatternWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $pm = new PatternManager();
         $this->assertSame(array(), $pm->getDefaultPatterns());
 

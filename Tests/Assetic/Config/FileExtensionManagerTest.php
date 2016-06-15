@@ -67,40 +67,44 @@ class FileExtensionManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($valid, $fem->getDefaultExtensions());
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testAddDefaultFileExtensionWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $fem = new FileExtensionManager();
         $this->assertSame(array(), $fem->getDefaultExtensions());
 
         $fem->addDefaultExtension('fileextension');
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testAddDefaultFileExtensionsWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $fem = new FileExtensionManager();
         $this->assertSame(array(), $fem->getDefaultExtensions());
 
         $fem->addDefaultExtensions(array('fileextension'));
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\BadMethodCallException
+     */
     public function testRemoveDefaultFileExtensionWithLockedManager()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\BadMethodCallException');
-
         $fem = new FileExtensionManager();
         $this->assertSame(array(), $fem->getDefaultExtensions());
 
         $fem->removeDefaultExtension('fileextension');
     }
 
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidConfigurationException
+     */
     public function testGetDefaultFileExtensionWithNonexistingFileExtension()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidConfigurationException');
-
         $fem = new FileExtensionManager();
         $fem->getDefaultExtension('fileextension');
     }

@@ -29,7 +29,7 @@ class PackageUtilsTest extends \PHPUnit_Framework_TestCase
             '@asset/vendor_asset_bundle' => 'path_to_bundle',
         );
 
-        $manager = $this->getMock('Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface');
+        $manager = $this->getMockBuilder('Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface')->getMock();
         $manager->expects($this->any())
             ->method('getPackages')
             ->will($this->returnValue($this->createMockPackages($validPackages)));
@@ -43,7 +43,7 @@ class PackageUtilsTest extends \PHPUnit_Framework_TestCase
         $mocks = array();
 
         foreach ($packages as $name => $path) {
-            $mock = $this->getMock('Fxp\Component\RequireAsset\Assetic\Config\PackageInterface');
+            $mock = $this->getMockBuilder('Fxp\Component\RequireAsset\Assetic\Config\PackageInterface')->getMock();
             $mock->expects($this->any())
                 ->method('getName')
                 ->will($this->returnValue($name));

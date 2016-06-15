@@ -41,11 +41,12 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
      * @dataProvider getRequireTwigTags
      *
      * @param string $tag
+     *
+     * @expectedException \Fxp\Component\RequireAsset\Exception\Twig\RequireTagException
+     * @expectedExceptionMessage is not managed by the Assetic Manager
      */
     public function testAssetIsNotManagedByAsseticManager($tag)
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\RequireTagException', 'is not managed by the Assetic Manager');
-
         $this->doValidTagTest($tag);
     }
 
@@ -81,10 +82,12 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
      * @dataProvider getRequireTwigTags
      *
      * @param string $tag
+     *
+     * @expectedException \Twig_Error_Syntax
+     * @expectedExceptionMessageRegExp /The twig tag "(\w+)" require a lest one asset/
      */
     public function testTwigTagsWithoutAssetInTag($tag)
     {
-        $this->setExpectedException('\Twig_Error_Syntax', sprintf('The twig tag "%s" require a lest one asset', $tag));
         $this->doValidTagTest($tag, 'test_without_asset');
     }
 

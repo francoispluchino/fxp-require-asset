@@ -20,10 +20,12 @@ use Fxp\Component\RequireAsset\Twig\Tag\Renderer\InlineTagRendererUtils;
  */
 class InlineTagRendererUtilsTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\Twig\BodyTagRendererException
+     * @expectedExceptionMessage The callable argument must be an array with Twig_Template instance and name function of the block to rendering
+     */
     public function testWrongCallable()
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\Twig\BodyTagRendererException', 'The callable argument must be an array with Twig_Template instance and name function of the block to rendering');
-
         InlineTagRendererUtils::renderBody(array(), array(), array());
     }
 }

@@ -76,7 +76,7 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
     public function testFilterLoad()
     {
         /* @var AssetInterface $asset */
-        $asset = $this->getMock('Assetic\Asset\AssetInterface');
+        $asset = $this->getMockBuilder('Assetic\Asset\AssetInterface')->getMock();
 
         $this->rcrf->filterLoad($asset);
     }

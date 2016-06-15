@@ -33,11 +33,11 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getCreateMethod
+     *
+     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
      */
     public function testCreateWhithoutName($method)
     {
-        $this->setExpectedException('Fxp\Component\RequireAsset\Exception\InvalidArgumentException');
-
         PackageFactory::$method(array());
     }
 
