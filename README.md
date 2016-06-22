@@ -2,9 +2,9 @@ Fxp Require Asset
 =================
 
 [![Latest Version](https://img.shields.io/packagist/v/fxp/require-asset.svg)](https://packagist.org/packages/fxp/require-asset)
-[![Build Status](https://img.shields.io/travis/francoispluchino/fxp-require-asset/master.svg)](https://travis-ci.org/francoispluchino/fxp-require-asset)
-[![Coverage Status](https://img.shields.io/coveralls/francoispluchino/fxp-require-asset/master.svg)](https://coveralls.io/r/francoispluchino/fxp-require-asset?branch=master)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/francoispluchino/fxp-require-asset/master.svg)](https://scrutinizer-ci.com/g/francoispluchino/fxp-require-asset?branch=master)
+[![Build Status](https://img.shields.io/travis/fxpio/fxp-require-asset/master.svg)](https://travis-ci.org/fxpio/fxp-require-asset)
+[![Coverage Status](https://img.shields.io/coveralls/fxpio/fxp-require-asset/master.svg)](https://coveralls.io/r/fxpio/fxp-require-asset?branch=master)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/fxpio/fxp-require-asset/master.svg)](https://scrutinizer-ci.com/g/fxpio/fxp-require-asset?branch=master)
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/43b207f9-6d4c-4d99-927d-e7bbd710d6ee.svg)](https://insight.sensiolabs.com/projects/43b207f9-6d4c-4d99-927d-e7bbd710d6ee)
 
 The Fxp Require Asset is a helper for assetic and twig to manage automatically the
@@ -57,7 +57,7 @@ The bulk of the documentation is located in the `Resources/doc/index.md`:
 
 [Read the Documentation](Resources/doc/index.md)
 
-[Read the Release Notes](https://github.com/francoispluchino/fxp-require-asset/releases)
+[Read the Release Notes](https://github.com/fxpio/fxp-require-asset/releases)
 
 Installation
 ------------
@@ -75,9 +75,9 @@ About
 -----
 
 Fxp Require Asset is a [François Pluchino](https://github.com/francoispluchino) initiative.
-See also the list of [contributors](https://github.com/francoispluchino/fxp-require-asset/contributors).
+See also the list of [contributors](https://github.com/fxpio/fxp-require-asset/contributors).
 
 Reporting an issue or a feature request
 ---------------------------------------
 
-Issues and feature requests are tracked in the [Github issue tracker](https://github.com/francoispluchino/fxp-require-asset/issues).
+Issues and feature requests are tracked in the [Github issue tracker](https://github.com/fxpio/fxp-require-asset/issues).
