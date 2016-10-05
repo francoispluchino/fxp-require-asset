@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
 use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManagerInterface;
+use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 use Fxp\Component\RequireAsset\Twig\Node\RequireTagReference;
 
 /**
@@ -22,6 +23,11 @@ use Fxp\Component\RequireAsset\Twig\Node\RequireTagReference;
 abstract class AbstractRequireTokenParser extends AbstractTokenParser
 {
     /**
+     * @var string
+     */
+    protected $extension;
+
+    /**
      * @var AssetReplacementManagerInterface|null
      */
     protected $replacementManager;
@@ -30,10 +36,12 @@ abstract class AbstractRequireTokenParser extends AbstractTokenParser
      * Constructor.
      *
      * @param AssetReplacementManagerInterface|null $replacementManager The asset replacement manager
+     * @param string|null                           $extension          The class name of twig extension
      */
-    public function __construct(AssetReplacementManagerInterface $replacementManager = null)
+    public function __construct(AssetReplacementManagerInterface $replacementManager = null, $extension = null)
     {
         $this->replacementManager = $replacementManager;
+        $this->extension = null !== $extension ? $extension : AssetExtension::class;
     }
 
     /**
@@ -69,7 +77,7 @@ abstract class AbstractRequireTokenParser extends AbstractTokenParser
 
         $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
-        return new RequireTagReference($name, $this->getTagClass(), $assets, $attributes, $lineno, $position);
+        return new RequireTagReference($this->extension, $name, $this->getTagClass(), $assets, $attributes, $lineno, $position);
     }
 
     /**

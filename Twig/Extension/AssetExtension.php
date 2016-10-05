@@ -85,21 +85,13 @@ class AssetExtension extends \Twig_Extension
     public function getTokenParsers()
     {
         $tokens = array(
-            new InlineScriptTokenParser(),
-            new InlineStyleTokenParser(),
-            new RequireScriptTokenParser($this->replacementManager),
-            new RequireStyleTokenParser($this->replacementManager),
+            new InlineScriptTokenParser(get_class($this)),
+            new InlineStyleTokenParser(get_class($this)),
+            new RequireScriptTokenParser($this->replacementManager, get_class($this)),
+            new RequireStyleTokenParser($this->replacementManager, get_class($this)),
         );
 
         return $tokens;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'fxp_require_asset';
     }
 
     /**

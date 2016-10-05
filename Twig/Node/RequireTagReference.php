@@ -19,8 +19,14 @@ namespace Fxp\Component\RequireAsset\Twig\Node;
 class RequireTagReference extends \Twig_Node
 {
     /**
+     * @var string
+     */
+    protected $extension;
+
+    /**
      * Constructor.
      *
+     * @param string      $extension  The class name of twig extension
      * @param string      $name       The node name
      * @param string      $tagClass   The template tag classname
      * @param array       $assets     The assets
@@ -29,8 +35,9 @@ class RequireTagReference extends \Twig_Node
      * @param string|null $position   The require position in template
      * @param string|null $twigTag    The twig tag
      */
-    public function __construct($name, $tagClass, array $assets, array $attributes, $lineno, $position = null, $twigTag = null)
+    public function __construct($extension, $name, $tagClass, array $assets, array $attributes, $lineno, $position = null, $twigTag = null)
     {
+        $this->extension = $extension;
         $twigAttributes = array(
             'name' => $name,
             'tagClass' => $tagClass,
@@ -51,7 +58,7 @@ class RequireTagReference extends \Twig_Node
     {
         $compiler
             ->addDebugInfo($this)
-            ->write(sprintf('$this->env->getExtension(\'%s\')', 'fxp_require_asset'))
+            ->write(sprintf('$this->env->getExtension(\'%s\')', $this->extension))
             ->raw(PHP_EOL)
             ->indent()
         ;

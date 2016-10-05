@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
 use Fxp\Component\RequireAsset\Tag\Config\InlineTagConfiguration;
+use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 use Fxp\Component\RequireAsset\Twig\Node\InlineTagReference;
 
 /**
@@ -21,6 +22,21 @@ use Fxp\Component\RequireAsset\Twig\Node\InlineTagReference;
  */
 abstract class AbstractInlineTokenParser extends AbstractTokenParser
 {
+    /**
+     * @var string
+     */
+    protected $extension;
+
+    /**
+     * Constructor.
+     *
+     * @param string|null $extension The class name of twig extension
+     */
+    public function __construct($extension = null)
+    {
+        $this->extension = null !== $extension ? $extension : AssetExtension::class;
+    }
+
     /**
      * Parses a token and returns a node.
      *
@@ -60,7 +76,7 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
         $this->parser->popBlockStack();
         $this->parser->popLocalScope();
 
-        return new InlineTagReference($name, $this->getTagClass(), $lineno, $position);
+        return new InlineTagReference($this->extension, $name, $this->getTagClass(), $lineno, $position);
     }
 
     /**
