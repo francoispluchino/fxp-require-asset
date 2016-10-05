@@ -29,8 +29,12 @@ class CommonAssetConfiguration extends AbstractConfiguration
             ->prototype('array')
                 ->beforeNormalization()
                     // a scalar is a simple formula of one input file
-                    ->ifTrue(function ($v) { return !is_array($v); })
-                    ->then(function ($v) { return array('inputs' => array($v)); })
+                    ->ifTrue(function ($v) {
+                        return !is_array($v);
+                    })
+                    ->then(function ($v) {
+                        return array('inputs' => array($v));
+                    })
                 ->end()
                 ->beforeNormalization()
                     ->always()
