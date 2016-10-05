@@ -63,7 +63,7 @@ interface RequireAssetManagerInterface
     /**
      * Set the output rewrite manager.
      *
-     * @param OutputManagerInterface $outputManager The output rewrite manager.
+     * @param OutputManagerInterface $outputManager The output rewrite manager
      *
      * @return self
      */

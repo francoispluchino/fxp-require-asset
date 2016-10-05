@@ -189,7 +189,7 @@ class AssetExtension extends \Twig_Extension
      *
      * @param bool $allPosition Check if all asset position must be rendered.
      *
-     * Replaces the current buffer with the new edited buffer content.
+     * Replaces the current buffer with the new edited buffer content
      */
     public function renderTags($allPosition = true)
     {
@@ -293,7 +293,7 @@ class AssetExtension extends \Twig_Extension
     /**
      * Validate the renderTags method.
      *
-     * @param bool $allPosition Check if all asset position must be rendered.
+     * @param bool $allPosition Check if all asset position must be rendered
      *
      * @throws MissingTagPositionException When the tag positions are not injected in the template
      */

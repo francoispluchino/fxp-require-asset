@@ -58,7 +58,7 @@ abstract class Utils
      * Merges the configs of asset config.
      *
      * @param NodeInterface $nodeConfiguration The node definition of configuration
-     * @param array         $configs           The list of config of asset config.
+     * @param array         $configs           The list of config of asset config
      *
      * @return array The merged config
      */

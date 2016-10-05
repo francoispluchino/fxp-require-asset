@@ -164,7 +164,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
      * Get the position in template.
      * Remove the attribute "position" if it exists.
      *
-     * @param array $attributes The attributes of twig tag.
+     * @param array $attributes The attributes of twig tag
      *
      * @return string|null The name position in the template
      */
