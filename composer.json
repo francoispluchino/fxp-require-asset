@@ -25,7 +25,10 @@
         "fxp/composer-asset-plugin": "For manage NPM/Bower dependencies with Composer"
     },
     "autoload": {
-        "psr-4": { "Fxp\\Component\\RequireAsset\\": "" }
+        "psr-4": { "Fxp\\Component\\RequireAsset\\": "" },
+		"exclude-from-classmap": [
+            "/Tests/"
+        ]
     },
     "extra": {
         "branch-alias": {
