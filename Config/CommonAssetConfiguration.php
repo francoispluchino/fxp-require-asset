@@ -33,7 +33,10 @@ class CommonAssetConfiguration extends AbstractConfiguration
                         return !is_array($v);
                     })
                     ->then(function ($v) {
-                        return array('inputs' => array($v));
+                        return array(
+                            'output' => '/'.trim($v, '@'),
+                            'inputs' => array($v),
+                        );
                     })
                 ->end()
                 ->beforeNormalization()
