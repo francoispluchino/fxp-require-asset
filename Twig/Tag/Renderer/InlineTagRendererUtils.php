@@ -27,16 +27,16 @@ abstract class InlineTagRendererUtils
      * @param array       $context  The twig context
      * @param array       $blocks   The twig blocks
      * @param int         $lineno   The twig lineno
-     * @param string|null $filename The twig filename
+     * @param string|null $name     The twig template name
      *
      * @return string
      *
      * @throws BodyTagRendererException
      */
-    public static function renderBody(array $callable, array $context, array $blocks, $lineno = -1, $filename = null)
+    public static function renderBody(array $callable, array $context, array $blocks, $lineno = -1, $name = null)
     {
         if (2 !== count($callable) || !$callable[0] instanceof \Twig_Template || !is_string($callable[1])) {
-            throw new BodyTagRendererException('The callable argument must be an array with Twig_Template instance and name function of the block to rendering', $lineno, $filename);
+            throw new BodyTagRendererException('The callable argument must be an array with Twig_Template instance and name function of the block to rendering', $lineno, $name);
         }
 
         /* @var \Twig_Template $template */

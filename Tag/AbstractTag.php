@@ -31,20 +31,20 @@ abstract class AbstractTag implements TagInterface
     /**
      * @var string|null
      */
-    protected $filename;
+    protected $name;
 
     /**
      * Constructor.
      *
      * @param string|null $position The positon in template
-     * @param int         $lineno   The template lineno
-     * @param string|null $filename The template filename
+     * @param int         $lineno   The template line
+     * @param string|null $name     The template logical name
      */
-    public function __construct($position = null, $lineno = -1, $filename = null)
+    public function __construct($position = null, $lineno = -1, $name = null)
     {
         $this->position = $position;
         $this->lineno = $lineno;
-        $this->filename = $filename;
+        $this->name = $name;
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractTag implements TagInterface
     /**
      * {@inheritdoc}
      */
-    public function getLineno()
+    public function getTemplateLine()
     {
         return $this->lineno;
     }
@@ -74,8 +74,8 @@ abstract class AbstractTag implements TagInterface
     /**
      * {@inheritdoc}
      */
-    public function getFilename()
+    public function getTemplateName()
     {
-        return $this->filename;
+        return $this->name;
     }
 }

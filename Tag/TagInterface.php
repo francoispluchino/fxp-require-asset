@@ -47,16 +47,16 @@ interface TagInterface
     public function getTagPositionName();
 
     /**
-     * Get the template lineno.
+     * Get the template line.
      *
      * @return int
      */
-    public function getLineno();
+    public function getTemplateLine();
 
     /**
-     * Get the template filename.
+     * Get the template logical name.
      *
      * @return string|null
      */
-    public function getFilename();
+    public function getTemplateName();
 }

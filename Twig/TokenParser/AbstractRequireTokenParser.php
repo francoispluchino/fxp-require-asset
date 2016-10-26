@@ -72,7 +72,7 @@ abstract class AbstractRequireTokenParser extends AbstractTokenParser
         $position = $this->getPosition($attributes);
 
         if (empty($assets)) {
-            throw new \Twig_Error_Syntax(sprintf('The twig tag "%s" require a lest one asset', $this->getTag()), $stream->getCurrent()->getLine(), $stream->getFilename());
+            throw new \Twig_Error_Syntax(sprintf('The twig tag "%s" require a lest one asset', $this->getTag()), $stream->getCurrent()->getLine(), $stream->getSourceContext()->getName());
         }
 
         $stream->expect(\Twig_Token::BLOCK_END_TYPE);

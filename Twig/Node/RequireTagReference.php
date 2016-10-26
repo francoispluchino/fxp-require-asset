@@ -89,8 +89,8 @@ class RequireTagReference extends \Twig_Node
                 ->repr($asset)
                 ->raw(', ')->repr($attributes)
                 ->raw(', ')->repr($position)
-                ->raw(', ')->repr($this->getLine())
-                ->raw(', ')->repr($this->getFilename())
+                ->raw(', ')->repr($this->getTemplateLine())
+                ->raw(', ')->repr($this->getTemplateName())
                 ->raw('))'.PHP_EOL)
             ;
         }

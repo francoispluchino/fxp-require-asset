@@ -63,12 +63,12 @@ class InlineTagReference extends \Twig_Node
             ->raw(sprintf('array($this, \'%s\')', $name))
             ->raw(', ')->raw('$context')
             ->raw(', ')->raw('$blocks')
-            ->raw(', ')->repr($this->getLine())
-            ->raw(', ')->repr($this->getFilename())
+            ->raw(', ')->repr($this->getTemplateLine())
+            ->raw(', ')->repr($this->getTemplateName())
             ->raw(')')
             ->raw(', ')->repr($position)
-            ->raw(', ')->repr($this->getLine())
-            ->raw(', ')->repr($this->getFilename())
+            ->raw(', ')->repr($this->getTemplateLine())
+            ->raw(', ')->repr($this->getTemplateName())
             ->raw('));'.PHP_EOL);
     }
 }

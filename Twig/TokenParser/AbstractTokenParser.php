@@ -36,7 +36,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
         $stream = $this->parser->getStream();
         $attributes = array();
         $lineno = $stream->getCurrent()->getLine();
-        $filename = $stream->getFilename();
+        $name = $stream->getSourceContext()->getName();
 
         if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
             do {
@@ -51,7 +51,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
             } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
         }
 
-        return $this->formatAttributes($attributes, $lineno, $filename);
+        return $this->formatAttributes($attributes, $lineno, $name);
     }
 
     /**
@@ -76,7 +76,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
 
         if (!$valid) {
             $message = 'The attribute %s "%s" must be an %s';
-            throw new \Twig_Error_Syntax(sprintf($message, $type, $stream->getCurrent()->getValue(), implode(', ', $allowed)), $stream->getCurrent()->getLine(), $stream->getFilename());
+            throw new \Twig_Error_Syntax(sprintf($message, $type, $stream->getCurrent()->getValue(), implode(', ', $allowed)), $stream->getCurrent()->getLine(), $stream->getSourceContext()->getName());
         }
     }
 
@@ -91,7 +91,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
     protected function validateAttributeOperator(\Twig_TokenStream $stream, $attr)
     {
         if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
-            throw new \Twig_Error_Syntax(sprintf('The attribute "%s" must be followed by "=" operator', $attr), $stream->getCurrent()->getLine(), $stream->getFilename());
+            throw new \Twig_Error_Syntax(sprintf('The attribute "%s" must be followed by "=" operator', $attr), $stream->getCurrent()->getLine(), $stream->getSourceContext()->getName());
         }
     }
 
@@ -100,20 +100,20 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
      *
      * @param array  $attributes
      * @param int    $lineno
-     * @param string $filename
+     * @param string $name
      *
      * @return array The formatted attributes
      *
      * @throws \Twig_Error_Syntax When the attribute does not exist
      */
-    protected function formatAttributes(array $attributes, $lineno, $filename)
+    protected function formatAttributes(array $attributes, $lineno, $name)
     {
         try {
             $processor = new Processor();
 
             return $processor->process($this->getAttributeNodeConfig(), array($attributes));
         } catch (\Exception $e) {
-            throw new \Twig_Error_Syntax($this->getFormattedMessageException($e), $lineno, $filename);
+            throw new \Twig_Error_Syntax($this->getFormattedMessageException($e), $lineno, $name);
         }
     }
 

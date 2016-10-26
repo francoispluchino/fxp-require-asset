@@ -28,12 +28,12 @@ abstract class AbstractInlineTag extends AbstractTag implements InlineTagInterfa
      *
      * @param string      $body     The content body
      * @param string|null $position The position in the template
-     * @param int         $lineno   The template lineno
-     * @param string|null $filename The template filename
+     * @param int         $lineno   The template line
+     * @param string|null $name     The template logical name
      */
-    public function __construct($body, $position = null, $lineno = -1, $filename = null)
+    public function __construct($body, $position = null, $lineno = -1, $name = null)
     {
-        parent::__construct($position, $lineno, $filename);
+        parent::__construct($position, $lineno, $name);
 
         $this->body = $body;
     }

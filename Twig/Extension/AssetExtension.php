@@ -156,19 +156,19 @@ class AssetExtension extends \Twig_Extension
      * @param string      $category The twig asset category
      * @param string      $type     The asset type
      * @param int         $lineno   The lineno
-     * @param string|null $filename The twig filename
+     * @param string|null $name     The template logical name
      * @param string|null $position The name of tag position in the twig template
      *
      * @return string
      *
      * @throws AlreadyExistTagPositionException When tag position is already defined in template
      */
-    public function createTagPosition($category, $type, $lineno = -1, $filename = null, $position = null)
+    public function createTagPosition($category, $type, $lineno = -1, $name = null, $position = null)
     {
         $tag = $this->formatTagPosition($category, $type, $position);
 
         if (in_array($tag, $this->tagPositions)) {
-            throw new AlreadyExistTagPositionException($category, $type, $position, $lineno, $filename);
+            throw new AlreadyExistTagPositionException($category, $type, $position, $lineno, $name);
         }
 
         $this->tagPositions[] = $tag;
@@ -255,7 +255,7 @@ class AssetExtension extends \Twig_Extension
             }
         }
 
-        throw new RuntimeTagRendererException(sprintf('No template tag renderer has been found for the "%s_%s" tag', $tag->getCategory(), $tag->getType()), $tag->getLineno(), $tag->getFilename());
+        throw new RuntimeTagRendererException(sprintf('No template tag renderer has been found for the "%s_%s" tag', $tag->getCategory(), $tag->getType()), $tag->getTemplateLine(), $tag->getTemplateName());
     }
 
     /**
@@ -276,7 +276,7 @@ class AssetExtension extends \Twig_Extension
             $content .= $renderer->render($tag);
         } catch (TagRendererExceptionInterface $e) {
             $tag = $e->getTag();
-            throw new RequireTagException($e->getMessage(), $tag->getLineno(), $tag->getFilename(), $e->getPrevious());
+            throw new RequireTagException($e->getMessage(), $tag->getTemplateLine(), $tag->getTemplateName(), $e->getPrevious());
         }
 
         return $content;

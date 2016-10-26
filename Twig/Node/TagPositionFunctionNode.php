@@ -27,7 +27,7 @@ class TagPositionFunctionNode extends \Twig_Node_Expression_Function
     {
         $name = $this->getAttribute('name');
         $function = $compiler->getEnvironment()->getFunction($name);
-        $function->setArguments(array($this->getLine(), $this->getFilename()));
+        $function->setArguments(array($this->getTemplateLine(), $this->getTemplateName()));
 
         parent::compile($compiler);
     }
