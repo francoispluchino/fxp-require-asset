@@ -58,7 +58,7 @@ class FileExtensionFactoryTest extends \PHPUnit_Framework_TestCase
             'name' => 'NAME',
         );
 
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
     }
 
@@ -75,7 +75,7 @@ class FileExtensionFactoryTest extends \PHPUnit_Framework_TestCase
             'exclude' => false,
         );
 
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
     }
 
@@ -90,7 +90,7 @@ class FileExtensionFactoryTest extends \PHPUnit_Framework_TestCase
             'exclude' => true,
         );
 
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
     }
 
@@ -107,7 +107,7 @@ class FileExtensionFactoryTest extends \PHPUnit_Framework_TestCase
             'exclude' => true,
         );
 
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
     }
 

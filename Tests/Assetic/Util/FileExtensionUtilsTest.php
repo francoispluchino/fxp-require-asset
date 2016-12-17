@@ -44,6 +44,6 @@ class FileExtensionUtilsTest extends \PHPUnit_Framework_TestCase
     {
         $configs = FileExtensionUtils::getDefaultConfigs();
 
-        $this->assertTrue(is_array($configs));
+        $this->assertInternalType('array', $configs);
     }
 }

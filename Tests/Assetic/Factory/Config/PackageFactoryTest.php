@@ -167,7 +167,7 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
             'name' => 'NAME',
         );
 
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
     }
 
@@ -185,7 +185,7 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
             'patterns' => array(),
         );
 
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
     }
 
@@ -210,7 +210,7 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
     }
 
@@ -236,7 +236,7 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
             'patterns' => array(),
         );
 
-        $this->assertTrue(is_array($config));
+        $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
     }
 
