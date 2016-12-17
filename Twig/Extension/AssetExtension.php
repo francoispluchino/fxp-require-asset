@@ -71,11 +71,11 @@ class AssetExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new TagPositionFunction('inlineScriptsPosition',  array($this, 'createTagPosition'), array('category' => 'inline',  'type' => 'script')),
-            new TagPositionFunction('inlineStylesPosition',   array($this, 'createTagPosition'), array('category' => 'inline',  'type' => 'style')),
+            new TagPositionFunction('inlineScriptsPosition', array($this, 'createTagPosition'), array('category' => 'inline',  'type' => 'script')),
+            new TagPositionFunction('inlineStylesPosition', array($this, 'createTagPosition'), array('category' => 'inline',  'type' => 'style')),
             new TagPositionFunction('requireScriptsPosition', array($this, 'createTagPosition'), array('category' => 'require', 'type' => 'script')),
-            new TagPositionFunction('requireStylesPosition',  array($this, 'createTagPosition'), array('category' => 'require', 'type' => 'style')),
-            new \Twig_SimpleFunction('renderAssetTags',       array($this, 'renderTags'),        array('is_safe' => array('html'))),
+            new TagPositionFunction('requireStylesPosition', array($this, 'createTagPosition'), array('category' => 'require', 'type' => 'style')),
+            new \Twig_SimpleFunction('renderAssetTags', array($this, 'renderTags'), array('is_safe' => array('html'))),
         );
     }
 
