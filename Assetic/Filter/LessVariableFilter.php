@@ -11,8 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Filter;
 
-use Assetic\Filter\FilterInterface;
 use Assetic\Asset\AssetInterface;
+use Assetic\Filter\FilterInterface;
 
 /**
  * Add the variables of require asset package directories at the beginning of the less file.

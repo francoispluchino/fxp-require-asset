@@ -15,8 +15,8 @@ use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetReference;
 use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Exception\RequireTagRendererException;
-use Fxp\Component\RequireAsset\Tag\TagInterface;
 use Fxp\Component\RequireAsset\Tag\RequireTagInterface;
+use Fxp\Component\RequireAsset\Tag\TagInterface;
 
 /**
  * Template require tag renderer.

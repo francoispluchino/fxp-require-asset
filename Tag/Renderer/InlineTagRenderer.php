@@ -11,8 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Tag\Renderer;
 
-use Fxp\Component\RequireAsset\Tag\TagInterface;
 use Fxp\Component\RequireAsset\Tag\InlineTagInterface;
+use Fxp\Component\RequireAsset\Tag\TagInterface;
 
 /**
  * Template inline tag renderer.
