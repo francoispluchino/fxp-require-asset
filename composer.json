@@ -28,7 +28,7 @@
     },
     "autoload": {
         "psr-4": { "Fxp\\Component\\RequireAsset\\": "" },
-		"exclude-from-classmap": [
+        "exclude-from-classmap": [
             "/Tests/"
         ]
     },
