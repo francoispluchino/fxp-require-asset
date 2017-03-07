@@ -49,7 +49,7 @@ abstract class AbstractRequireTokenParser extends AbstractTokenParser
      *
      * @param \Twig_Token $token A Twig_Token instance
      *
-     * @return \Twig_NodeInterface A Twig_NodeInterface instance
+     * @return \Twig_Node A Twig_Node instance
      *
      * @throws \Twig_Error_Syntax When the twig tag does not have at least one asset
      */

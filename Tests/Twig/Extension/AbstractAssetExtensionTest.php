@@ -111,7 +111,7 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
      * @param string $tag
      * @param string $file
      *
-     * @return \Twig_TemplateInterface
+     * @return \Twig_TemplateWrapper
      */
     protected function getTemplate($tag, $file)
     {
@@ -119,7 +119,7 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
         $twig = new \Twig_Environment($loader, array('debug' => true, 'cache' => false));
         $twig->addExtension($this->ext);
 
-        return $twig->loadTemplate($file);
+        return $twig->load($file);
     }
 
     /**

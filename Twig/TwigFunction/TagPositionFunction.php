@@ -16,37 +16,47 @@ namespace Fxp\Component\RequireAsset\Twig\TwigFunction;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class TagPositionFunction extends \Twig_SimpleFunction
+class TagPositionFunction extends \Twig_Function
 {
+    /**
+     * @var string|null
+     */
+    private $catagory;
+
+    /**
+     * @var string|null
+     */
+    private $type;
+
     /**
      * Constructor.
      *
-     * @param string       $name
-     * @param string|array $callable
-     * @param array        $options
+     * @param string        $name
+     * @param callable|null $callable
+     * @param array         $options
      */
     public function __construct($name, $callable, array $options = array())
     {
-        parent::__construct($name, $callable, $options);
-
-        $this->options = array_merge($this->options, array(
+        $options = array_merge($options, array(
             'node_class' => 'Fxp\Component\RequireAsset\Twig\Node\TagPositionFunctionNode',
             'is_safe' => array('html'),
             'category' => null,
             'type' => null,
         ), $options);
+        $this->catagory = $options['category'];
+        $this->type = $options['type'];
+
+        parent::__construct($name, $callable, $options);
     }
 
     /**
-     * Get arguments.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getArguments()
     {
         return array_merge(array(
-            $this->options['category'],
-            $this->options['type'],
-        ), $this->arguments);
+            $this->catagory,
+            $this->type,
+        ), parent::getArguments());
     }
 }

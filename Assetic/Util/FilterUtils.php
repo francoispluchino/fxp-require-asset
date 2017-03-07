@@ -103,9 +103,7 @@ abstract class FilterUtils
         $targetBase = $fs->makePathRelative(dirname($target), $targetBase);
         $url = $targetBase.basename($target);
 
-        return 0 === strpos($url, './')
-            ? substr($url, 2)
-            : $url;
+        return 0 === strpos($url, './') ? substr($url, 2) : $url;
     }
 
     /**

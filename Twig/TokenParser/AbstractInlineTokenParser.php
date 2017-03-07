@@ -42,7 +42,7 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
      *
      * @param \Twig_Token $token A Twig_Token instance
      *
-     * @return \Twig_NodeInterface A Twig_NodeInterface instance
+     * @return \Twig_Node A Twig_Node instance
      *
      * @throws \Twig_Error_Syntax When attribute name is not a string or constant
      * @throws \Twig_Error_Syntax When attribute does not exist
