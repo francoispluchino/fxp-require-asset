@@ -100,6 +100,9 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForFilterDump
+     *
+     * @param string $sourceUrl
+     * @param string $newUrl
      */
     public function testFilterDumpWithAsseticResource($sourceUrl, $newUrl)
     {
@@ -147,6 +150,9 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForFilterDumpWithUrl
+     *
+     * @param string $sourceUrl
+     * @param string $newUrl
      */
     public function testFilterDumpWithUrlAsseticResource($sourceUrl, $newUrl)
     {
@@ -193,6 +199,9 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForFilterDumpWithPartialUrl
+     *
+     * @param string $sourceUrl
+     * @param string $newUrl
      */
     public function testFilterDumpWithPartialUrlAsseticResource($sourceUrl, $newUrl)
     {

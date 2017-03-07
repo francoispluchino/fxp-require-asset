@@ -107,6 +107,8 @@ class PackageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDebugMode
+     *
+     * @param bool $debug
      */
     public function testGetFiles($debug)
     {

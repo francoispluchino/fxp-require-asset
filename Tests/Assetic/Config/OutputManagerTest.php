@@ -80,6 +80,10 @@ class OutputManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDataForConvertOutput
+     *
+     * @param string $assert
+     * @param string $validOutput
+     * @param array  $patterns
      */
     public function testConvertOutput($assert, $validOutput, array $patterns)
     {

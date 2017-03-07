@@ -35,6 +35,8 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getCreateMethod
      *
      * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
+     *
+     * @param string $method
      */
     public function testCreateWhithoutName($method)
     {
@@ -43,6 +45,8 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getCreateMethod
+     *
+     * @param string $method
      */
     public function testCreate($method)
     {
@@ -88,6 +92,8 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getCreateMethod
+     *
+     * @param string $method
      */
     public function testCreateWithExtensionList($method)
     {
@@ -117,6 +123,8 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getCreateMethod
+     *
+     * @param string $method
      */
     public function testCreateWithReplaceDefault($method)
     {

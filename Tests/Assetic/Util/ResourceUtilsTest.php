@@ -30,6 +30,9 @@ class ResourceUtilsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getDebugMode
+     *
+     * @param bool  $debug
+     * @param array $valid
      */
     public function testCleanDebugFilters($debug, array $valid)
     {
