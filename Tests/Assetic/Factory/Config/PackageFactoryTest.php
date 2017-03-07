@@ -118,7 +118,7 @@ class PackageFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getCreateMethod
      */
-    public function testCreateWhithReplaceDefault($method)
+    public function testCreateWithReplaceDefault($method)
     {
         $config = array(
             'name' => 'package1',
