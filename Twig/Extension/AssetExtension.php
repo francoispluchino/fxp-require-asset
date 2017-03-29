@@ -11,13 +11,14 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
-use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManagerInterface;
+use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Exception\TagRendererExceptionInterface;
 use Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistTagPositionException;
 use Fxp\Component\RequireAsset\Exception\Twig\MissingTagPositionException;
 use Fxp\Component\RequireAsset\Exception\Twig\RequireTagException;
 use Fxp\Component\RequireAsset\Exception\Twig\RuntimeTagRendererException;
 use Fxp\Component\RequireAsset\Tag\Renderer\TagRendererInterface;
+use Fxp\Component\RequireAsset\Tag\RequireTagInterface;
 use Fxp\Component\RequireAsset\Tag\TagInterface;
 use Fxp\Component\RequireAsset\Twig\TokenParser\InlineScriptTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\InlineStyleTokenParser;
@@ -255,7 +256,27 @@ class AssetExtension extends \Twig_Extension
             }
         }
 
-        throw new RuntimeTagRendererException(sprintf('No template tag renderer has been found for the "%s_%s" tag', $tag->getCategory(), $tag->getType()), $tag->getTemplateLine(), $tag->getTemplateName());
+        throw $this->buildRuntimeTagRendererException($tag);
+    }
+
+    /**
+     * Build the runtime tag renderer exception.
+     *
+     * @param TagInterface $tag
+     *
+     * @return RuntimeTagRendererException
+     *
+     * @throws RuntimeTagRendererException When no template tag renderer has been found
+     */
+    protected function buildRuntimeTagRendererException(TagInterface $tag)
+    {
+        $msg = sprintf('No template tag renderer has been found for the "%s_%s" tag', $tag->getCategory(), $tag->getType());
+
+        if ($tag instanceof RequireTagInterface) {
+            $msg .= sprintf(' with the asset "%s"', $tag->getPath());
+        }
+
+        return new RuntimeTagRendererException($msg);
     }
 
     /**

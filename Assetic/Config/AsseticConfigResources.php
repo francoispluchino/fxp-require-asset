@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 
 /**
@@ -39,7 +39,7 @@ class AsseticConfigResources implements AsseticConfigResourcesInterface
      */
     public function hasResource($name)
     {
-        return isset($this->resources[Utils::formatName($name)]);
+        return isset($this->resources[AssetUtils::formatName($name)]);
     }
 
     /**
@@ -57,7 +57,7 @@ class AsseticConfigResources implements AsseticConfigResourcesInterface
      */
     public function removeResource($name)
     {
-        unset($this->resources[Utils::formatName($name)]);
+        unset($this->resources[AssetUtils::formatName($name)]);
 
         return $this;
     }
@@ -71,7 +71,7 @@ class AsseticConfigResources implements AsseticConfigResourcesInterface
             throw new InvalidArgumentException(sprintf('The "%s" config of asset resource does not exist', $name));
         }
 
-        return $this->resources[Utils::formatName($name)];
+        return $this->resources[AssetUtils::formatName($name)];
     }
 
     /**

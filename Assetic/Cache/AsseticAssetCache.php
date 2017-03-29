@@ -19,7 +19,7 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireAssetCache implements RequireAssetCacheInterface
+class AsseticAssetCache implements AsseticAssetCacheInterface
 {
     /**
      * @var string

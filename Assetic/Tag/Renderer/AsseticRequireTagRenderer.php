@@ -9,21 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Tag\Renderer;
+namespace Fxp\Component\RequireAsset\Assetic\Tag\Renderer;
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetReference;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 use Fxp\Component\RequireAsset\Exception\RequireTagRendererException;
 use Fxp\Component\RequireAsset\Tag\RequireTagInterface;
 use Fxp\Component\RequireAsset\Tag\TagInterface;
 
 /**
- * Template require tag renderer.
+ * Template assetic require tag renderer.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireTagRenderer extends AbstractRequireTagRenderer
+class AsseticRequireTagRenderer extends AbstractAsseticRequireTagRenderer
 {
     /**
      * {@inheritdoc}
@@ -52,7 +52,7 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
     {
         /* @var RequireTagInterface $tag */
 
-        return $this->canBeRendered($tag->getAsseticName())
+        return $this->canBeRendered($tag->getAssetName())
             ? $this->preRender($tag)
             : '';
     }
@@ -74,8 +74,8 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
      */
     protected function configureCommonTag(RequireTagInterface $tag)
     {
-        if ($this->manager->hasFormula($tag->getAsseticName())) {
-            $resource = $this->manager->getFormula($tag->getAsseticName());
+        if ($this->manager->hasFormula($tag->getAssetName())) {
+            $resource = $this->manager->getFormula($tag->getAssetName());
 
             if (isset($resource[2]['fxp_require_common_asset']) && $resource[2]['fxp_require_common_asset']) {
                 $tag->setInputs($resource[0]);
@@ -102,8 +102,8 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
             return '';
         }
 
-        if (isset($this->debugCommonAssets[$tag->getAsseticName()])) {
-            $tag->setInputs($this->debugCommonAssets[$tag->getAsseticName()]);
+        if (isset($this->debugCommonAssets[$tag->getAssetName()])) {
+            $tag->setInputs($this->debugCommonAssets[$tag->getAssetName()]);
         }
 
         if ($this->manager->isDebug() && count($tag->getInputs()) > 0) {
@@ -122,10 +122,10 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
      */
     protected function isNonExistentOptionalTag(RequireTagInterface $tag)
     {
-        if (!$this->manager->has($tag->getAsseticName())) {
+        if (!$this->manager->has($tag->getAssetName())) {
             if ($tag->isOptional()) {
                 return true;
-            } elseif (!isset($this->debugCommonAssets[$tag->getAsseticName()])) {
+            } elseif (!isset($this->debugCommonAssets[$tag->getAssetName()])) {
                 throw new RequireTagRendererException($tag, sprintf('The %s %s "%s" is not managed by the Assetic Manager', $tag->getCategory(), $tag->getType(), $tag->getPath()));
             }
         }
@@ -145,7 +145,7 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
         $output = $this->doRenderCommonDebug($tag);
 
         foreach ($this->getLocalizedAssets($tag->getPath()) as $localeAsset) {
-            $output .= $this->doRenderCommonDebug($tag, Utils::formatName($localeAsset));
+            $output .= $this->doRenderCommonDebug($tag, AssetUtils::formatName($localeAsset));
         }
 
         return $output.$this->includeMissingLocalizedAssets($tag);
@@ -154,23 +154,23 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
     /**
      * Do the render of common assets in debug mode and do the render.
      *
-     * @param RequireTagInterface $tag         The require template tag
-     * @param string|null         $asseticName The assetic name
+     * @param RequireTagInterface $tag       The require template tag
+     * @param string|null         $assetName The asset name
      *
      * @return string The output render
      */
-    protected function doRenderCommonDebug(RequireTagInterface $tag, $asseticName = null)
+    protected function doRenderCommonDebug(RequireTagInterface $tag, $assetName = null)
     {
-        $asseticName = null !== $asseticName ? $asseticName : $tag->getAsseticName();
+        $assetName = null !== $assetName ? $assetName : $tag->getAssetName();
         $output = '';
 
-        if (!$this->manager->has($asseticName)) {
+        if (!$this->manager->has($assetName)) {
             foreach ($tag->getInputs() as $input) {
-                $output .= $this->doRender($tag, Utils::formatName($input));
+                $output .= $this->doRender($tag, AssetUtils::formatName($input));
             }
         } else {
             /* @var AssetCollection $asset */
-            $asset = $this->manager->get($asseticName);
+            $asset = $this->manager->get($assetName);
             $iterator = $asset->getIterator();
 
             /* @var AssetReference $child */
@@ -191,7 +191,7 @@ class RequireTagRenderer extends AbstractRequireTagRenderer
      */
     protected function preRenderProd(RequireTagInterface $tag)
     {
-        $output = $this->doRender($tag, $tag->getAsseticName());
+        $output = $this->doRender($tag, $tag->getAssetName());
         $this->assetRendered($tag->getInputs());
 
         $output .= $this->preRenderLocalized($tag, $tag->getPath());

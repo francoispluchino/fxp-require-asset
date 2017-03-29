@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
-use Fxp\Component\RequireAsset\Assetic\Config\LocaleManager;
+use Fxp\Component\RequireAsset\Asset\Config\LocaleManager;
 
 /**
  * Locale Require Asset Extension Tests.

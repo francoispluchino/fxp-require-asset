@@ -11,8 +11,9 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Util;
 
+use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
+use Fxp\Component\RequireAsset\Asset\Util\LocaleUtils;
 use Fxp\Component\RequireAsset\Assetic\Config\AssetResource;
-use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageInterface;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface;

@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Factory\Resource;
 
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 
 /**
  * Abstract require asset resource.
@@ -55,7 +55,7 @@ abstract class AbstractRequireAssetResource implements RequireAssetResourceInter
      */
     public function __construct($name, $targetPath, array $filters = array(), array $options = array())
     {
-        $this->name = Utils::formatName($name);
+        $this->name = AssetUtils::formatName($name);
         $this->prettyName = $name;
         $this->targetPath = $targetPath;
         $this->filters = $filters;

@@ -11,8 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Assetic\Cache;
 
-use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCache;
-use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
+use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCache;
+use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCacheInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -20,16 +20,16 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireAssetCacheTest extends \PHPUnit_Framework_TestCase
+class AsseticAssetCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var RequireAssetCacheInterface
+     * @var AsseticAssetCacheInterface
      */
     protected $cache;
 
     protected function setUp()
     {
-        $this->cache = new RequireAssetCache($this->getCacheDir(), $this->getCacheName());
+        $this->cache = new AsseticAssetCache($this->getCacheDir(), $this->getCacheName());
     }
 
     protected function tearDown()
@@ -77,7 +77,7 @@ class RequireAssetCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->cache->hasResources());
         $this->assertSame($resources, $this->cache->getResources());
 
-        $cache = new RequireAssetCache($this->getCacheDir(), $this->getCacheName());
+        $cache = new AsseticAssetCache($this->getCacheDir(), $this->getCacheName());
 
         $this->assertTrue($cache->hasResources());
         $this->assertEquals($resources, $cache->getResources());

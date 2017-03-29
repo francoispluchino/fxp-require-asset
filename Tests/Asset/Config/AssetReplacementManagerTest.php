@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Tests\Assetic\Config;
+namespace Fxp\Component\RequireAsset\Tests\Asset\Config;
 
-use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManager;
+use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManager;
 
 /**
  * Require Locale Manager Tests.

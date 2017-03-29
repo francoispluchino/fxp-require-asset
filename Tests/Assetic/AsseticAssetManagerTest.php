@@ -14,29 +14,29 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic;
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\FilterManager;
-use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCache;
-use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
-use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManager;
+use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManager;
+use Fxp\Component\RequireAsset\Asset\Config\LocaleManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCache;
+use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCacheInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManager;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
-use Fxp\Component\RequireAsset\Assetic\Config\LocaleManager;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManager;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManagerInterface;
 use Fxp\Component\RequireAsset\Tests\Assetic\Config\PackageTest;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Require Asset Manager Tests.
+ * Assetic Asset Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
+class AsseticAssetManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var AssetFactory
@@ -69,9 +69,9 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
     protected $om;
 
     /**
-     * @var RequireAssetManagerInterface
+     * @var AsseticAssetManagerInterface
      */
-    protected $ram;
+    protected $aam;
 
     protected function setUp()
     {
@@ -84,13 +84,13 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
         $this->fem = new FileExtensionManager();
         $this->ptm = new PatternManager();
         $this->om = new OutputManager();
-        $this->ram = new RequireAssetManager();
-        $this->ram->setFileExtensionManager($this->fem);
-        $this->ram->setPatternManager($this->ptm);
-        $this->ram->setOutputManager($this->om);
-        $this->ram->setLocaleManager(new LocaleManager());
-        $this->ram->setPackageManager(new PackageManager($this->fem, $this->ptm));
-        $this->ram->setAssetReplacementManager(new AssetReplacementManager());
+        $this->aam = new AsseticAssetManager();
+        $this->aam->setFileExtensionManager($this->fem);
+        $this->aam->setPatternManager($this->ptm);
+        $this->aam->setOutputManager($this->om);
+        $this->aam->setLocaleManager(new LocaleManager());
+        $this->aam->setPackageManager(new PackageManager($this->fem, $this->ptm));
+        $this->aam->setAssetReplacementManager(new AssetReplacementManager());
     }
 
     protected function tearDown()
@@ -99,42 +99,42 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
         $this->fem = null;
         $this->ptm = null;
         $this->om = null;
-        $this->ram = null;
+        $this->aam = null;
 
         PackageTest::cleanFixtures();
     }
 
     public function testBasicWithoutConstructor()
     {
-        $ram = new RequireAssetManager();
+        $aam = new AsseticAssetManager();
 
-        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface', $ram->getFileExtensionManager());
-        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface', $ram->getPatternManager());
-        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface', $ram->getOutputManager());
-        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface', $ram->getPackageManager());
-        $this->assertNull($ram->getCache());
+        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface', $aam->getFileExtensionManager());
+        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface', $aam->getPatternManager());
+        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface', $aam->getOutputManager());
+        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface', $aam->getPackageManager());
+        $this->assertNull($aam->getCache());
     }
 
-    public function testBascic()
+    public function testBasic()
     {
-        /* @var RequireAssetCacheInterface $cache */
-        $cache = $this->getMockBuilder('Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface')->getMock();
+        /* @var AsseticAssetCacheInterface $cache */
+        $cache = $this->getMockBuilder('Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCacheInterface')->getMock();
 
-        $this->assertSame($this->fem, $this->ram->getFileExtensionManager());
-        $this->assertSame($this->ptm, $this->ram->getPatternManager());
-        $this->assertSame($this->om, $this->ram->getOutputManager());
-        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface', $this->ram->getPackageManager());
-        $this->assertNull($this->ram->getCache());
+        $this->assertSame($this->fem, $this->aam->getFileExtensionManager());
+        $this->assertSame($this->ptm, $this->aam->getPatternManager());
+        $this->assertSame($this->om, $this->aam->getOutputManager());
+        $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface', $this->aam->getPackageManager());
+        $this->assertNull($this->aam->getCache());
 
-        $this->ram->setCache($cache);
-        $this->assertSame($cache, $this->ram->getCache());
+        $this->aam->setCache($cache);
+        $this->assertSame($cache, $this->aam->getCache());
     }
 
     public function testAddAssetResourcesWithoutAsset()
     {
         $this->assertCount(0, $this->lam->getResources());
 
-        $this->ram->addAssetResources($this->lam);
+        $this->aam->addAssetResources($this->lam);
 
         $this->assertCount(0, $this->lam->getResources());
     }
@@ -143,12 +143,12 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
     {
         PackageTest::createFixtures();
 
-        $pm = $this->ram->getPackageManager();
+        $pm = $this->aam->getPackageManager();
         $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', array('js', 'css'), array(), false, false);
 
         $this->assertCount(0, $this->lam->getResources());
 
-        $this->ram->addAssetResources($this->lam);
+        $this->aam->addAssetResources($this->lam);
 
         $this->assertCount(9, $this->lam->getResources());
     }
@@ -164,8 +164,8 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
             '@foobar/js/component-b.js',
         );
 
-        $this->ram->addCommonAsset('common_js', $inputs, 'TARGET.js');
-        $this->ram->addAssetResources($this->lam);
+        $this->aam->addCommonAsset('common_js', $inputs, 'TARGET.js');
+        $this->aam->addAssetResources($this->lam);
 
         $this->assertCount(1, $this->lam->getResources());
     }
@@ -177,11 +177,11 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(0, $this->lam->getResources());
 
-        $this->ram->getLocaleManager()->addLocalizedAsset('@foobar/js/component-a.js', 'fr', '@foobar/js/component-a-fr.js');
-        $this->ram->getLocaleManager()->addLocalizedAsset('@foobar/js/component-a.js', 'fr_FR', '@foobar/js/component-a-fr-fr.js');
-        $this->ram->getLocaleManager()->addLocalizedAsset('@foobar/js/component-a.js', 'en_US', '@foobar/js/component-a-en-us.js');
-        $this->ram->getLocaleManager()->addLocalizedAsset('@foobar/js/component-b.js', 'fr', '@foobar/js/component-b-fr.js');
-        $this->ram->getLocaleManager()->addLocalizedAsset('@foobar/js/component-b.js', 'en_US', '@foobar/js/component-b-en-us.js');
+        $this->aam->getLocaleManager()->addLocalizedAsset('@foobar/js/component-a.js', 'fr', '@foobar/js/component-a-fr.js');
+        $this->aam->getLocaleManager()->addLocalizedAsset('@foobar/js/component-a.js', 'fr_FR', '@foobar/js/component-a-fr-fr.js');
+        $this->aam->getLocaleManager()->addLocalizedAsset('@foobar/js/component-a.js', 'en_US', '@foobar/js/component-a-en-us.js');
+        $this->aam->getLocaleManager()->addLocalizedAsset('@foobar/js/component-b.js', 'fr', '@foobar/js/component-b-fr.js');
+        $this->aam->getLocaleManager()->addLocalizedAsset('@foobar/js/component-b.js', 'en_US', '@foobar/js/component-b-en-us.js');
 
         $inputs = array(
             '@foobar/js/component-a.js',
@@ -189,16 +189,16 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
             '@foobar/js/component-c.js',
         );
 
-        $this->ram->addCommonAsset('common_js', $inputs, 'TARGET.js');
-        $this->ram->addCommonAsset('common_js__fr_fr', array('@foobar_js_component_a_fr_fr_js', '@foobar_js_component_b_fr_js'), 'TARGET-fr-fr-custom.js');
-        $this->ram->addAssetResources($this->lam);
+        $this->aam->addCommonAsset('common_js', $inputs, 'TARGET.js');
+        $this->aam->addCommonAsset('common_js__fr_fr', array('@foobar_js_component_a_fr_fr_js', '@foobar_js_component_b_fr_js'), 'TARGET-fr-fr-custom.js');
+        $this->aam->addAssetResources($this->lam);
 
         $validLocales = array(
             'fr',
             'fr_fr',
             'en_us',
         );
-        $this->assertSame($validLocales, $this->ram->getLocaleManager()->getAssetLocales());
+        $this->assertSame($validLocales, $this->aam->getLocaleManager()->getAssetLocales());
 
         $validResources = array(
             new CommonRequireAssetResource('common_js', $inputs, 'assets/TARGET.js', array(), array()),
@@ -213,25 +213,25 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
     {
         PackageTest::createFixtures();
 
-        $cache = new RequireAssetCache(PackageTest::getFixturesDir());
-        $pm = $this->ram->getPackageManager();
+        $cache = new AsseticAssetCache(PackageTest::getFixturesDir());
+        $pm = $this->aam->getPackageManager();
         $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', array('js', 'css'), array(), false, false);
 
-        $this->ram->setCache($cache);
+        $this->aam->setCache($cache);
 
         $this->assertCount(0, $this->lam->getResources());
 
-        $this->ram->addAssetResources($this->lam);
+        $this->aam->addAssetResources($this->lam);
         $resources = $this->lam->getResources();
         $this->assertCount(9, $resources);
 
-        $this->ram->addAssetResources($this->lam);
+        $this->aam->addAssetResources($this->lam);
         $this->assertEquals($resources, $this->lam->getResources());
 
         $lam = new LazyAssetManager($this->factory);
 
         $this->assertCount(0, $lam->getResources());
-        $this->ram->addAssetResources($lam);
+        $this->aam->addAssetResources($lam);
         $this->assertEquals($resources, $this->lam->getResources());
     }
 
@@ -239,27 +239,27 @@ class RequireAssetManagerTest extends \PHPUnit_Framework_TestCase
     {
         PackageTest::createFixtures();
 
-        $pm = $this->ram->getPackageManager();
+        $pm = $this->aam->getPackageManager();
         $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', array('js', 'less'), array(), false, false);
 
-        $arm = $this->ram->getAssetReplacementManager();
+        $arm = $this->aam->getAssetReplacementManager();
         $arm->addReplacement('@foobar/less/foobar.less', '@foobar/less/foobar-theme.less');
 
         $this->assertCount(0, $this->lam->getResources());
 
-        $this->ram->addAssetResources($this->lam);
+        $this->aam->addAssetResources($this->lam);
 
         $this->assertCount(10, $this->lam->getResources());
     }
 
     public function testNonexistentAssetReplacement()
     {
-        $arm = $this->ram->getAssetReplacementManager();
+        $arm = $this->aam->getAssetReplacementManager();
         $arm->addReplacement('@foobar/less/foobar.less', '@foobar/less/foobar-theme.less');
 
         $this->assertCount(0, $this->lam->getResources());
 
-        $this->ram->addAssetResources($this->lam);
+        $this->aam->addAssetResources($this->lam);
 
         $this->assertCount(0, $this->lam->getResources());
     }

@@ -11,11 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
-use Assetic\Asset\AssetInterface;
-use Assetic\Factory\AssetFactory;
-use Assetic\Factory\LazyAssetManager;
-use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
+use Fxp\Component\RequireAsset\Asset\RequireAssetManagerInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\RequireAssetExtension;
 
 /**
@@ -31,14 +28,9 @@ class RequireAssetExtensionUrlTest extends \PHPUnit_Framework_TestCase
     protected $ext;
 
     /**
-     * @var LazyAssetManager
+     * @var RequireAssetManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $manager;
-
-    /**
-     * @var AssetFactory
-     */
-    protected $factory;
 
     /**
      * @var LocaleManagerInterface
@@ -47,9 +39,7 @@ class RequireAssetExtensionUrlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factory = new AssetFactory('web');
-        $this->manager = new LazyAssetManager($this->factory);
-        $this->factory->setAssetManager($this->manager);
+        $this->manager = $this->getMockBuilder(RequireAssetManagerInterface::class)->getMock();
         $this->ext = new RequireAssetExtension($this->manager);
     }
 
@@ -57,43 +47,28 @@ class RequireAssetExtensionUrlTest extends \PHPUnit_Framework_TestCase
     {
         $this->ext = null;
         $this->manager = null;
-        $this->factory = null;
         $this->localeManager = null;
     }
 
     public function testRequireAsset()
     {
-        $this->addAsset('@acme_demo/js/asset.js', '/assets/acemodemo/js/asset.js');
+        $this->manager->expects($this->at(0))
+            ->method('has')
+            ->with('@acme_demo/js/asset.js')
+            ->willReturn(true);
 
-        $this->assertSame('fxp_require_asset_url', $this->ext->getName());
+        $this->manager->expects($this->at(1))
+            ->method('getPath')
+            ->with('@acme_demo/js/asset.js')
+            ->willReturn('/assets/acemodemo/js/asset.js');
+
+        $this->manager->expects($this->at(2))
+            ->method('has')
+            ->with('@acme_demo/js/asset2.js')
+            ->willReturn(false);
+
         $this->assertCount(1, $this->ext->getFunctions());
         $this->assertSame('/assets/acemodemo/js/asset.js', $this->ext->requireAsset('@acme_demo/js/asset.js'));
         $this->assertSame('@acme_demo/js/asset2.js', $this->ext->requireAsset('@acme_demo/js/asset2.js'));
-    }
-
-    /**
-     * Add require asset in assetic manager.
-     *
-     * @param string $source
-     * @param string $target
-     */
-    protected function addAsset($source, $target)
-    {
-        $asset = $this->getMockBuilder('Assetic\Asset\AssetInterface')->getMock();
-        $asset
-            ->expects($this->any())
-            ->method('getTargetPath')
-            ->will($this->returnValue($target));
-        $asset
-            ->expects($this->any())
-            ->method('getVars')
-            ->will($this->returnValue(array()));
-        $asset
-            ->expects($this->any())
-            ->method('getValues')
-            ->will($this->returnValue(array()));
-
-        /* @var AssetInterface $asset */
-        $this->manager->set(Utils::formatName($source), $asset);
     }
 }

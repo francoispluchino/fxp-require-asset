@@ -18,7 +18,7 @@ use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInte
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-interface RequireAssetCacheInterface
+interface AsseticAssetCacheInterface
 {
     /**
      * Checks if the cache has the asset resources.

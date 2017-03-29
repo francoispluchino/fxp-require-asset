@@ -24,3 +24,21 @@ $twig = new Twig_Environment($loader, array(
 // require asset twig extension
 $twig->addExtension(new CoreAssetExtension($lam));
 ```
+
+If you prefer to create your asset extension from scratch, to avoid using the assetic for example,
+you can use the `Fxp\Component\RequireAsset\Twig\Extension\AssetExtension` class directly.
+
+```php
+<?php
+
+use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
+
+// twig environment
+$loader = new Twig_Loader_Filesystem('/path/to/templates');
+$twig = new Twig_Environment($loader, array(
+    'cache' => '/path/to/compilation_cache',
+));
+
+// require asset twig extension
+$twig->addExtension(new AssetExtension());
+```

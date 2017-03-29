@@ -19,11 +19,11 @@ namespace Fxp\Component\RequireAsset\Tag;
 interface RequireTagInterface extends TagInterface
 {
     /**
-     * Get the assetic name of this template tag.
+     * Get the asset name of this template tag.
      *
      * @return string
      */
-    public function getAsseticName();
+    public function getAssetName();
 
     /**
      * Get the HTML attributes.

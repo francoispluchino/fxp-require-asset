@@ -11,14 +11,14 @@
 
 namespace Fxp\Component\RequireAsset\Assetic;
 
-use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
-use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManager;
-use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManagerInterface;
+use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManager;
+use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManagerInterface;
+use Fxp\Component\RequireAsset\Asset\Config\LocaleManager;
+use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCacheInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\AssetResourceInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManager;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
-use Fxp\Component\RequireAsset\Assetic\Config\LocaleManager;
-use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManager;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageManager;
@@ -27,11 +27,11 @@ use Fxp\Component\RequireAsset\Assetic\Config\PatternManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface;
 
 /**
- * Abstract class for Require asset package.
+ * Abstract class for Assetic asset package.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-abstract class AbstractRequireAssetManager implements RequireAssetManagerInterface
+abstract class AbstractAsseticAssetManager implements AsseticAssetManagerInterface
 {
     /**
      * @var FileExtensionManagerInterface
@@ -69,7 +69,7 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
     protected $commons;
 
     /**
-     * @var RequireAssetCacheInterface
+     * @var AsseticAssetCacheInterface
      */
     protected $cache;
 
@@ -210,7 +210,7 @@ abstract class AbstractRequireAssetManager implements RequireAssetManagerInterfa
     /**
      * {@inheritdoc}
      */
-    public function setCache(RequireAssetCacheInterface $cache)
+    public function setCache(AsseticAssetCacheInterface $cache)
     {
         $this->cache = $cache;
 

@@ -13,9 +13,9 @@ namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
-use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManager;
-use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManagerInterface;
-use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
+use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManager;
+use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManagerInterface;
+use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 use Fxp\Component\RequireAsset\Twig\Extension\CoreAssetExtension;
 

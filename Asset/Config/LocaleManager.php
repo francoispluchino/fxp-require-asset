@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Assetic\Config;
+namespace Fxp\Component\RequireAsset\Asset\Config;
 
-use Fxp\Component\RequireAsset\Assetic\Util\LocaleUtils;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
+use Fxp\Component\RequireAsset\Asset\Util\LocaleUtils;
 
 /**
  * Require Locale Manager.
@@ -103,7 +103,7 @@ class LocaleManager implements LocaleManagerInterface
     {
         $locale = $this->getCurrentLocale($locale);
 
-        return isset($this->assets[$locale][Utils::formatName($asset)]);
+        return isset($this->assets[$locale][AssetUtils::formatName($asset)]);
     }
 
     /**
@@ -111,7 +111,7 @@ class LocaleManager implements LocaleManagerInterface
      */
     public function addLocalizedAsset($asset, $locale, $localizedAsset)
     {
-        $name = Utils::formatName($asset);
+        $name = AssetUtils::formatName($asset);
         $locale = LocaleUtils::formatLocale($locale);
         $this->assets[$locale][$name] = (array) $localizedAsset;
         $this->mapAssets[$name][$locale] = true;
@@ -125,7 +125,7 @@ class LocaleManager implements LocaleManagerInterface
      */
     public function removeLocalizedAsset($asset, $locale)
     {
-        $name = Utils::formatName($asset);
+        $name = AssetUtils::formatName($asset);
         $locale = LocaleUtils::formatLocale($locale);
 
         $this->cleanArray('assets', $locale, $name);
@@ -140,7 +140,7 @@ class LocaleManager implements LocaleManagerInterface
      */
     public function getLocalizedAsset($asset, $locale = null)
     {
-        $name = Utils::formatName($asset);
+        $name = AssetUtils::formatName($asset);
         $locale = $this->getCurrentLocale($locale);
         $cacheKey = $this->getCacheKey($locale, $name);
 
@@ -175,7 +175,7 @@ class LocaleManager implements LocaleManagerInterface
     public function getAssetLocales($asset = null)
     {
         if (null !== $asset) {
-            $name = Utils::formatName($asset);
+            $name = AssetUtils::formatName($asset);
 
             return isset($this->mapAssets[$name])
                 ? array_keys($this->mapAssets[$name])

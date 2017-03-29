@@ -16,10 +16,10 @@ use Assetic\Asset\FileAsset;
 use Assetic\Asset\HttpAsset;
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 use Fxp\Component\RequireAsset\Assetic\Factory\Loader\RequireAssetLoader;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource;
 use Fxp\Component\RequireAsset\Assetic\Filter\RequireCssRewriteFilter;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -122,7 +122,7 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
 
         foreach ($fixtures as $filename => $config) {
             $path = $this->getCacheDir().'/'.$filename;
-            $rar = new RequireAssetResource(Utils::formatName($filename), $path, $config['target']);
+            $rar = new RequireAssetResource(AssetUtils::formatName($filename), $path, $config['target']);
 
             $this->createFixtures(array($filename => $config['content']));
             $this->lam->addResource($rar, 'requireassetloader');
@@ -172,7 +172,7 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
 
         foreach ($fixtures as $filename => $config) {
             $path = $filename;
-            $rar = new RequireAssetResource(Utils::formatName($filename), $path, $config['target']);
+            $rar = new RequireAssetResource(AssetUtils::formatName($filename), $path, $config['target']);
 
             $this->lam->addResource($rar, 'requireassetloader');
 
@@ -217,7 +217,7 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
 
         foreach ($fixtures as $filename => $config) {
             $path = $filename;
-            $rar = new RequireAssetResource(Utils::formatName($filename), $path, $config['target']);
+            $rar = new RequireAssetResource(AssetUtils::formatName($filename), $path, $config['target']);
 
             $this->lam->addResource($rar, 'requireassetloader');
 

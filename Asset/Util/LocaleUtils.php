@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Assetic\Util;
+namespace Fxp\Component\RequireAsset\Asset\Util;
 
-use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
+use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
 
 /**
- * Assetic Locale Utils.
+ * Asset Locale Utils.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */

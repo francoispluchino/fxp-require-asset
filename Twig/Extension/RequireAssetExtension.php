@@ -11,9 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
-use Assetic\Asset\AssetInterface;
-use Assetic\Factory\LazyAssetManager;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Asset\RequireAssetManagerInterface;
 
 /**
  * RequireAssetExtension extends Twig with global assets rendering capabilities.
@@ -23,16 +21,16 @@ use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 class RequireAssetExtension extends \Twig_Extension
 {
     /**
-     * @var LazyAssetManager|null
+     * @var RequireAssetManagerInterface|null
      */
     protected $manager;
 
     /**
      * Constructor.
      *
-     * @param LazyAssetManager|null $manager The lazy assetic manager
+     * @param RequireAssetManagerInterface|null $manager The require asset manager
      */
-    public function __construct(LazyAssetManager $manager = null)
+    public function __construct(RequireAssetManagerInterface $manager = null)
     {
         $this->manager = $manager;
     }
@@ -48,14 +46,6 @@ class RequireAssetExtension extends \Twig_Extension
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'fxp_require_asset_url';
-    }
-
-    /**
      * Get the target path of the require asset.
      *
      * @param string $asset The require asset name
@@ -64,28 +54,8 @@ class RequireAssetExtension extends \Twig_Extension
      */
     public function requireAsset($asset)
     {
-        $searchAsset = Utils::formatName($asset);
-
-        return null !== $this->manager && $this->manager->has($searchAsset)
-            ? $this->formatTargetPath($this->manager->get($searchAsset))
+        return null !== $this->manager && $this->manager->has($asset)
+            ? $this->manager->getPath($asset)
             : $asset;
-    }
-
-    /**
-     * Format the target path.
-     *
-     * @param AssetInterface $asset
-     *
-     * @return string
-     */
-    protected function formatTargetPath(AssetInterface $asset)
-    {
-        $target = str_replace('_controller/', '', $asset->getTargetPath());
-
-        if (false === strpos($target, '://')) {
-            $target = '/'.ltrim($target, '/');
-        }
-
-        return $target;
     }
 }

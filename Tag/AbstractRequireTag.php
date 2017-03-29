@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Tag;
 
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 
 /**
  * Abstract require template tag.
@@ -28,7 +28,7 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
     /**
      * @var string
      */
-    protected $asseticName;
+    protected $assetName;
 
     /**
      * @var array
@@ -59,7 +59,7 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
         $this->optional = false;
         $assetPath = $this->checkOptionalPath($assetPath);
         $this->assetPath = $assetPath;
-        $this->asseticName = Utils::formatName($assetPath);
+        $this->assetName = AssetUtils::formatName($assetPath);
         $this->attributes = $attributes;
         $this->inputs = array();
     }
@@ -75,9 +75,9 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
     /**
      * {@inheritdoc}
      */
-    public function getAsseticName()
+    public function getAssetName()
     {
-        return $this->asseticName;
+        return $this->assetName;
     }
 
     /**

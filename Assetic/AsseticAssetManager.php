@@ -12,6 +12,8 @@
 namespace Fxp\Component\RequireAsset\Assetic;
 
 use Assetic\Factory\LazyAssetManager;
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
+use Fxp\Component\RequireAsset\Asset\Util\LocaleUtils;
 use Fxp\Component\RequireAsset\Assetic\Config\AsseticConfigResources;
 use Fxp\Component\RequireAsset\Assetic\Config\AsseticConfigResourcesInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\AssetResourceInterface;
@@ -19,15 +21,13 @@ use Fxp\Component\RequireAsset\Assetic\Config\PackageInterface;
 use Fxp\Component\RequireAsset\Assetic\Factory\Loader\RequireAssetLoader;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface;
 use Fxp\Component\RequireAsset\Assetic\Util\AssetResourceUtils;
-use Fxp\Component\RequireAsset\Assetic\Util\LocaleUtils;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 
 /**
- * Require asset package.
+ * Assetic asset package.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireAssetManager extends AbstractRequireAssetManager
+class AsseticAssetManager extends AbstractAsseticAssetManager
 {
     /**
      * {@inheritdoc}
@@ -38,7 +38,7 @@ class RequireAssetManager extends AbstractRequireAssetManager
         $args = array($name, $inputs, $this->convertTargetPath($targetPath), $filters, $options);
         $resource = AssetResourceUtils::createAssetResource($name, $classname, $args, 0);
 
-        $this->commons[Utils::formatName($name)] = $resource;
+        $this->commons[AssetUtils::formatName($name)] = $resource;
 
         return $this;
     }

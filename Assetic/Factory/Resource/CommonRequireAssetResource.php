@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Factory\Resource;
 
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 
 /**
  * Common require asset resource.
@@ -41,7 +41,7 @@ class CommonRequireAssetResource extends AbstractRequireAssetResource
         $this->inputs = array();
 
         foreach ($inputs as $input) {
-            $this->inputs[] = '@'.Utils::formatName($input);
+            $this->inputs[] = '@'.AssetUtils::formatName($input);
         }
     }
 

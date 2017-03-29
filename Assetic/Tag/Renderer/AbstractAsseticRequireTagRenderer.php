@@ -9,22 +9,24 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Tag\Renderer;
+namespace Fxp\Component\RequireAsset\Assetic\Tag\Renderer;
 
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\AssetReference;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\Util\VarUtils;
-use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
+use Fxp\Component\RequireAsset\Tag\Renderer\RequireTagRendererInterface;
+use Fxp\Component\RequireAsset\Tag\Renderer\RequireUtil;
 use Fxp\Component\RequireAsset\Tag\RequireTagInterface;
 
 /**
- * Abstract template require tag renderer.
+ * Abstract template assetic require tag renderer.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-abstract class AbstractRequireTagRenderer implements TagRendererInterface
+abstract class AbstractAsseticRequireTagRenderer implements RequireTagRendererInterface
 {
     /**
      * The list of already rendered tags.
@@ -55,7 +57,8 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
      * @param LocaleManagerInterface|null $localeManager     The require locale asset manager
      * @param array                       $debugCommonAssets The common assets for debug mode without assetic common parts
      */
-    public function __construct(LazyAssetManager $manager, LocaleManagerInterface $localeManager = null,
+    public function __construct(LazyAssetManager $manager,
+                                LocaleManagerInterface $localeManager = null,
                                 array $debugCommonAssets = array())
     {
         $this->manager = $manager;
@@ -85,7 +88,7 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
         $output = '';
 
         foreach ($this->getLocalizedAssets($asset) as $localeAsset) {
-            $childName = Utils::formatName($localeAsset);
+            $childName = AssetUtils::formatName($localeAsset);
             $output .= $this->doRender($tag, $childName);
         }
 
@@ -95,20 +98,20 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
     /**
      * Do render the HTML tag.
      *
-     * @param RequireTagInterface $tag
-     * @param string              $asseticName The assetic name
-     * @param AssetInterface|null $asset       The assetic asset (useful for common assets)
+     * @param RequireTagInterface $tag       The require template tag
+     * @param string              $assetName The asset name
+     * @param AssetInterface|null $asset     The asset asset (useful for common assets)
      *
      * @return string The output render
      */
-    protected function doRender(RequireTagInterface $tag, $asseticName, AssetInterface $asset = null)
+    protected function doRender(RequireTagInterface $tag, $assetName, AssetInterface $asset = null)
     {
         $output = '';
 
-        if ($this->canBeRendered($asseticName)) {
-            $asset = null !== $asset ? $asset : $this->manager->get($asseticName);
+        if ($this->canBeRendered($assetName)) {
+            $asset = null !== $asset ? $asset : $this->manager->get($assetName);
             $attributes = $this->prepareAttributes($tag, $asset);
-            $this->assetRendered($asseticName);
+            $this->assetRendered($assetName);
 
             $output = RequireUtil::renderHtmlTag($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
         }
@@ -119,7 +122,7 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
     /**
      * Prepare the attributes of HTML tag.
      *
-     * @param RequireTagInterface $tag   The require tag
+     * @param RequireTagInterface $tag   The require template tag
      * @param AssetInterface      $asset The assetic asset
      *
      * @return array
@@ -183,13 +186,13 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
     /**
      * Check if the asset can be rendered.
      *
-     * @param string $asseticName The assetic name
+     * @param string $assetName The asset name
      *
      * @return bool
      */
-    protected function canBeRendered($asseticName)
+    protected function canBeRendered($assetName)
     {
-        return !in_array($asseticName, $this->renderedTags);
+        return !in_array($assetName, $this->renderedTags);
     }
 
     /**
@@ -202,7 +205,7 @@ abstract class AbstractRequireTagRenderer implements TagRendererInterface
         $assets = (array) $assets;
 
         foreach ($assets as $asset) {
-            $this->renderedTags[] = Utils::formatName($asset);
+            $this->renderedTags[] = AssetUtils::formatName($asset);
         }
     }
 }

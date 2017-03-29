@@ -12,21 +12,21 @@
 namespace Fxp\Component\RequireAsset\Assetic;
 
 use Assetic\Factory\LazyAssetManager;
-use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface;
+use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManagerInterface;
+use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
+use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCacheInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\AsseticConfigResourcesInterface;
-use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManagerInterface;
-use Fxp\Component\RequireAsset\Assetic\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface;
 
 /**
- * Interface of require asset manager.
+ * Interface of assetic asset manager.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-interface RequireAssetManagerInterface
+interface AsseticAssetManagerInterface
 {
     /**
      * Set the file extension manager.
@@ -125,18 +125,18 @@ interface RequireAssetManagerInterface
     public function getAssetReplacementManager();
 
     /**
-     * Set the require asset cache.
+     * Set the assetic asset cache.
      *
-     * @param RequireAssetCacheInterface $cache
+     * @param AsseticAssetCacheInterface $cache
      *
      * @return self
      */
-    public function setCache(RequireAssetCacheInterface $cache);
+    public function setCache(AsseticAssetCacheInterface $cache);
 
     /**
-     * Get the require asset cache.
+     * Get the assetic asset cache.
      *
-     * @return RequireAssetCacheInterface
+     * @return AsseticAssetCacheInterface
      */
     public function getCache();
 

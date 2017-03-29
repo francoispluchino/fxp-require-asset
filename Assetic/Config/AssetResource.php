@@ -11,8 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Assetic\Config;
 
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResourceInterface;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
 use Fxp\Component\RequireAsset\Exception\InvalidConfigurationException;
 
 /**
@@ -61,7 +61,7 @@ class AssetResource implements AssetResourceInterface
      */
     public function __construct($name, $classname, $loader, array $arguments, $namePosition = null)
     {
-        $this->name = Utils::formatName($name);
+        $this->name = AssetUtils::formatName($name);
         $this->prettyName = $name;
         $this->classname = $classname;
         $this->loader = $loader;

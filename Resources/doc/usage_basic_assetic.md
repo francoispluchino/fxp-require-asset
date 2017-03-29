@@ -3,7 +3,9 @@ Basic usage
 
 ### Prerequisites
 
-The `RequireAssetManager` works only with Assetic `LazyAssetManager` (not the basic
+This feature require the dependency `kriswallsmith/assetic`.
+
+The `AsseticAssetManager` works only with Assetic `LazyAssetManager` (not the basic
 `AssetManager`), because it uses the resource loading and the filters.
 
 For create a new Assetic `LazyAssetManager`:
@@ -29,11 +31,11 @@ You can set a default configuration for a file extension:
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 
-$ram->getFileExtensionManager()
+$aam->getFileExtensionManager()
     ->addDefaultExtension('js')
     ->addDefaultExtension('css');
 ```
@@ -57,12 +59,12 @@ the internet browsers.
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 
-$ram->getFileExtensionManager()->addDefaultExtensions(FileExtensionUtils::getDefaultConfigs());
+$aam->getFileExtensionManager()->addDefaultExtensions(FileExtensionUtils::getDefaultConfigs());
 ```
 
 With this list, only files below are copied:
@@ -95,11 +97,11 @@ mode, and `lessphp` for the `less` files (with changing name of file extension):
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 
-$ram->getFileExtensionManager()
+$aam->getFileExtensionManager()
     ->addDefaultExtension('js',   array(), array('?yui_js')))
     ->addDefaultExtension('less', array(), array('lessphp'), 'css'));
 ```
@@ -116,11 +118,11 @@ files more precisely, using a pattern in the `Glob` format.
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 
-$ram->getPatternManager()
+$aam->getPatternManager()
     ->addDefaultPattern('*')
     ->addDefaultPattern('!test/*')
     ->addDefaultPattern('!bin/*');
@@ -144,12 +146,12 @@ add it in  `PackageManager`.
 <?php
 
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 $configPackage = new ConfigPackage('foo_bar', __DIR__ . '/vendor/assets/foobar');
 
-$ram->getPackageManager()->addPackage($configPackage);
+$aam->getPackageManager()->addPackage($configPackage);
 ```
 
 **Constructor arguments available:**
@@ -173,13 +175,13 @@ merged in the order of addition.
 <?php
 
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 $configPackage = new ConfigPackage('foo_bar');
 $configPackageBis = new ConfigPackage('foo_bar', __DIR__ . '/vendor/assets/foobar');
 
-$ram->getPackageManager()
+$aam->getPackageManager()
     ->addPackage($configPackage)
     ->addPackage($configPackageBis);
 ```
@@ -200,15 +202,15 @@ mode, and `lessphp` for the `less` files (with changing name of file extension):
 <?php
 
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 $configPackage = new ConfigPackage('foo_bar', __DIR__ . '/vendor/assets/foobar');
 $configPackage
     ->addExtension('js', array(), array('?yui_js'))
     ->addExtension('less', array(), array('lessphp'), 'css');
 
-$ram->getPackageManager()->addPackage($configPackage);
+$aam->getPackageManager()->addPackage($configPackage);
 ```
 
 **Arguments available:**
@@ -235,16 +237,16 @@ files more precisely, using a pattern in the `Glob` format.
 <?php
 
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 $configPackage = new ConfigPackage('foo_bar', __DIR__ . '/vendor/assets/foobar');
 $configPackage
     ->addPattern('*')
     ->addPattern('!test/*')
     ->addPattern('!bin/*');
 
-$ram->getPackageManager()->addPackage($configPackage);
+$aam->getPackageManager()->addPackage($configPackage);
 ```
 
 This example will copy all files whose the file extension is allowed, but to exclude the folders
@@ -260,15 +262,15 @@ But it is possible not to include the default settings for a package:
 <?php
 
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 $configPackage = new ConfigPackage('foo_bar', __DIR__ . '/vendor/assets/foobar');
 $configPackage
     ->setReplaceDefaultExtensions(true)
     ->setReplaceDefaultPatterns(true);
 
-$ram->getPackageManager()->addPackage($configPackage);
+$aam->getPackageManager()->addPackage($configPackage);
 ```
 
 ### Add common asset (formulae)
@@ -278,16 +280,16 @@ You can create common assets, which are reality the assetic formulae dedicated t
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 // configure your packages of your require assets
 
 $input = array(
     '@asset/source/path.js',
     '@asset/source/path2.js',
 );
-$ram->addCommonAsset('common_js', $inputs, '/common.js', array('?compiler', array('debug' => true));
+$aam->addCommonAsset('common_js', $inputs, '/common.js', array('?compiler', array('debug' => true));
 ```
 
 ### Add localized asset
@@ -298,10 +300,10 @@ Manager, and set the locale of each asset in the Locale Manager:
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
-$lm = $ram->getLocaleManager();
+$aam = new AsseticAssetManager();
+$lm = $aam->getLocaleManager();
 // configure your packages of your require assets
 
 $lm->addLocalizedAsset('@package1/asset1.js', 'fr_fr', '@package1/locale/asset1-fr-fr.js');
@@ -328,22 +330,22 @@ common asset with the name of common asset, followed by `__` and the locale in l
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 // configure your packages of your require assets
 
 $inputs = array(
     '@asset/source/path.js',
     '@asset/source/path2.js',
 );
-$ram->addCommonAsset('common_js', $inputs, '/common.js', array('?compiler', array('debug' => true));
+$aam->addCommonAsset('common_js', $inputs, '/common.js', array('?compiler', array('debug' => true));
 
 $localeInputs = array(
     '@asset/source/path-fr-fr.js',
 );
-$ram->addCommonAsset('common_js__fr_fr', $localeInputs, '/common-fr-fr.js', array('?compiler', array('debug' => true));
-$ram->getLocaleManager()->addLocalizedAsset('common_js', 'fr_fr', 'common_js__fr_fr');
+$aam->addCommonAsset('common_js__fr_fr', $localeInputs, '/common-fr-fr.js', array('?compiler', array('debug' => true));
+$aam->getLocaleManager()->addLocalizedAsset('common_js', 'fr_fr', 'common_js__fr_fr');
 ```
 
 ### Replace an asset by another asset
@@ -353,12 +355,12 @@ You can indicate to the require asset manager that an asset to be replaced by an
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 // configure your packages of your require assets
 
-$ram->getAssetReplacementManager()->addReplacement('@asset1/path.ext', '@asset5/path.ext');
+$aam->getAssetReplacementManager()->addReplacement('@asset1/path.ext', '@asset5/path.ext');
 ```
 
 For this example, the `@asset1/path.ext` will be replace by the `@asset5/path.ext`.
@@ -375,22 +377,22 @@ use Assetic\AssetWriter;
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
 $factory = new AssetFactory('web');
 $lam = new LazyAssetManager($factory);
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 
 // your configuration of asset packages
 
-$ram->addAssetResources($lam);
+$aam->addAssetResources($lam);
 
 // launch the assetic compilation
 $writer = new AssetWriter('web');
 $writer->writeManagerAssets($lam);
 ```
 
-The `RequireAssetManager` will search and filter all the compatible assets, configure each
+The `AsseticAssetManager` will search and filter all the compatible assets, configure each
 Assetic Resource (which is in each case a single file) with the good configuration, and add
 each resource in Assetic `LazyAssetManager`.
 
@@ -406,11 +408,11 @@ Beware, each pattern will be executed in order for each file.
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 
-$ram->getOutputManager()->addOutputPattern('*/less/*', '*/css/*');
+$aam->getOutputManager()->addOutputPattern('*/less/*', '*/css/*');
 ```
 
 This example will rename all directories `/less/` to `/css/`.
@@ -425,11 +427,11 @@ the wildcard (`*`). However, The wildcards used in first and last position are n
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 
-$ram->getOutputManager()->addOutputPattern('acmedemo/*/*.css', 'css/$1.css');
+$aam->getOutputManager()->addOutputPattern('acmedemo/*/*.css', 'css/$1.css');
 ```
 
 In this example, the variable `$0` is the folder name, and the variable `$1` is the file name.
@@ -449,20 +451,20 @@ For get the good path of the asset, you must use the filter `RequireCssRewriteFi
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\FilterManager;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Filter\RequireCssRewriteFilter;
 
 $fm = new FilterManager();
 $factory = new AssetFactory('web');
 $factory->setFilterManager($fm);
 $lam = new LazyAssetManager($factory);
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 
 // configure your asset packages
 
 $fm->set('requirecssrewrite', new RequireCssRewriteFilter($lam));
 
-$ram->getFileExtensionManager()
+$aam->getFileExtensionManager()
     ->addDefaultExtension('css', array(), array('requirecssrewrite'));
 ```
 
@@ -478,7 +480,7 @@ You can add the source paths of asset packages in variables to the beginning of 
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
 use Assetic\FilterManager;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 use Fxp\Component\RequireAsset\Assetic\Filter\LessVariableFilter;
 use Fxp\Component\RequireAsset\Assetic\Util\PackageUtils;
 
@@ -486,20 +488,20 @@ $fm = new FilterManager();
 $factory = new AssetFactory('web');
 $factory->setFilterManager($fm);
 $lam = new LazyAssetManager($factory);
-$ram = new RequireAssetManager();
+$aam = new AsseticAssetManager();
 
 // configure your asset packages
 
-$fm->set('lessvariable', new LessVariableFilter(PackageUtils::getPackagePaths($ram->getPackageManager())));
+$fm->set('lessvariable', new LessVariableFilter(PackageUtils::getPackagePaths($aam->getPackageManager())));
 
-$ram->getFileExtensionManager()
+$aam->getFileExtensionManager()
     ->addDefaultExtension('less', array(), array('lessvariable'));
 ```
 
 ### Using cache of the search of assets
 
 To avoid to search and create the Assetic Resources to each execution, you can use a
-cache. In this way, if the Assetic Resources are in the cache, the `RequireAssetManager`
+cache. In this way, if the Assetic Resources are in the cache, the `AsseticAssetManager`
 will retrieve this list.
 
 **Example:**
@@ -510,13 +512,13 @@ will retrieve this list.
 use Assetic\AssetWriter;
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
-use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCache;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCache;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$rac = new RequireAssetCache('cache');
-$ram = new RequireAssetManager();
+$aac = new AsseticAssetCache('cache');
+$aam = new AsseticAssetManager();
 
-$ram->setCache($rac);
+$aam->setCache($aac);
 
 // your configuration of asset packages
 
@@ -525,7 +527,7 @@ $factory = new AssetFactory('web');
 $lam = new LazyAssetManager($factory);
 
 // add require assets in lazy asset manager
-$ram->addAssetResources($lam);
+$aam->addAssetResources($lam);
 
 // launch the assetic compilation
 $writer = new AssetWriter('web');
@@ -533,7 +535,7 @@ $writer->writeManagerAssets($lam);
 ```
 
 You can create your own Cache using the interface
-`Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCacheInterface`.
+`Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCacheInterface`.
 
 #### Do not configure the Require Asset Manager to each execution
 
@@ -549,14 +551,14 @@ use the method `hasResources` in the cache.
 use Assetic\AssetWriter;
 use Assetic\Factory\AssetFactory;
 use Assetic\Factory\LazyAssetManager;
-use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCache;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCache;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$rac = new RequireAssetCache('cache');
-$ram = new RequireAssetManager();
-$ram->setCache($rac);
+$aac = new AsseticAssetCache('cache');
+$aam = new AsseticAssetManager();
+$aam->setCache($aac);
 
-if (!$rac->hasResources()) {
+if (!$aac->hasResources()) {
     // your configuration of asset packages
 }
 
@@ -565,7 +567,7 @@ $factory = new AssetFactory('web');
 $lam = new LazyAssetManager($factory);
 
 // add require assets in lazy asset manager
-$ram->addAssetResources($lam);
+$aam->addAssetResources($lam);
 
 // launch the assetic compilation
 $writer = new AssetWriter('web');
@@ -581,14 +583,14 @@ To invalidate the cache, you must call the method `invalidate` in the cache.
 ```php
 <?php
 
-use Fxp\Component\RequireAsset\Assetic\Cache\RequireAssetCache;
-use Fxp\Component\RequireAsset\Assetic\RequireAssetManager;
+use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCache;
+use Fxp\Component\RequireAsset\Assetic\AsseticAssetManager;
 
-$rac = new RequireAssetCache('cache');
-$ram = new RequireAssetManager();
-$ram->setCache($rac);
+$aac = new AsseticAssetCache('cache');
+$aam = new AsseticAssetManager();
+$aam->setCache($aac);
 
-$ram->getCache()->invalidate();
+$aam->getCache()->invalidate();
 
 // ...
 ```

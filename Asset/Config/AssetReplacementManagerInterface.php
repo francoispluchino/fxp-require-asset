@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Assetic\Config;
+namespace Fxp\Component\RequireAsset\Asset\Config;
 
 use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 

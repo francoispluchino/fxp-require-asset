@@ -12,7 +12,7 @@
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Assetic\Asset\AssetInterface;
-use Fxp\Component\RequireAsset\Assetic\Util\Utils;
+use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 
 /**
  * Abstract Require Asset Extension Tests.
@@ -44,7 +44,7 @@ abstract class AbstractRequireAssetExtensionTest extends AbstractAssetExtensionT
             ->will($this->returnValue(array()));
 
         /* @var AssetInterface $asset */
-        $this->manager->set(Utils::formatName($source), $asset);
+        $this->manager->set(AssetUtils::formatName($source), $asset);
     }
 
     /**
@@ -67,7 +67,7 @@ abstract class AbstractRequireAssetExtensionTest extends AbstractAssetExtensionT
         );
 
         foreach ($inputs as $input) {
-            $config[0][] = '@'.Utils::formatName($input);
+            $config[0][] = '@'.AssetUtils::formatName($input);
         }
 
         $this->manager->setFormula($name, $config);

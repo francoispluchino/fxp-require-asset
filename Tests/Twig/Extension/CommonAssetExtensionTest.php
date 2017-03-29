@@ -74,6 +74,37 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
     }
 
     /**
+     * @expectedException \Fxp\Component\RequireAsset\Exception\Twig\RuntimeTagRendererException
+     * @expectedExceptionMessage No template tag renderer has been found for the "category_type" tag with the asset "ASSET_PATH"
+     */
+    public function testAssetRendererNotFoundForRequireTag()
+    {
+        $ext = new AssetExtension();
+        $tag = $this->getMockBuilder('Fxp\Component\RequireAsset\Tag\RequireTagInterface')->getMock();
+        $tag
+            ->expects($this->any())
+            ->method('getTagPositionName')
+            ->will($this->returnValue('category:type:position'));
+        $tag
+            ->expects($this->any())
+            ->method('getCategory')
+            ->will($this->returnValue('category'));
+        $tag
+            ->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue('type'));
+        $tag
+            ->expects($this->any())
+            ->method('getPath')
+            ->will($this->returnValue('ASSET_PATH'));
+
+        /* @var TagInterface $tag */
+        echo $ext->createTagPosition('category', 'type', -1, null, 'position');
+        $ext->addTag($tag);
+        $ext->renderTags();
+    }
+
+    /**
      * @dataProvider getTwigTags
      *
      * @param string $tag

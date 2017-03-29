@@ -11,7 +11,7 @@
 
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
-use Fxp\Component\RequireAsset\Assetic\Config\AssetReplacementManagerInterface;
+use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 use Fxp\Component\RequireAsset\Twig\Node\RequireTagReference;
 

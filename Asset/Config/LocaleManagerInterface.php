@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Fxp\Component\RequireAsset\Assetic\Config;
+namespace Fxp\Component\RequireAsset\Asset\Config;
 
 /**
  * Interface of require locale asset manager.

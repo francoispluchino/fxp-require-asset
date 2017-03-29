@@ -23,38 +23,6 @@ use Symfony\Component\Config\Definition\Processor;
 abstract class Utils
 {
     /**
-     * @var array
-     */
-    protected static $nameFilters = array(
-        '.',
-        '/',
-        '\\',
-        '=',
-        '+',
-        '-',
-        '*',
-        '#',
-        '&',
-        '@',
-        ':',
-    );
-
-    /**
-     * Gets the assetic name of the asset.
-     *
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function formatName($name)
-    {
-        $asseticName = ltrim($name, '@');
-        $asseticName = str_replace(self::$nameFilters, '_', $asseticName);
-
-        return $asseticName;
-    }
-
-    /**
      * Merges the configs of asset config.
      *
      * @param NodeInterface $nodeConfiguration The node definition of configuration
