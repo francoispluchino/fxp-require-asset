@@ -152,7 +152,7 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * Create the tagposition to included in the twig template.
+     * Create the tag position to included in the twig template.
      *
      * @param string      $category The twig asset category
      * @param string      $type     The asset type
@@ -231,9 +231,22 @@ class AssetExtension extends \Twig_Extension
     protected function doRenderTags($contentType)
     {
         if (isset($this->contents[$contentType])) {
-            $renderer = $this->findRenderer(current($this->contents[$contentType]));
-            foreach ($renderer->order($this->contents[$contentType]) as $tag) {
-                echo $this->renderTag($renderer, $tag);
+            $tags = $this->contents[$contentType];
+            /* @var TagRendererInterface[] $renderers */
+            $renderers = array();
+            $rendererTags = array();
+
+            foreach ($tags as $tag) {
+                $renderer = $this->findRenderer($tag);
+                $id = spl_object_hash($renderer);
+                $renderers[$id] = $renderer;
+                $rendererTags[$id][] = $tag;
+            }
+
+            foreach ($renderers as $id => $renderer) {
+                foreach ($renderer->order($rendererTags[$id]) as $orderedTag) {
+                    echo $this->renderTag($renderer, $orderedTag);
+                }
             }
             unset($this->contents[$contentType]);
         }
