@@ -23,20 +23,22 @@ interface RequireAssetManagerInterface
     /**
      * Check if the asset is present.
      *
-     * @param string $asset The asset name
+     * @param string      $asset The asset name
+     * @param string|null $type  The asset type
      *
      * @return bool
      */
-    public function has($asset);
+    public function has($asset, $type = null);
 
     /**
      * Get the public path of the asset.
      *
-     * @param string $asset The asset name
+     * @param string      $asset The asset name
+     * @param string|null $type  The asset type
      *
      * @return string
      *
      * @throws AssetNotFoundException When the asset is not found
      */
-    public function getPath($asset);
+    public function getPath($asset, $type = null);
 }

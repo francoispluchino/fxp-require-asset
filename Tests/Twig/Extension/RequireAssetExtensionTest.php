@@ -119,6 +119,19 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
         $this->doValidTagTest($tag, 'test_optional_asset');
     }
 
+    /**
+     * @dataProvider getRequireTwigTags
+     *
+     * @param string $tag
+     *
+     * @expectedException \Fxp\Component\RequireAsset\Exception\Twig\RequireTagException
+     * @expectedExceptionMessage is not managed by the Webpack Require Asset Manager
+     */
+    public function testAssetIsNotManagedByWebpackManager($tag)
+    {
+        $this->doValidTagTest($tag, 'invalid_webpack_asset');
+    }
+
     public function getRequireTwigAsset()
     {
         return array(

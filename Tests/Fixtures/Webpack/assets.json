@@ -1,0 +1,27 @@
+{
+    "asset": {
+        "js": "/assets/asset.js",
+        "css": "/assets/asset.css"
+    },
+    "asset_js": {
+        "js": "/assets/asset_js.js"
+    },
+    "asset_css": {
+        "js": "/assets/asset_css.js",
+        "css": "/assets/asset_css.css"
+    },
+    "asset_js_fr": {
+        "js": "/assets/asset_js_fr.js"
+    },
+    "asset_css_fr": {
+        "js": "/assets/asset_css_fr.js",
+        "css": "/assets/asset_css_fr.css"
+    },
+    "asset_ext": {
+        "ext": "/assets/asset_ext.ext"
+    },
+    "asset_ext2": {
+        "js": "/assets/asset_ext2.js",
+        "ext": "/assets/asset_ext2.ext"
+    }
+}

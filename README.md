@@ -8,7 +8,7 @@ Fxp Require Asset
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/43b207f9-6d4c-4d99-927d-e7bbd710d6ee.svg)](https://insight.sensiolabs.com/projects/43b207f9-6d4c-4d99-927d-e7bbd710d6ee)
 
 The Fxp Require Asset is a helper for twig to manage automatically the required assets
-with Assetic. It allows to define the required assets (script, style) directly
+with Assetic or Webpack. It allows to define the required assets (script, style) directly
 in the Twig template and adds the HTML links of the assets automatically to the
 right place in the template, while removing duplicates.
 
@@ -27,6 +27,7 @@ right place in the template, while removing duplicates.
   - the replacement of assets by other assets
 - Automatic addition of localized commons assets
 - Compiling the final list of asset in cache for increase performance
+- Compatible with [Webpack](https://webpack.js.org) and source maps (require the plugin [assets-webpack-plugin](https://github.com/kossnocorp/assets-webpack-plugin))
 - Assetic filters:
   - `requirecssrewrite`: for rewrite the url of another require asset in css file
   - `lessvariable`: for inject the asset package paths as variables

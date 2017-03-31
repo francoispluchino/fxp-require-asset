@@ -18,7 +18,7 @@ use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 use Fxp\Component\RequireAsset\Exception\AssetNotFoundException;
 
 /**
- * Interface of require asset manager.
+ * Require asset manager for Assetic.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
@@ -42,7 +42,7 @@ class AsseticRequireAssetManager implements RequireAssetManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function has($asset)
+    public function has($asset, $type = null)
     {
         return $this->manager->has(AssetUtils::formatName($asset));
     }
@@ -50,7 +50,7 @@ class AsseticRequireAssetManager implements RequireAssetManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function getPath($asset)
+    public function getPath($asset, $type = null)
     {
         $formattedName = AssetUtils::formatName($asset);
 

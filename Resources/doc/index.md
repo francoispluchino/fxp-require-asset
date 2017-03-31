@@ -26,4 +26,5 @@ Composer will install the bundle to your project's `vendor/fxp` directory.
 - [Basic usage with Assetic](usage_basic_assetic.md)
 - [Twig configuration](configuration_twig.md)
 - [Require asset usage in Twig](usage_twig_require_asset.md)
+- [Require asset usage in Twig with Webpack](usage_twig_require_asset_webpack.md)
 - [Inline asset usage in Twig](usage_twig_inline_asset.md)

@@ -48,14 +48,15 @@ class RequireAssetExtension extends \Twig_Extension
     /**
      * Get the target path of the require asset.
      *
-     * @param string $asset The require asset name
+     * @param string      $asset The require asset name
+     * @param string|null $type  The asset type
      *
      * @return string
      */
-    public function requireAsset($asset)
+    public function requireAsset($asset, $type = null)
     {
-        return null !== $this->manager && $this->manager->has($asset)
-            ? $this->manager->getPath($asset)
+        return null !== $this->manager && $this->manager->has($asset, $type)
+            ? $this->manager->getPath($asset, $type)
             : $asset;
     }
 }

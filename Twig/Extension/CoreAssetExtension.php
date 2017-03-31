@@ -16,6 +16,8 @@ use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Tag\Renderer\AsseticRequireTagRenderer;
 use Fxp\Component\RequireAsset\Tag\Renderer\InlineTagRenderer;
+use Fxp\Component\RequireAsset\Webpack\Tag\Renderer\WebpackRequireTagRenderer;
+use Fxp\Component\RequireAsset\Webpack\WebpackRequireAssetManager;
 
 /**
  * Core asset extension.
@@ -27,20 +29,30 @@ class CoreAssetExtension extends AssetExtension
     /**
      * Constructor.
      *
-     * @param LazyAssetManager                      $manager            The lazy assetic manager
+     * @param LazyAssetManager|null                 $manager            The lazy assetic manager
      * @param LocaleManagerInterface|null           $localeManager      The require locale asset manager
      * @param AssetReplacementManagerInterface|null $replacementManager The asset replacement manager
      * @param array                                 $debugCommonAssets  The common assets for debug mode without assetic common parts
+     * @param string|null                           $webpackAssetsFile  The filename of webpack assets
      */
-    public function __construct(LazyAssetManager $manager, LocaleManagerInterface $localeManager = null,
+    public function __construct(LazyAssetManager $manager = null,
+                                LocaleManagerInterface $localeManager = null,
                                 AssetReplacementManagerInterface $replacementManager = null,
-                                array $debugCommonAssets = array())
+                                array $debugCommonAssets = array(),
+                                $webpackAssetsFile = null)
     {
         parent::__construct($replacementManager);
 
-        $this->setRenderers(array(
-            new InlineTagRenderer(),
-            new AsseticRequireTagRenderer($manager, $localeManager, $debugCommonAssets),
-        ));
+        $renderers = array(new InlineTagRenderer());
+
+        if (null !== $webpackAssetsFile) {
+            $renderers[] = new WebpackRequireTagRenderer(new WebpackRequireAssetManager($webpackAssetsFile), $localeManager);
+        }
+
+        if (null !== $manager) {
+            $renderers[] = new AsseticRequireTagRenderer($manager, $localeManager, $debugCommonAssets);
+        }
+
+        $this->setRenderers($renderers);
     }
 }

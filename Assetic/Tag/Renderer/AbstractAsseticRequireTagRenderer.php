@@ -17,7 +17,7 @@ use Assetic\Factory\LazyAssetManager;
 use Assetic\Util\VarUtils;
 use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
-use Fxp\Component\RequireAsset\Tag\Renderer\RequireTagRendererInterface;
+use Fxp\Component\RequireAsset\Tag\Renderer\BaseRequireTagRenderer;
 use Fxp\Component\RequireAsset\Tag\Renderer\RequireUtil;
 use Fxp\Component\RequireAsset\Tag\RequireTagInterface;
 
@@ -26,24 +26,12 @@ use Fxp\Component\RequireAsset\Tag\RequireTagInterface;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-abstract class AbstractAsseticRequireTagRenderer implements RequireTagRendererInterface
+abstract class AbstractAsseticRequireTagRenderer extends BaseRequireTagRenderer
 {
-    /**
-     * The list of already rendered tags.
-     *
-     * @var array
-     */
-    protected $renderedTags;
-
     /**
      * @var LazyAssetManager
      */
     protected $manager;
-
-    /**
-     * @var LocaleManagerInterface|null
-     */
-    protected $localeManager;
 
     /**
      * @var array
@@ -62,17 +50,9 @@ abstract class AbstractAsseticRequireTagRenderer implements RequireTagRendererIn
                                 array $debugCommonAssets = array())
     {
         $this->manager = $manager;
-        $this->localeManager = $localeManager;
         $this->debugCommonAssets = $debugCommonAssets;
-        $this->reset();
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function reset()
-    {
-        $this->renderedTags = array();
+        parent::__construct($localeManager);
     }
 
     /**
@@ -152,22 +132,6 @@ abstract class AbstractAsseticRequireTagRenderer implements RequireTagRendererIn
     }
 
     /**
-     * Get localized assets.
-     *
-     * @param string $asset The require asset
-     *
-     * @return string[]
-     */
-    protected function getLocalizedAssets($asset)
-    {
-        if (null !== $this->localeManager) {
-            return $this->localeManager->getLocalizedAsset($asset);
-        }
-
-        return array();
-    }
-
-    /**
      * Extract the assetic name of the asset reference.
      *
      * @param AssetReference $asset The asset
@@ -181,18 +145,6 @@ abstract class AbstractAsseticRequireTagRenderer implements RequireTagRendererIn
         $meth->setAccessible(true);
 
         return (string) $meth->getValue($asset);
-    }
-
-    /**
-     * Check if the asset can be rendered.
-     *
-     * @param string $assetName The asset name
-     *
-     * @return bool
-     */
-    protected function canBeRendered($assetName)
-    {
-        return !in_array($assetName, $this->renderedTags);
     }
 
     /**

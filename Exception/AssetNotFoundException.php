@@ -18,9 +18,16 @@ namespace Fxp\Component\RequireAsset\Exception;
  */
 class AssetNotFoundException extends InvalidArgumentException
 {
-    public function __construct($asset, $code = 0, \Exception $previous = null)
+    /**
+     * @param string          $asset    The asset
+     * @param string|null     $type     The asset type
+     * @param int             $code     The exception code
+     * @param \Exception|null $previous The previous exception
+     */
+    public function __construct($asset, $type = null, $code = 0, \Exception $previous = null)
     {
-        $message = sprintf('The asset "%s" is not found', $asset);
+        $type = null === $type ? '' : ' '.$type;
+        $message = sprintf('The%s asset "%s" is not found', $type, $asset);
 
         parent::__construct($message, $code, $previous);
     }

@@ -54,10 +54,10 @@ class ChainRequireAssetManager implements RequireAssetManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function has($asset)
+    public function has($asset, $type = null)
     {
         foreach ($this->managers as $manager) {
-            if ($manager->has($asset)) {
+            if ($manager->has($asset, $type)) {
                 return true;
             }
         }
@@ -68,20 +68,20 @@ class ChainRequireAssetManager implements RequireAssetManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function getPath($asset)
+    public function getPath($asset, $type = null)
     {
         $previous = null;
 
         try {
             foreach ($this->managers as $manager) {
                 if ($manager->has($asset)) {
-                    return $manager->getPath($asset);
+                    return $manager->getPath($asset, $type);
                 }
             }
         } catch (\Exception $e) {
             $previous = $e;
         }
 
-        throw new AssetNotFoundException($asset, 0, $previous);
+        throw new AssetNotFoundException($asset, $type, 0, $previous);
     }
 }

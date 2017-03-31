@@ -1,8 +1,8 @@
 {
     "name": "fxp/require-asset",
     "type": "library",
-    "description": "Required assets helper for assetic manager and twig",
-    "keywords": ["asset", "require", "twig", "assetic", "javascript", "stylesheet", "user interface", "ui"],
+    "description": "Helper of required assets for Twig with Assetic or Webpack",
+    "keywords": ["asset", "require", "webpack", "twig", "assetic", "javascript", "stylesheet", "user interface", "ui"],
     "homepage": "https://github.com/fxpio/fxp-require-asset",
     "license": "MIT",
     "authors": [
@@ -21,7 +21,8 @@
     },
     "require-dev": {
         "twig/twig": "^2.0.0",
-        "kriswallsmith/assetic": "^1.3.0"
+        "kriswallsmith/assetic": "^1.3.0",
+        "psr/cache": "^1.0.0"
     },
     "suggest": {
         "fxp/composer-asset-plugin": "For manage NPM/Bower dependencies with Composer"

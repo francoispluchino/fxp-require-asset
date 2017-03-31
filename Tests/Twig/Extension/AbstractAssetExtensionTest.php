@@ -62,7 +62,13 @@ abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
         $this->manager = new LazyAssetManager($this->factory);
         $this->replacementManager = new AssetReplacementManager();
         $this->factory->setAssetManager($this->manager);
-        $this->ext = new CoreAssetExtension($this->manager, $this->localeManager, $this->replacementManager, $this->debugCommonAssets);
+        $this->ext = new CoreAssetExtension(
+            $this->manager,
+            $this->localeManager,
+            $this->replacementManager,
+            $this->debugCommonAssets,
+            realpath(__DIR__.'/../../Fixtures/Webpack/assets.json')
+        );
     }
 
     protected function tearDown()

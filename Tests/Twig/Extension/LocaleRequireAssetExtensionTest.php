@@ -96,6 +96,9 @@ class LocaleRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
         $this->localeManager->addLocalizedAsset('@common_js', 'fr', '@common_js_fr');
         $this->localeManager->addLocalizedAsset('@common_css', 'fr', '@common_css_fr');
 
+        $this->localeManager->addLocalizedAsset('@webpack/asset_js', 'fr_FR', '@webpack/asset_js_fr');
+        $this->localeManager->addLocalizedAsset('@webpack/asset_css', 'fr_FR', '@webpack/asset_css_fr');
+
         $this->doValidTagTest($tag, 'test', '_'.$env);
     }
 }
