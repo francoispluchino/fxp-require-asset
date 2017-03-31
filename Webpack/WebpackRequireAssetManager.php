@@ -14,6 +14,7 @@ namespace Fxp\Component\RequireAsset\Webpack;
 use Fxp\Component\RequireAsset\Asset\RequireAssetManagerInterface;
 use Fxp\Component\RequireAsset\Exception\AssetNotFoundException;
 use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
+use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
@@ -97,24 +98,10 @@ class WebpackRequireAssetManager implements RequireAssetManagerInterface
     protected function getContent()
     {
         if (null === $this->contentCache) {
-            $item = null;
-
-            if (null !== $this->cache) {
-                $item = $this->cache->getItem($this->cacheKey);
-                $cacheContent = $item->get();
-
-                if ($item->isHit() && null !== $cacheContent) {
-                    $this->contentCache = $cacheContent;
-                }
-            }
+            $item = $this->getCachedContent();
 
             if (null === $this->contentCache) {
-                $this->contentCache = $this->readFile();
-
-                if (null !== $this->cache && null !== $item) {
-                    $item->set($this->contentCache);
-                    $this->cache->save($item);
-                }
+                $this->contentCache = $this->saveContentInCache($item, $this->readFile());
             }
         }
 
@@ -126,7 +113,7 @@ class WebpackRequireAssetManager implements RequireAssetManagerInterface
      *
      * @return array
      */
-    private function readFile()
+    protected function readFile()
     {
         $content = @file_get_contents($this->filename);
 
@@ -180,26 +167,91 @@ class WebpackRequireAssetManager implements RequireAssetManagerInterface
      */
     protected function getAssetType($asset, array $availables, $type)
     {
-        if ('script' === $type) {
-            $type = 'js';
-        } elseif ('style' === $type) {
-            $type = 'css';
-        } elseif (null === $type) {
-            $oneAsset = 1 === count($availables);
-
-            if (in_array('css', $availables)) {
-                $type = 'css';
-            } elseif (in_array('js', $availables) && $oneAsset) {
-                $type = 'js';
-            } elseif ($oneAsset) {
-                $type = current($availables);
-            }
-        }
+        $type = null === $type
+            ? $this->findAssetType($availables)
+            : $this->formatAssetType($type);
 
         if (null !== $type) {
             return $type;
         }
 
         throw new InvalidArgumentException(sprintf('The asset type is required for the asset "%s"', $asset));
+    }
+
+    /**
+     * Format the asset type.
+     *
+     * @param string $type The asset type
+     *
+     * @return string
+     */
+    private function formatAssetType($type)
+    {
+        if ('script' === $type) {
+            $type = 'js';
+        } elseif ('style' === $type) {
+            $type = 'css';
+        }
+
+        return $type;
+    }
+
+    /**
+     * Find automatically the asset type.
+     *
+     * @param string[] $availables The available types
+     *
+     * @return string|null
+     */
+    private function findAssetType(array $availables)
+    {
+        $type = null;
+
+        if (in_array('css', $availables)) {
+            $type = 'css';
+        } elseif (1 === count($availables)) {
+            $type = current($availables);
+        }
+
+        return $type;
+    }
+
+    /**
+     * Get the cached content.
+     *
+     * @return CacheItemInterface|null
+     */
+    private function getCachedContent()
+    {
+        $item = null;
+
+        if (null !== $this->cache) {
+            $item = $this->cache->getItem($this->cacheKey);
+            $cacheContent = $item->get();
+
+            if ($item->isHit() && null !== $cacheContent) {
+                $this->contentCache = $cacheContent;
+            }
+        }
+
+        return $item;
+    }
+
+    /**
+     * Save the content in the cache and returns the content.
+     *
+     * @param CacheItemInterface|null $item    The cache item
+     * @param array                   $content The content
+     *
+     * @return array
+     */
+    private function saveContentInCache($item, array $content)
+    {
+        if (null !== $this->cache && null !== $item) {
+            $item->set($this->contentCache);
+            $this->cache->save($item);
+        }
+
+        return $content;
     }
 }
