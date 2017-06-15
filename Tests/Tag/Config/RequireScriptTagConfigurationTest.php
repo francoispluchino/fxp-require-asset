@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Tests\Tag\Config;
 
 use Fxp\Component\RequireAsset\Tag\Config\RequireScriptTagConfiguration;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
@@ -19,7 +20,7 @@ use Symfony\Component\Config\Definition\Processor;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireScriptTagConfigurationTest extends \PHPUnit_Framework_TestCase
+class RequireScriptTagConfigurationTest extends TestCase
 {
     public function testRequireScript()
     {

@@ -12,13 +12,14 @@
 namespace Fxp\Component\RequireAsset\Tests\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Config\AssetResource;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Asset Resource Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class AssetResourceTest extends \PHPUnit_Framework_TestCase
+class AssetResourceTest extends TestCase
 {
     /**
      * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidConfigurationException

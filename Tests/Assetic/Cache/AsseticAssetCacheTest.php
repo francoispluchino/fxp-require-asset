@@ -13,6 +13,7 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic\Cache;
 
 use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCache;
 use Fxp\Component\RequireAsset\Assetic\Cache\AsseticAssetCacheInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -20,7 +21,7 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class AsseticAssetCacheTest extends \PHPUnit_Framework_TestCase
+class AsseticAssetCacheTest extends TestCase
 {
     /**
      * @var AsseticAssetCacheInterface

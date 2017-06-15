@@ -14,13 +14,14 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic\Factory\Loader;
 use Assetic\Factory\Resource\ResourceInterface;
 use Fxp\Component\RequireAsset\Assetic\Factory\Loader\RequireAssetLoader;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Require Asset Loader Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireAssetLoaderTest extends \PHPUnit_Framework_TestCase
+class RequireAssetLoaderTest extends TestCase
 {
     public function testLoadWithRequireAssetResource()
     {

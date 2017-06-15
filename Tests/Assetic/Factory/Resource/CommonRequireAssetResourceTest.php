@@ -12,13 +12,14 @@
 namespace Fxp\Component\RequireAsset\Tests\Assetic\Factory\Resource;
 
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Common Require Asset Resource Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class CommonRequireAssetResourceTest extends \PHPUnit_Framework_TestCase
+class CommonRequireAssetResourceTest extends TestCase
 {
     public function testCommonRequireAssetResource()
     {

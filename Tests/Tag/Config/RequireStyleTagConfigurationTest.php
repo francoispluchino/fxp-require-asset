@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Tests\Tag\Config;
 
 use Fxp\Component\RequireAsset\Tag\Config\RequireStyleTagConfiguration;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
@@ -19,7 +20,7 @@ use Symfony\Component\Config\Definition\Processor;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireStyleTagConfigurationTest extends \PHPUnit_Framework_TestCase
+class RequireStyleTagConfigurationTest extends TestCase
 {
     public function testRequireStyle()
     {

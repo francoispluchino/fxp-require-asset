@@ -18,13 +18,14 @@ use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 use Fxp\Component\RequireAsset\Twig\Extension\CoreAssetExtension;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Abstract Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-abstract class AbstractAssetExtensionTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractAssetExtensionTest extends TestCase
 {
     /**
      * @var AssetExtension

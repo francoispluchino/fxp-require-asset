@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Tests\Webpack;
 
 use Fxp\Component\RequireAsset\Webpack\WebpackRequireAssetManager;
+use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -20,7 +21,7 @@ use Psr\Cache\CacheItemPoolInterface;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class WebpackRequireAssetManagerTest extends \PHPUnit_Framework_TestCase
+class WebpackRequireAssetManagerTest extends TestCase
 {
     /**
      * @var WebpackRequireAssetManager

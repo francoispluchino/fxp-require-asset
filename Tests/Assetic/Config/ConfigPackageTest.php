@@ -14,13 +14,14 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic\Config;
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackageInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtension;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Config Package Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class ConfigPackageTest extends \PHPUnit_Framework_TestCase
+class ConfigPackageTest extends TestCase
 {
     public function testBasic()
     {

@@ -12,13 +12,14 @@
 namespace Fxp\Component\RequireAsset\Tests\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Pattern Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class PatternManagerTest extends \PHPUnit_Framework_TestCase
+class PatternManagerTest extends TestCase
 {
     public function testBasic()
     {

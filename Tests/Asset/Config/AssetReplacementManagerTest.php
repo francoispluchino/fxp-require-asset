@@ -12,13 +12,14 @@
 namespace Fxp\Component\RequireAsset\Tests\Asset\Config;
 
 use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Require Locale Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class AssetReplacementManagerTest extends \PHPUnit_Framework_TestCase
+class AssetReplacementManagerTest extends TestCase
 {
     public function testBasic()
     {

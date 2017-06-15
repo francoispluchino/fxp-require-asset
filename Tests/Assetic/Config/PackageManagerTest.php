@@ -15,13 +15,14 @@ use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PackageManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Assetic Package Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class PackageManagerTest extends \PHPUnit_Framework_TestCase
+class PackageManagerTest extends TestCase
 {
     /**
      * @var FileExtensionManager

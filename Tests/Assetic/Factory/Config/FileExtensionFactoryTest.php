@@ -13,13 +13,14 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic\Factory\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtension;
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\FileExtensionFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * File Extension Factory Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class FileExtensionFactoryTest extends \PHPUnit_Framework_TestCase
+class FileExtensionFactoryTest extends TestCase
 {
     /**
      * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException

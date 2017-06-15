@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Tests\Config;
 
 use Fxp\Component\RequireAsset\Config\LocaleConfiguration;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
 
 /**
@@ -19,7 +20,7 @@ use Symfony\Component\Config\Definition\Processor;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class LocaleConfigurationTest extends \PHPUnit_Framework_TestCase
+class LocaleConfigurationTest extends TestCase
 {
     public function testLocale()
     {

@@ -14,13 +14,14 @@ namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Asset\RequireAssetManagerInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\RequireAssetExtension;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Abstract Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireAssetExtensionUrlTest extends \PHPUnit_Framework_TestCase
+class RequireAssetExtensionUrlTest extends TestCase
 {
     /**
      * @var RequireAssetExtension

@@ -12,13 +12,14 @@
 namespace Fxp\Component\RequireAsset\Tests\Assetic\Util;
 
 use Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * File Extension Utils Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class FileExtensionUtilsTest extends \PHPUnit_Framework_TestCase
+class FileExtensionUtilsTest extends TestCase
 {
     public function testCreateByConfig()
     {

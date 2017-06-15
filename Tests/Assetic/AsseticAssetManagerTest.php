@@ -29,6 +29,7 @@ use Fxp\Component\RequireAsset\Assetic\Config\PatternManager;
 use Fxp\Component\RequireAsset\Assetic\Config\PatternManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource;
 use Fxp\Component\RequireAsset\Tests\Assetic\Config\PackageTest;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -36,7 +37,7 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class AsseticAssetManagerTest extends \PHPUnit_Framework_TestCase
+class AsseticAssetManagerTest extends TestCase
 {
     /**
      * @var AssetFactory

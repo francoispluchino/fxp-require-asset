@@ -13,6 +13,7 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
 use Fxp\Component\RequireAsset\Assetic\Config\Package;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -21,7 +22,7 @@ use Symfony\Component\Finder\SplFileInfo;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class PackageTest extends \PHPUnit_Framework_TestCase
+class PackageTest extends TestCase
 {
     public function tearDown()
     {

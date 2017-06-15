@@ -13,13 +13,14 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Config\AsseticConfigResources;
 use Fxp\Component\RequireAsset\Assetic\Util\AssetResourceUtils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Assetic Config Resources Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class AsseticConfigResourcesTest extends \PHPUnit_Framework_TestCase
+class AsseticConfigResourcesTest extends TestCase
 {
     public function testGetResource()
     {

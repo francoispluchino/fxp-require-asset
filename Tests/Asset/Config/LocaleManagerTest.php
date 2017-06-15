@@ -12,13 +12,14 @@
 namespace Fxp\Component\RequireAsset\Tests\Asset\Config;
 
 use Fxp\Component\RequireAsset\Asset\Config\LocaleManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Require Locale Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class LocaleManagerTest extends \PHPUnit_Framework_TestCase
+class LocaleManagerTest extends TestCase
 {
     public function testBasicWithoutAsset()
     {

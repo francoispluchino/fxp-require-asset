@@ -14,13 +14,14 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic;
 use Assetic\Asset\AssetInterface;
 use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Assetic\AsseticRequireAssetManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Assetic Require Asset Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class AsseticRequireAssetManagerTest extends \PHPUnit_Framework_TestCase
+class AsseticRequireAssetManagerTest extends TestCase
 {
     /**
      * @var LazyAssetManager|\PHPUnit_Framework_MockObject_MockObject

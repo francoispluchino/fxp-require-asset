@@ -12,13 +12,14 @@
 namespace Fxp\Component\RequireAsset\Tests\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Config\OutputManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Output Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class OutputManagerTest extends \PHPUnit_Framework_TestCase
+class OutputManagerTest extends TestCase
 {
     public function testBasic()
     {

@@ -13,13 +13,14 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic\Config;
 
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtension;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtensionManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * File Extension Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class FileExtensionManagerTest extends \PHPUnit_Framework_TestCase
+class FileExtensionManagerTest extends TestCase
 {
     public function testBasic()
     {

@@ -20,6 +20,7 @@ use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 use Fxp\Component\RequireAsset\Assetic\Factory\Loader\RequireAssetLoader;
 use Fxp\Component\RequireAsset\Assetic\Factory\Resource\RequireAssetResource;
 use Fxp\Component\RequireAsset\Assetic\Filter\RequireCssRewriteFilter;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -27,7 +28,7 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
+class RequireCssRewriteFilterTest extends TestCase
 {
     /**
      * @var AssetFactory
@@ -78,14 +79,14 @@ class RequireCssRewriteFilterTest extends \PHPUnit_Framework_TestCase
         /* @var AssetInterface $asset */
         $asset = $this->getMockBuilder('Assetic\Asset\AssetInterface')->getMock();
 
-        $this->rcrf->filterLoad($asset);
+        $this->assertNull($this->rcrf->filterLoad($asset));
     }
 
     public function testFilterDumpWithoutAsseticResource()
     {
         $asset = new FileAsset($this->getCacheDir().'/foobar/asset.css');
 
-        $this->rcrf->filterDump($asset);
+        $this->assertNull($this->rcrf->filterDump($asset));
     }
 
     public function getDataForFilterDump()

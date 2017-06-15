@@ -12,13 +12,14 @@
 namespace Fxp\Component\RequireAsset\Tests\Assetic\Util;
 
 use Fxp\Component\RequireAsset\Assetic\Util\ResourceUtils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Resource Utils Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class ResourceUtilsTest extends \PHPUnit_Framework_TestCase
+class ResourceUtilsTest extends TestCase
 {
     public function getDebugMode()
     {

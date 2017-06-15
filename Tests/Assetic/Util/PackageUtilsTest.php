@@ -13,13 +13,14 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic\Util;
 
 use Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Util\PackageUtils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Package Utils Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class PackageUtilsTest extends \PHPUnit_Framework_TestCase
+class PackageUtilsTest extends TestCase
 {
     public function testGetPackagePaths()
     {

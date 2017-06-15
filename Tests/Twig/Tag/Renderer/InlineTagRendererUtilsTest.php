@@ -12,13 +12,14 @@
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Fxp\Component\RequireAsset\Twig\Tag\Renderer\InlineTagRendererUtils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Inline Tag Renderer Utils Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class InlineTagRendererUtilsTest extends \PHPUnit_Framework_TestCase
+class InlineTagRendererUtilsTest extends TestCase
 {
     /**
      * @expectedException \Fxp\Component\RequireAsset\Exception\Twig\BodyTagRendererException

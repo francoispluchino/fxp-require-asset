@@ -13,13 +13,14 @@ namespace Fxp\Component\RequireAsset\Tests\Assetic\Filter;
 
 use Assetic\Asset\StringAsset;
 use Fxp\Component\RequireAsset\Assetic\Filter\LessVariableFilter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Less Variable Filter Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class LessVariableFilterTest extends \PHPUnit_Framework_TestCase
+class LessVariableFilterTest extends TestCase
 {
     public function testGetContent()
     {

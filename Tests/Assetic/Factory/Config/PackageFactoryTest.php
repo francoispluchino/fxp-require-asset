@@ -15,13 +15,14 @@ use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackage;
 use Fxp\Component\RequireAsset\Assetic\Config\ConfigPackageInterface;
 use Fxp\Component\RequireAsset\Assetic\Config\FileExtension;
 use Fxp\Component\RequireAsset\Assetic\Factory\Config\PackageFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Package Factory Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class PackageFactoryTest extends \PHPUnit_Framework_TestCase
+class PackageFactoryTest extends TestCase
 {
     public function getCreateMethod()
     {

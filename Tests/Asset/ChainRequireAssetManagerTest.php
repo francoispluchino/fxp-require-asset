@@ -13,13 +13,14 @@ namespace Fxp\Component\RequireAsset\Tests\Asset;
 
 use Fxp\Component\RequireAsset\Asset\ChainRequireAssetManager;
 use Fxp\Component\RequireAsset\Asset\RequireAssetManagerInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Require Locale Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class ChainRequireAssetManagerTest extends \PHPUnit_Framework_TestCase
+class ChainRequireAssetManagerTest extends TestCase
 {
     /**
      * @var RequireAssetManagerInterface|\PHPUnit_Framework_MockObject_MockObject

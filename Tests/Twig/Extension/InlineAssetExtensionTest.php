@@ -25,7 +25,7 @@ class InlineAssetExtensionTest extends AbstractAssetExtensionTest
      */
     public function testEmptyBody($tag)
     {
-        $this->getTemplate($tag, 'empty_body.html.twig');
+        $this->assertInstanceOf(\Twig_TemplateWrapper::class, $this->getTemplate($tag, 'empty_body.html.twig'));
     }
 
     /**
