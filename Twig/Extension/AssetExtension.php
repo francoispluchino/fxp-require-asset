@@ -24,7 +24,6 @@ use Fxp\Component\RequireAsset\Twig\TokenParser\InlineScriptTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\InlineStyleTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\RequireScriptTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\RequireStyleTokenParser;
-use Fxp\Component\RequireAsset\Twig\TwigFunction\TagPositionFunction;
 
 /**
  * AssetExtension extends Twig with global assets rendering capabilities.
@@ -72,11 +71,11 @@ class AssetExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new TagPositionFunction('inlineScriptsPosition', array($this, 'createTagPosition'), array('category' => 'inline',  'type' => 'script')),
-            new TagPositionFunction('inlineStylesPosition', array($this, 'createTagPosition'), array('category' => 'inline',  'type' => 'style')),
-            new TagPositionFunction('requireScriptsPosition', array($this, 'createTagPosition'), array('category' => 'require', 'type' => 'script')),
-            new TagPositionFunction('requireStylesPosition', array($this, 'createTagPosition'), array('category' => 'require', 'type' => 'style')),
-            new \Twig_SimpleFunction('renderAssetTags', array($this, 'renderTags'), array('is_safe' => array('html'))),
+            $this->createTagPositionFunction('inlineScriptsPosition', array('category' => 'inline',  'type' => 'script')),
+            $this->createTagPositionFunction('inlineStylesPosition', array('category' => 'inline',  'type' => 'style')),
+            $this->createTagPositionFunction('requireScriptsPosition', array('category' => 'require',  'type' => 'script')),
+            $this->createTagPositionFunction('requireStylesPosition', array('category' => 'require',  'type' => 'style')),
+            new \Twig_Function('renderAssetTags', array($this, 'renderTags'), array('is_safe' => array('html'))),
         );
     }
 
@@ -371,5 +370,32 @@ class AssetExtension extends \Twig_Extension
             : '<!--%s-->';
 
         return sprintf($pattern, '#tag-position:'.$name.':'.spl_object_hash($this).'#');
+    }
+
+    /**
+     * Create the tag position twig function.
+     *
+     * @param string $name    The name of function
+     * @param array  $options The options of function
+     *
+     * @return \Twig_Function
+     */
+    private function createTagPositionFunction($name, array $options)
+    {
+        $options = array_merge($options, array(
+            'node_class' => 'Fxp\Component\RequireAsset\Twig\Node\TagPositionFunctionNode',
+            'is_safe' => array('html'),
+            'category' => null,
+            'type' => null,
+        ), $options);
+        $callable = array($this, 'createTagPosition');
+
+        $tagPosition = new \Twig_Function($name, $callable, $options);
+        $tagPosition->setArguments(array(
+            $options['category'],
+            $options['type'],
+        ));
+
+        return $tagPosition;
     }
 }
