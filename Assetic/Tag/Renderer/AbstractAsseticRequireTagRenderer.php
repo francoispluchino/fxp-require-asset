@@ -86,12 +86,13 @@ abstract class AbstractAsseticRequireTagRenderer extends BaseRequireTagRenderer
      */
     protected function doRender(RequireTagInterface $tag, $assetName, AssetInterface $asset = null)
     {
+        $type = $tag->getType();
         $output = '';
 
-        if ($this->canBeRendered($assetName)) {
+        if ($this->canBeRendered($assetName, $type)) {
             $asset = null !== $asset ? $asset : $this->manager->get($assetName);
             $attributes = $this->prepareAttributes($tag, $asset);
-            $this->assetRendered($assetName);
+            $this->assetRendered($assetName, $type);
 
             $output = RequireUtil::renderHtmlTag($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
         }
@@ -151,13 +152,14 @@ abstract class AbstractAsseticRequireTagRenderer extends BaseRequireTagRenderer
      * Indicate the asset is rendered.
      *
      * @param array|string $assets The asset name or list of asset name
+     * @param string       $type   The require tag type
      */
-    protected function assetRendered($assets)
+    protected function assetRendered($assets, $type)
     {
         $assets = (array) $assets;
 
         foreach ($assets as $asset) {
-            $this->renderedTags[] = AssetUtils::formatName($asset);
+            $this->renderedTags[] = $type.'::'.AssetUtils::formatName($asset);
         }
     }
 }

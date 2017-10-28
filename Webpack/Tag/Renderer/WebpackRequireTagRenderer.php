@@ -60,7 +60,7 @@ class WebpackRequireTagRenderer extends BaseRequireTagRenderer
     {
         /* @var RequireTagInterface $tag */
 
-        return $this->canBeRendered($tag->getAssetName())
+        return $this->canBeRendered($tag->getAssetName(), $tag->getType())
             ? $this->preRender($tag)
             : '';
     }
@@ -117,11 +117,12 @@ class WebpackRequireTagRenderer extends BaseRequireTagRenderer
      */
     protected function doRender(RequireTagInterface $tag, $assetName)
     {
+        $type = $tag->getType();
         $output = '';
 
-        if ($this->canBeRendered($assetName)) {
+        if ($this->canBeRendered($assetName, $type)) {
             $attributes = $this->prepareAttributes($tag, $assetName);
-            $this->assetRendered($assetName);
+            $this->assetRendered($assetName, $type);
 
             $output = RequireUtil::renderHtmlTag($attributes, $tag->getHtmlTag(), $tag->shortEndTag());
         }
@@ -173,7 +174,7 @@ class WebpackRequireTagRenderer extends BaseRequireTagRenderer
      */
     protected function isNonExistentOptionalTag(RequireTagInterface $tag)
     {
-        if (!$this->manager->has($tag->getPath())) {
+        if (!$this->manager->has($tag->getPath(), $tag->getType())) {
             if ($tag->isOptional()) {
                 return true;
             } else {
@@ -188,13 +189,14 @@ class WebpackRequireTagRenderer extends BaseRequireTagRenderer
      * Indicate the asset is rendered.
      *
      * @param array|string $assets The asset name or list of asset name
+     * @param string       $type   The require tag type
      */
-    protected function assetRendered($assets)
+    protected function assetRendered($assets, $type)
     {
         $assets = (array) $assets;
 
         foreach ($assets as $asset) {
-            $this->renderedTags[] = $asset;
+            $this->renderedTags[] = $type.'::'.$asset;
         }
     }
 }

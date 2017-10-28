@@ -71,11 +71,12 @@ abstract class BaseRequireTagRenderer implements RequireTagRendererInterface
      * Check if the asset can be rendered.
      *
      * @param string $assetName The asset name
+     * @param string $type      The require tag type
      *
      * @return bool
      */
-    protected function canBeRendered($assetName)
+    protected function canBeRendered($assetName, $type)
     {
-        return !in_array($assetName, $this->renderedTags);
+        return !in_array($type.'::'.$assetName, $this->renderedTags);
     }
 }

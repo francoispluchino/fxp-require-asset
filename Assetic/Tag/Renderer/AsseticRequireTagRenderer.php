@@ -52,7 +52,7 @@ class AsseticRequireTagRenderer extends AbstractAsseticRequireTagRenderer
     {
         /* @var RequireTagInterface $tag */
 
-        return $this->canBeRendered($tag->getAssetName())
+        return $this->canBeRendered($tag->getAssetName(), $tag->getType())
             ? $this->preRender($tag)
             : '';
     }
@@ -191,12 +191,13 @@ class AsseticRequireTagRenderer extends AbstractAsseticRequireTagRenderer
      */
     protected function preRenderProd(RequireTagInterface $tag)
     {
+        $type = $tag->getType();
         $output = $this->doRender($tag, $tag->getAssetName());
-        $this->assetRendered($tag->getInputs());
+        $this->assetRendered($tag->getInputs(), $type);
 
         $output .= $this->preRenderLocalized($tag, $tag->getPath());
         foreach ($tag->getInputs() as $input) {
-            $this->assetRendered($this->getLocalizedAssets($input));
+            $this->assetRendered($this->getLocalizedAssets($input), $type);
         }
 
         $output .= $this->includeMissingLocalizedAssets($tag, !$this->manager->isDebug());
