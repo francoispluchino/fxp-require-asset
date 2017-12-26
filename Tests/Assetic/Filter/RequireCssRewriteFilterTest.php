@@ -112,11 +112,11 @@ class RequireCssRewriteFilterTest extends TestCase
         $this->lam->setLoader('requireassetloader', new RequireAssetLoader());
         $fixtures = array(
             'foobar/static/img/bg.jpg' => array(
-                'target' => 'web/assets/img/bg.jpg',
+                'target' => '/web/assets/img/bg.jpg',
                 'content' => '',
             ),
             'foobar/src/css/asset.css' => array(
-                'target' => 'web/assets/css/asset.css',
+                'target' => '/web/assets/css/asset.css',
                 'content' => sprintf($cssContent, $sourceUrl),
             ),
         );
@@ -162,11 +162,11 @@ class RequireCssRewriteFilterTest extends TestCase
         $this->lam->setLoader('requireassetloader', new RequireAssetLoader());
         $fixtures = array(
             'https://foobar.tld/foobar/static/img/bg.jpg' => array(
-                'target' => 'web/assets/img/bg.jpg',
+                'target' => '/web/assets/img/bg.jpg',
                 'content' => '',
             ),
             'https://foobar.tld/foobar/src/css/asset.css' => array(
-                'target' => 'web/assets/css/asset.css',
+                'target' => '/web/assets/css/asset.css',
                 'content' => sprintf($cssContent, $sourceUrl),
             ),
         );
@@ -211,7 +211,7 @@ class RequireCssRewriteFilterTest extends TestCase
         $this->lam->setLoader('requireassetloader', new RequireAssetLoader());
         $fixtures = array(
             'https://foobar.tld/foobar/src/css/asset.css' => array(
-                'target' => 'web/assets/css/asset.css',
+                'target' => '/web/assets/css/asset.css',
                 'content' => sprintf($cssContent, $sourceUrl),
             ),
         );

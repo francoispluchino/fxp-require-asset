@@ -14,10 +14,10 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.0.0",
-        "symfony/filesystem": "^3.3.0",
-        "symfony/finder": "^3.3.0",
-        "symfony/config": "^3.3.0"
+        "php": "^7.1.0",
+        "symfony/filesystem": "^3.4.0|^4.0.0",
+        "symfony/finder": "^3.4.0|^4.0.0",
+        "symfony/config": "^3.4.0|^4.0.0"
     },
     "require-dev": {
         "twig/twig": "^2.4.0",
