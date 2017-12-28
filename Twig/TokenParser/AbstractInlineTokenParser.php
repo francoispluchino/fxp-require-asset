@@ -59,7 +59,7 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
         $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
         $name = uniqid($this->getTag());
-        $body = $this->parser->subparse(array($this, 'decideBlockEnd'), true);
+        $body = $this->parser->subparse([$this, 'decideBlockEnd'], true);
 
         if (!$attributes['keep_html_tag']) {
             $this->removeHtmlTag($body, $lineno);
@@ -110,7 +110,7 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
     protected function removeHtmlTag(\Twig_Node $body, $lineno)
     {
         if (0 === count($body)) {
-            $body = new \Twig_Node(array($body), array(), $lineno);
+            $body = new \Twig_Node([$body], [], $lineno);
         }
 
         $this->removeTagContent($body, 0, '/(|\ \\t|\\n|\\n\ \\t)<([a-zA-Z0-9]+)[a-zA-Z\=\'\"\ \/]+>(\\n?|\\r?)/');

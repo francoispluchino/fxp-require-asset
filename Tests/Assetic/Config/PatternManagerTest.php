@@ -26,10 +26,10 @@ class PatternManagerTest extends TestCase
         $pm = new PatternManager();
 
         $pm->addDefaultPattern('pattern1/*');
-        $pm->addDefaultPatterns(array(
+        $pm->addDefaultPatterns([
             'pattern2/*',
             'pattern3/*',
-        ));
+        ]);
 
         $this->assertTrue($pm->hasDefaultPattern('pattern1/*'));
         $this->assertTrue($pm->hasDefaultPattern('pattern2/*'));
@@ -42,10 +42,10 @@ class PatternManagerTest extends TestCase
         $this->assertFalse($pm->hasDefaultPattern('pattern2/*'));
         $this->assertTrue($pm->hasDefaultPattern('pattern3/*'));
 
-        $valid = array(
+        $valid = [
             'pattern1/*',
             'pattern3/*',
-        );
+        ];
         $this->assertSame($valid, $pm->getDefaultPatterns());
     }
 
@@ -55,7 +55,7 @@ class PatternManagerTest extends TestCase
     public function testAddDefaultPatternWithLockedManager()
     {
         $pm = new PatternManager();
-        $this->assertSame(array(), $pm->getDefaultPatterns());
+        $this->assertSame([], $pm->getDefaultPatterns());
 
         $pm->addDefaultPattern('pattern');
     }
@@ -66,9 +66,9 @@ class PatternManagerTest extends TestCase
     public function testAddDefaultPatternsWithLockedManager()
     {
         $pm = new PatternManager();
-        $this->assertSame(array(), $pm->getDefaultPatterns());
+        $this->assertSame([], $pm->getDefaultPatterns());
 
-        $pm->addDefaultPatterns(array('pattern'));
+        $pm->addDefaultPatterns(['pattern']);
     }
 
     /**
@@ -77,7 +77,7 @@ class PatternManagerTest extends TestCase
     public function testAddRemovePatternWithLockedManager()
     {
         $pm = new PatternManager();
-        $this->assertSame(array(), $pm->getDefaultPatterns());
+        $this->assertSame([], $pm->getDefaultPatterns());
 
         $pm->removeDefaultPattern('pattern');
     }

@@ -37,7 +37,7 @@ abstract class PackageFactory
      *
      * @throws InvalidArgumentException When the "name" key does not exist
      */
-    public static function create(array $config = array(), array $defaultExts = array(), array $defaultPatterns = array())
+    public static function create(array $config = [], array $defaultExts = [], array $defaultPatterns = [])
     {
         $configPackage = static::createConfig($config, $defaultExts, $defaultPatterns);
 
@@ -55,7 +55,7 @@ abstract class PackageFactory
      *
      * @throws InvalidArgumentException When the "name" key does not exist
      */
-    public static function createConfig(array $config = array(), array $defaultExts = array(), array $defaultPatterns = array())
+    public static function createConfig(array $config = [], array $defaultExts = [], array $defaultPatterns = [])
     {
         if (!isset($config['name'])) {
             throw new InvalidArgumentException('The key "name" of package config must be present');
@@ -84,13 +84,13 @@ abstract class PackageFactory
      *
      * @return ConfigPackageInterface The new instance with merged config
      */
-    public static function merge(array $packages, array $defaultExts = array(), array $defaultPatterns = array())
+    public static function merge(array $packages, array $defaultExts = [], array $defaultPatterns = [])
     {
         $nodeConfig = PackageConfiguration::getNode();
-        $configs = array();
+        $configs = [];
 
         foreach ($packages as $package) {
-            $configs[] = array($package->getName() => static::convertToArray($package));
+            $configs[] = [$package->getName() => static::convertToArray($package)];
         }
 
         $config = Utils::mergeConfigs($nodeConfig, $configs);
@@ -108,9 +108,9 @@ abstract class PackageFactory
      */
     public static function convertToArray(ConfigPackageInterface $package, $allFields = false)
     {
-        $value = array(
+        $value = [
             'name' => $package->getName(),
-        );
+        ];
 
         Utils::addStringField($value, 'source_path', $package, 'getSourcePath', $allFields);
         Utils::addStringField($value, 'source_base', $package, 'getSourceBase', $allFields);
@@ -118,7 +118,7 @@ abstract class PackageFactory
         Utils::addBoolField($value, 'replace_default_patterns', $package, 'replaceDefaultPatterns', true, $allFields);
 
         if ($allFields || count($package->getExtensions()) > 0) {
-            $value['extensions'] = array();
+            $value['extensions'] = [];
 
             foreach ($package->getExtensions() as $extension) {
                 $extConfig = FileExtensionFactory::convertToArray($extension);
@@ -142,7 +142,7 @@ abstract class PackageFactory
     protected static function formatExtensionConfig($extName, $confExt)
     {
         if (is_string($confExt)) {
-            $confExt = array('name' => $confExt);
+            $confExt = ['name' => $confExt];
         } elseif (!array_key_exists('name', $confExt)) {
             $confExt['name'] = $extName;
         }
@@ -188,7 +188,7 @@ abstract class PackageFactory
      * @param string                 $addMethod The method name for add default config
      * @param array                  $defaults  The list default value of config
      */
-    protected static function addDefaultConfig(ConfigPackageInterface $package, $method, $addMethod, array $defaults = array())
+    protected static function addDefaultConfig(ConfigPackageInterface $package, $method, $addMethod, array $defaults = [])
     {
         if (!$package->$method()) {
             foreach ($defaults as $default) {

@@ -25,40 +25,40 @@ class LocaleConfigurationTest extends TestCase
     public function testLocale()
     {
         $process = new Processor();
-        $configs = array(
-            array(
-                'en_US' => array(
-                    '@asset/source/path.ext' => array(
+        $configs = [
+            [
+                'en_US' => [
+                    '@asset/source/path.ext' => [
                         '@asset/source/locale/path-en-us.ext',
-                    ),
-                ),
-                'fr' => array(
+                    ],
+                ],
+                'fr' => [
                     '@asset/source/path.ext' => '@asset/source/locale/path-fr.ext',
-                ),
-            ),
-            array(
-                'en' => array(
+                ],
+            ],
+            [
+                'en' => [
                     '@asset/source/path.ext' => '@asset/source/locale/path-en.ext',
-                ),
-            ),
-        );
-        $validConfig = array(
-            'en_US' => array(
-                '@asset/source/path.ext' => array(
+                ],
+            ],
+        ];
+        $validConfig = [
+            'en_US' => [
+                '@asset/source/path.ext' => [
                     '@asset/source/locale/path-en-us.ext',
-                ),
-            ),
-            'fr' => array(
-                '@asset/source/path.ext' => array(
+                ],
+            ],
+            'fr' => [
+                '@asset/source/path.ext' => [
                     '@asset/source/locale/path-fr.ext',
-                ),
-            ),
-            'en' => array(
-                '@asset/source/path.ext' => array(
+                ],
+            ],
+            'en' => [
+                '@asset/source/path.ext' => [
                     '@asset/source/locale/path-en.ext',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $res = $process->process(LocaleConfiguration::getNode(), $configs);
 

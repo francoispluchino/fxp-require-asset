@@ -32,10 +32,10 @@ class AsseticAssetManager extends AbstractAsseticAssetManager
     /**
      * {@inheritdoc}
      */
-    public function addCommonAsset($name, array $inputs, $targetPath, array $filters = array(), array $options = array())
+    public function addCommonAsset($name, array $inputs, $targetPath, array $filters = [], array $options = [])
     {
         $classname = 'Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource';
-        $args = array($name, $inputs, $this->convertTargetPath($targetPath), $filters, $options);
+        $args = [$name, $inputs, $this->convertTargetPath($targetPath), $filters, $options];
         $resource = AssetResourceUtils::createAssetResource($name, $classname, $args, 0);
 
         $this->commons[AssetUtils::formatName($name)] = $resource;
@@ -110,7 +110,7 @@ class AsseticAssetManager extends AbstractAsseticAssetManager
      */
     protected function addConfigAsseticResources(array $configResources, LazyAssetManager $assetManager)
     {
-        $asseticResources = array();
+        $asseticResources = [];
 
         foreach ($configResources as $configResource) {
             $resource = $configResource->getNewInstance();
@@ -152,7 +152,7 @@ class AsseticAssetManager extends AbstractAsseticAssetManager
             } else {
                 $name = substr($commonName, 0, strrpos($commonName, '__'));
                 $locale = substr($commonName, strrpos($commonName, '__') + 2);
-                $this->getLocaleManager()->addLocalizedAsset($name, $locale, array($resource->getPrettyName()));
+                $this->getLocaleManager()->addLocalizedAsset($name, $locale, [$resource->getPrettyName()]);
             }
         }
     }

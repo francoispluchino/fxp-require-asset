@@ -27,10 +27,10 @@ class FileExtensionManagerTest extends TestCase
         $fem = new FileExtensionManager();
 
         $fem->addDefaultExtension('ext1');
-        $fem->addDefaultExtensions(array(
+        $fem->addDefaultExtensions([
             'ext2',
             'ext3',
-        ));
+        ]);
 
         $this->assertTrue($fem->hasDefaultExtension('ext1'));
         $this->assertTrue($fem->hasDefaultExtension('ext2'));
@@ -43,10 +43,10 @@ class FileExtensionManagerTest extends TestCase
         $this->assertFalse($fem->hasDefaultExtension('ext2'));
         $this->assertTrue($fem->hasDefaultExtension('ext3'));
 
-        $valid = array(
+        $valid = [
             'ext1' => new FileExtension('ext1'),
             'ext3' => new FileExtension('ext3'),
-        );
+        ];
         $this->assertEquals($valid, $fem->getDefaultExtensions());
         $this->assertEquals($valid['ext1'], $fem->getDefaultExtension('ext1'));
         $this->assertEquals($valid['ext3'], $fem->getDefaultExtension('ext3'));
@@ -56,15 +56,15 @@ class FileExtensionManagerTest extends TestCase
     {
         $fem = new FileExtensionManager();
 
-        $fem->addDefaultExtensions(array(
-            'ext1' => array(),
-            'ext2' => array(),
-        ));
+        $fem->addDefaultExtensions([
+            'ext1' => [],
+            'ext2' => [],
+        ]);
 
-        $valid = array(
+        $valid = [
             'ext1' => new FileExtension('ext1'),
             'ext2' => new FileExtension('ext2'),
-        );
+        ];
         $this->assertEquals($valid, $fem->getDefaultExtensions());
     }
 
@@ -74,7 +74,7 @@ class FileExtensionManagerTest extends TestCase
     public function testAddDefaultFileExtensionWithLockedManager()
     {
         $fem = new FileExtensionManager();
-        $this->assertSame(array(), $fem->getDefaultExtensions());
+        $this->assertSame([], $fem->getDefaultExtensions());
 
         $fem->addDefaultExtension('fileextension');
     }
@@ -85,9 +85,9 @@ class FileExtensionManagerTest extends TestCase
     public function testAddDefaultFileExtensionsWithLockedManager()
     {
         $fem = new FileExtensionManager();
-        $this->assertSame(array(), $fem->getDefaultExtensions());
+        $this->assertSame([], $fem->getDefaultExtensions());
 
-        $fem->addDefaultExtensions(array('fileextension'));
+        $fem->addDefaultExtensions(['fileextension']);
     }
 
     /**
@@ -96,7 +96,7 @@ class FileExtensionManagerTest extends TestCase
     public function testRemoveDefaultFileExtensionWithLockedManager()
     {
         $fem = new FileExtensionManager();
-        $this->assertSame(array(), $fem->getDefaultExtensions());
+        $this->assertSame([], $fem->getDefaultExtensions());
 
         $fem->removeDefaultExtension('fileextension');
     }

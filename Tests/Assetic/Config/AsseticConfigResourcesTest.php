@@ -27,11 +27,11 @@ class AsseticConfigResourcesTest extends TestCase
         $configs = new AsseticConfigResources();
         $name = '@asset/path.ext';
         $classname = 'Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource';
-        $inputs = array($name);
+        $inputs = [$name];
         $targetPath = 'target.ext';
-        $filters = array();
-        $options = array();
-        $args = array($name, $inputs, $targetPath, $filters, $options);
+        $filters = [];
+        $options = [];
+        $args = [$name, $inputs, $targetPath, $filters, $options];
 
         $resource = AssetResourceUtils::createAssetResource($name, $classname, $args, 0);
 

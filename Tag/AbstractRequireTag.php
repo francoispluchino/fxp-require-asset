@@ -52,7 +52,7 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
      * @param int         $lineno     The template line
      * @param string|null $name       The template logical name
      */
-    public function __construct($assetPath, array $attributes = array(), $position = null, $lineno = -1, $name = null)
+    public function __construct($assetPath, array $attributes = [], $position = null, $lineno = -1, $name = null)
     {
         parent::__construct($position, $lineno, $name);
 
@@ -61,7 +61,7 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
         $this->assetPath = $assetPath;
         $this->assetName = AssetUtils::formatName($assetPath);
         $this->attributes = $attributes;
-        $this->inputs = array();
+        $this->inputs = [];
     }
 
     /**

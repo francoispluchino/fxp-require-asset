@@ -26,10 +26,10 @@ class OutputManagerTest extends TestCase
         $om = new OutputManager('assets-test');
 
         $om->addOutputPattern('inpattern1', 'outpattern1');
-        $om->addOutputPatterns(array(
+        $om->addOutputPatterns([
             'inpattern2' => 'outpattern2',
             'inpattern3' => 'outpattern3',
-        ));
+        ]);
 
         $this->assertTrue($om->hasOutputPattern('inpattern1'));
         $this->assertTrue($om->hasOutputPattern('inpattern2'));
@@ -42,41 +42,41 @@ class OutputManagerTest extends TestCase
         $this->assertFalse($om->hasOutputPattern('inpattern2'));
         $this->assertTrue($om->hasOutputPattern('inpattern3'));
 
-        $valid = array(
+        $valid = [
             'inpattern1' => 'outpattern1',
             'inpattern3' => 'outpattern3',
-        );
+        ];
         $this->assertSame($valid, $om->getOutputPatterns());
     }
 
     public function getDataForConvertOutput()
     {
-        return array(
-            array('package/asset.js', 'assets-test/package/asset.js', array(
-            )),
-            array('package/asset.js', 'assets-test/package/asset.js', array(
+        return [
+            ['package/asset.js', 'assets-test/package/asset.js', [
+            ]],
+            ['package/asset.js', 'assets-test/package/asset.js', [
                 '*' => '*',
-            )),
-            array('package/asset.js', 'assets-test/asset.js', array(
+            ]],
+            ['package/asset.js', 'assets-test/asset.js', [
                 'package/*' => '*',
-            )),
-            array('package/less/asset.css', 'assets-test/package/css/asset.css', array(
+            ]],
+            ['package/less/asset.css', 'assets-test/package/css/asset.css', [
                 '*/less/*' => '*/css/*',
-            )),
-            array('package/less/asset.css', 'assets-test/css/asset.css', array(
+            ]],
+            ['package/less/asset.css', 'assets-test/css/asset.css', [
                 '*/less/*' => '*/css/*',
                 'package/css/*' => 'css/*',
-            )),
-            array('package/fonts/font-name-regular.ttf', 'assets-test/fonts/font-name.ttf', array(
+            ]],
+            ['package/fonts/font-name-regular.ttf', 'assets-test/fonts/font-name.ttf', [
                 'package/fonts/font-name-regular.*' => 'fonts/font-name.*',
-            )),
-            array('package/asset/asset-file.css', 'assets-test/css/asset-file.css', array(
+            ]],
+            ['package/asset/asset-file.css', 'assets-test/css/asset-file.css', [
                 'package/asset/*.css' => 'css/$0.css',
-            )),
-            array('package/asset/asset-file.css', 'assets-test/css/asset-file.css', array(
+            ]],
+            ['package/asset/asset-file.css', 'assets-test/css/asset-file.css', [
                 'package/*/*.css' => 'css/$1.css',
-            )),
-        );
+            ]],
+        ];
     }
 
     /**

@@ -30,8 +30,8 @@ class AsseticRequireTagRenderer extends AbstractAsseticRequireTagRenderer
      */
     public function order(array $tags)
     {
-        $commons = array();
-        $singles = array();
+        $commons = [];
+        $singles = [];
 
         /* @var RequireTagInterface $tag */
         foreach ($tags as $tag) {

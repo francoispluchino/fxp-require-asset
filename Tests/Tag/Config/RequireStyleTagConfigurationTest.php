@@ -25,16 +25,16 @@ class RequireStyleTagConfigurationTest extends TestCase
     public function testRequireStyle()
     {
         $process = new Processor();
-        $configs = array(
-            array(
+        $configs = [
+            [
                 'position' => 'head',
-            ),
-            array(
+            ],
+            [
                 'media' => 'all',
                 'hreflang' => 'en',
-            ),
-        );
-        $validConfig = array(
+            ],
+        ];
+        $validConfig = [
             'position' => 'head',
             'media' => 'all',
             'hreflang' => 'en',
@@ -42,7 +42,7 @@ class RequireStyleTagConfigurationTest extends TestCase
             'rel' => 'stylesheet',
             'type' => null,
             'sizes' => null,
-        );
+        ];
 
         $res = $process->process(RequireStyleTagConfiguration::getNode(), $configs);
 

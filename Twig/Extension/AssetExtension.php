@@ -60,9 +60,9 @@ class AssetExtension extends \Twig_Extension
     public function __construct(AssetReplacementManagerInterface $replacementManager = null)
     {
         $this->replacementManager = $replacementManager;
-        $this->renderers = array();
-        $this->contents = array();
-        $this->tagPositions = array();
+        $this->renderers = [];
+        $this->contents = [];
+        $this->tagPositions = [];
     }
 
     /**
@@ -70,13 +70,13 @@ class AssetExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-            $this->createTagPositionFunction('inlineScriptsPosition', array('category' => 'inline',  'type' => 'script')),
-            $this->createTagPositionFunction('inlineStylesPosition', array('category' => 'inline',  'type' => 'style')),
-            $this->createTagPositionFunction('requireScriptsPosition', array('category' => 'require',  'type' => 'script')),
-            $this->createTagPositionFunction('requireStylesPosition', array('category' => 'require',  'type' => 'style')),
-            new \Twig_Function('renderAssetTags', array($this, 'renderTags'), array('is_safe' => array('html'))),
-        );
+        return [
+            $this->createTagPositionFunction('inlineScriptsPosition', ['category' => 'inline',  'type' => 'script']),
+            $this->createTagPositionFunction('inlineStylesPosition', ['category' => 'inline',  'type' => 'style']),
+            $this->createTagPositionFunction('requireScriptsPosition', ['category' => 'require',  'type' => 'script']),
+            $this->createTagPositionFunction('requireStylesPosition', ['category' => 'require',  'type' => 'style']),
+            new \Twig_Function('renderAssetTags', [$this, 'renderTags'], ['is_safe' => ['html']]),
+        ];
     }
 
     /**
@@ -84,12 +84,12 @@ class AssetExtension extends \Twig_Extension
      */
     public function getTokenParsers()
     {
-        $tokens = array(
+        $tokens = [
             new InlineScriptTokenParser(get_class($this)),
             new InlineStyleTokenParser(get_class($this)),
             new RequireScriptTokenParser($this->replacementManager, get_class($this)),
             new RequireStyleTokenParser($this->replacementManager, get_class($this)),
-        );
+        ];
 
         return $tokens;
     }
@@ -117,7 +117,7 @@ class AssetExtension extends \Twig_Extension
      */
     public function setRenderers(array $renderers)
     {
-        $this->renderers = array();
+        $this->renderers = [];
 
         foreach ($renderers as $renderer) {
             $this->addRenderer($renderer);
@@ -201,8 +201,8 @@ class AssetExtension extends \Twig_Extension
      */
     public function resetTagPosition()
     {
-        $this->contents = array();
-        $this->tagPositions = array();
+        $this->contents = [];
+        $this->tagPositions = [];
     }
 
     /**
@@ -232,8 +232,8 @@ class AssetExtension extends \Twig_Extension
         if (isset($this->contents[$contentType])) {
             $tags = $this->contents[$contentType];
             /* @var TagRendererInterface[] $renderers */
-            $renderers = array();
-            $rendererTags = array();
+            $renderers = [];
+            $rendererTags = [];
 
             foreach ($tags as $tag) {
                 $renderer = $this->findRenderer($tag);
@@ -382,19 +382,19 @@ class AssetExtension extends \Twig_Extension
      */
     private function createTagPositionFunction($name, array $options)
     {
-        $options = array_merge($options, array(
+        $options = array_merge($options, [
             'node_class' => 'Fxp\Component\RequireAsset\Twig\Node\TagPositionFunctionNode',
-            'is_safe' => array('html'),
+            'is_safe' => ['html'],
             'category' => null,
             'type' => null,
-        ), $options);
-        $callable = array($this, 'createTagPosition');
+        ], $options);
+        $callable = [$this, 'createTagPosition'];
 
         $tagPosition = new \Twig_Function($name, $callable, $options);
-        $tagPosition->setArguments(array(
+        $tagPosition->setArguments([
             $options['category'],
             $options['type'],
-        ));
+        ]);
 
         return $tagPosition;
     }

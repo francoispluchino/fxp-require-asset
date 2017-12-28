@@ -27,19 +27,19 @@ class FileExtensionFactoryTest extends TestCase
      */
     public function testCreateWhithoutName()
     {
-        FileExtensionFactory::create(array());
+        FileExtensionFactory::create([]);
     }
 
     public function testCreate()
     {
-        $config = array(
+        $config = [
             'name' => 'less',
-            'options' => array(),
-            'filters' => array('lessphp'),
+            'options' => [],
+            'filters' => ['lessphp'],
             'extension' => 'css',
             'debug' => true,
             'exclude' => true,
-        );
+        ];
         $ext = FileExtensionFactory::create($config);
 
         $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\FileExtensionInterface', $ext);
@@ -55,9 +55,9 @@ class FileExtensionFactoryTest extends TestCase
     {
         $ext = new FileExtension('NAME');
         $config = $ext = FileExtensionFactory::convertToArray($ext);
-        $valid = array(
+        $valid = [
             'name' => 'NAME',
-        );
+        ];
 
         $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
@@ -67,14 +67,14 @@ class FileExtensionFactoryTest extends TestCase
     {
         $ext = new FileExtension('NAME');
         $config = $ext = FileExtensionFactory::convertToArray($ext, true);
-        $valid = array(
+        $valid = [
             'name' => 'NAME',
-            'options' => array(),
-            'filters' => array(),
+            'options' => [],
+            'filters' => [],
             'extension' => null,
             'debug' => false,
             'exclude' => false,
-        );
+        ];
 
         $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
@@ -82,14 +82,14 @@ class FileExtensionFactoryTest extends TestCase
 
     public function testConvertToArrayComplexe()
     {
-        $ext = new FileExtension('NAME', array(), array('filter'), 'ext', false, true);
+        $ext = new FileExtension('NAME', [], ['filter'], 'ext', false, true);
         $config = $ext = FileExtensionFactory::convertToArray($ext);
-        $valid = array(
+        $valid = [
             'name' => 'NAME',
-            'filters' => array('filter'),
+            'filters' => ['filter'],
             'extension' => 'ext',
             'exclude' => true,
-        );
+        ];
 
         $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
@@ -97,16 +97,16 @@ class FileExtensionFactoryTest extends TestCase
 
     public function testConvertToArrayComplexeWithAllFields()
     {
-        $ext = new FileExtension('NAME', array(), array('filter'), 'ext', false, true);
+        $ext = new FileExtension('NAME', [], ['filter'], 'ext', false, true);
         $config = $ext = FileExtensionFactory::convertToArray($ext, true);
-        $valid = array(
+        $valid = [
             'name' => 'NAME',
-            'options' => array(),
-            'filters' => array('filter'),
+            'options' => [],
+            'filters' => ['filter'],
             'extension' => 'ext',
             'debug' => false,
             'exclude' => true,
-        );
+        ];
 
         $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
@@ -114,14 +114,14 @@ class FileExtensionFactoryTest extends TestCase
 
     public function testMerge()
     {
-        $ext1 = new FileExtension('NAME', array(), array('filter1'), null, false, true);
-        $ext2 = new FileExtension('NAME', array('option2'), array('filter2'), 'ext', true);
-        $ext = FileExtensionFactory::merge(array($ext1, $ext2));
+        $ext1 = new FileExtension('NAME', [], ['filter1'], null, false, true);
+        $ext2 = new FileExtension('NAME', ['option2'], ['filter2'], 'ext', true);
+        $ext = FileExtensionFactory::merge([$ext1, $ext2]);
 
         $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\FileExtensionInterface', $ext);
         $this->assertSame('NAME', $ext->getName());
-        $this->assertSame(array('option2'), $ext->getOptions());
-        $this->assertSame(array('filter1', 'filter2'), $ext->getFilters());
+        $this->assertSame(['option2'], $ext->getOptions());
+        $this->assertSame(['filter1', 'filter2'], $ext->getFilters());
         $this->assertSame('ext', $ext->getOutputExtension());
         $this->assertTrue($ext->isDebug());
         $this->assertTrue($ext->isExclude());

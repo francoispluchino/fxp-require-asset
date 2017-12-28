@@ -89,10 +89,10 @@ class PackageTest extends TestCase
 
     public function getDebugMode()
     {
-        return array(
-            array(false),
-            array(true),
-        );
+        return [
+            [false],
+            [true],
+        ];
     }
 
     /**
@@ -120,8 +120,8 @@ class PackageTest extends TestCase
             ->addExtension('js')
             ->addExtension('css')
             ->addExtension('less')
-            ->addExtension('map', array(), array(), null, true)
-            ->addExtension('md', array(), array(), null, false, true)
+            ->addExtension('map', [], [], null, true)
+            ->addExtension('md', [], [], null, false, true)
             ->addPattern('*')
             ->addPattern('!.*')
             ->addPattern('dist/css/*')
@@ -132,14 +132,14 @@ class PackageTest extends TestCase
         $pkg = new Package($cpkg);
         $fs = new Filesystem();
         $base = realpath($this->getFixturesDir());
-        $files = array();
+        $files = [];
 
         /* @var SplFileInfo $file */
         foreach ($pkg->getFiles($debug) as $file) {
             $files[] = rtrim($fs->makePathRelative($file->getRealpath(), $base), '/');
         }
 
-        $valid = array(
+        $valid = [
             'foobar/dist/css/foobar-theme.css',
             'foobar/dist/css/foobar-theme.min.css',
             'foobar/dist/css/foobar.css',
@@ -152,13 +152,13 @@ class PackageTest extends TestCase
             'foobar/less/foobar.less',
             'foobar/less/mixins.less',
             'foobar/less/variable.less',
-        );
+        ];
 
         if ($debug) {
-            $valid = array_merge($valid, array(
+            $valid = array_merge($valid, [
                 'foobar/dist/css/foobar.css.map',
                 'foobar/dist/css/foobar-theme.css.map',
-            ));
+            ]);
         }
 
         sort($valid);
@@ -197,7 +197,7 @@ class PackageTest extends TestCase
      */
     public static function getFixtureFiles()
     {
-        return array(
+        return [
             'foobar/bower.json',
             'foobar/package.json',
             'foobar/README.md',
@@ -236,6 +236,6 @@ class PackageTest extends TestCase
             'foobar/less/mixins.less',
             'foobar/less/component-a.less',
             'foobar/less/component-b.less',
-        );
+        ];
     }
 }

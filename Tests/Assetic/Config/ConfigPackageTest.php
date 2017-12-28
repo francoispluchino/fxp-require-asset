@@ -61,18 +61,18 @@ class ConfigPackageTest extends TestCase
         $this->assertSame('SOURCE_PATH', $cpkg->getSourcePath());
         $this->assertSame('SOURCE_BASE', $cpkg->getSourceBase());
 
-        $validExts = array(
+        $validExts = [
             'ext1' => new FileExtension('ext1'),
             'ext3' => new FileExtension('ext3'),
-        );
+        ];
         $this->assertEquals($validExts['ext1'], $cpkg->getExtension('ext1'));
         $this->assertEquals($validExts['ext3'], $cpkg->getExtension('ext3'));
         $this->assertEquals($validExts, $cpkg->getExtensions());
 
-        $validPatterns = array(
+        $validPatterns = [
             'pattern1/*',
             'pattern3/*',
-        );
+        ];
         $this->assertEquals($validPatterns, $cpkg->getPatterns());
 
         $this->assertFalse($cpkg->replaceDefaultExtensions());
@@ -231,14 +231,14 @@ class ConfigPackageTest extends TestCase
      */
     protected function getFileExtensionConfig1()
     {
-        return array(
+        return [
             'name' => 'ext',
-            'options' => array('option1' => 'value1'),
-            'filters' => array('filter1'),
+            'options' => ['option1' => 'value1'],
+            'filters' => ['filter1'],
             'extension' => null,
             'debug' => false,
             'exclude' => true,
-        );
+        ];
     }
 
     /**
@@ -246,13 +246,13 @@ class ConfigPackageTest extends TestCase
      */
     protected function getFileExtensionConfig2()
     {
-        return array(
+        return [
             'name' => 'ext',
-            'options' => array('option2' => 'value2'),
-            'filters' => array('filter2'),
+            'options' => ['option2' => 'value2'],
+            'filters' => ['filter2'],
             'extension' => 'otherext',
             'debug' => true,
             'exclude' => false,
-        );
+        ];
     }
 }

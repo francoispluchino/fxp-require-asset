@@ -25,23 +25,23 @@ class RequireScriptTagConfigurationTest extends TestCase
     public function testRequireScript()
     {
         $process = new Processor();
-        $configs = array(
-            array(
+        $configs = [
+            [
                 'position' => 'head',
-            ),
-            array(
+            ],
+            [
                 'async' => true,
                 'defer' => false,
-            ),
-        );
-        $validConfig = array(
+            ],
+        ];
+        $validConfig = [
             'position' => 'head',
             'async' => 'async',
             'defer' => null,
             'src' => null,
             'charset' => null,
             'type' => null,
-        );
+        ];
 
         $res = $process->process(RequireScriptTagConfiguration::getNode(), $configs);
 

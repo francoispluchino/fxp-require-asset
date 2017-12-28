@@ -151,7 +151,7 @@ interface AsseticAssetManagerInterface
      *
      * @return self
      */
-    public function addCommonAsset($name, array $inputs, $targetPath, array $filters = array(), array $options = array());
+    public function addCommonAsset($name, array $inputs, $targetPath, array $filters = [], array $options = []);
 
     /**
      * Add all require asset resources in assetic lazy asset manager.

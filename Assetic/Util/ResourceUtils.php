@@ -84,8 +84,8 @@ abstract class ResourceUtils
     {
         $name = static::getPackageFilename($package, $file);
         $output = static::getPathRelative($package, $file);
-        $filters = array();
-        $options = array();
+        $filters = [];
+        $options = [];
         $ext = static::getSplFileExtension($file);
         $output = $package->getSourceBase().'/'.$output;
 
@@ -98,7 +98,7 @@ abstract class ResourceUtils
 
         $output = $outputManager->convertOutput($output);
 
-        return array($name, $file->getRealPath(), $output, $filters, $options);
+        return [$name, $file->getRealPath(), $output, $filters, $options];
     }
 
     /**
@@ -111,7 +111,7 @@ abstract class ResourceUtils
      */
     public static function cleanDebugFilters(array $filters, $debug = false)
     {
-        $news = array();
+        $news = [];
 
         foreach ($filters as $filter) {
             if (!$debug || ($debug && false === strpos($filter, '?'))) {

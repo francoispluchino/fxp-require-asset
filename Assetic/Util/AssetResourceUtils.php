@@ -74,7 +74,7 @@ abstract class AssetResourceUtils
         $name = LocaleUtils::formatLocaleCommonName($resource->getPrettyName(), $locale);
         $targetPath = LocaleUtils::convertLocaleTartgetPath($resource->getTargetPath(), $locale);
         $classname = 'Fxp\Component\RequireAsset\Assetic\Factory\Resource\CommonRequireAssetResource';
-        $args = array($name, $localeInputs, $targetPath, $resource->getFilters(), $resource->getOptions());
+        $args = [$name, $localeInputs, $targetPath, $resource->getFilters(), $resource->getOptions()];
 
         return static::createAssetResource($name, $classname, $args, 0);
     }

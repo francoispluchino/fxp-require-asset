@@ -33,25 +33,25 @@ class CommonAssetConfiguration extends AbstractConfiguration
                         return !is_array($v);
                     })
                     ->then(function ($v) {
-                        return array(
+                        return [
                             'output' => '/'.trim($v, '@'),
-                            'inputs' => array($v),
-                        );
+                            'inputs' => [$v],
+                        ];
                     })
                 ->end()
                 ->beforeNormalization()
                     ->always()
                     ->then(function ($v) {
                         // cast scalars as array
-                        foreach (array('input', 'inputs', 'filter', 'filters') as $key) {
+                        foreach (['input', 'inputs', 'filter', 'filters'] as $key) {
                             if (isset($v[$key]) && !is_array($v[$key])) {
-                                $v[$key] = array($v[$key]);
+                                $v[$key] = [$v[$key]];
                             }
                         }
 
                         // organize arbitrary options
                         foreach ($v as $key => $value) {
-                            if (!in_array($key, array('input', 'inputs', 'filter', 'filters', 'option', 'options', 'output'))) {
+                            if (!in_array($key, ['input', 'inputs', 'filter', 'filters', 'option', 'options', 'output'])) {
                                 $v['options'][$key] = $value;
                                 unset($v[$key]);
                             }

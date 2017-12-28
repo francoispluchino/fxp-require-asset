@@ -25,39 +25,39 @@ class CommonAssetConfigurationTest extends TestCase
     public function testCommonAsset()
     {
         $process = new Processor();
-        $configs = array(
-             array(
-                'common_asset_1' => array(
+        $configs = [
+             [
+                'common_asset_1' => [
                     'output' => 'OUTPUT_1.ext',
                     'debug' => true,
-                ),
-                 'common_asset_2' => array(
+                ],
+                 'common_asset_2' => [
                      'output' => 'OUTPUT_2.ext',
                      'inputs' => '@asset/source/path.ext',
-                 ),
+                 ],
                  'common_asset_3' => '@asset3/source/path.ext',
-            ),
-        );
-        $validConfig = array(
-            'common_asset_1' => array(
+            ],
+        ];
+        $validConfig = [
+            'common_asset_1' => [
                 'output' => 'OUTPUT_1.ext',
-                'options' => array('debug' => true),
-                'inputs' => array(),
-                'filters' => array(),
-            ),
-            'common_asset_2' => array(
+                'options' => ['debug' => true],
+                'inputs' => [],
+                'filters' => [],
+            ],
+            'common_asset_2' => [
                 'output' => 'OUTPUT_2.ext',
-                'inputs' => array('@asset/source/path.ext'),
-                'filters' => array(),
-                'options' => array(),
-            ),
-            'common_asset_3' => array(
+                'inputs' => ['@asset/source/path.ext'],
+                'filters' => [],
+                'options' => [],
+            ],
+            'common_asset_3' => [
                 'output' => '/asset3/source/path.ext',
-                'inputs' => array('@asset3/source/path.ext'),
-                'filters' => array(),
-                'options' => array(),
-            ),
-        );
+                'inputs' => ['@asset3/source/path.ext'],
+                'filters' => [],
+                'options' => [],
+            ],
+        ];
 
         $res = $process->process(CommonAssetConfiguration::getNode(), $configs);
 

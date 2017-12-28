@@ -23,12 +23,12 @@ class CommonRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
      */
     public function getCommonRequireTwigTags()
     {
-        return array(
-            array('common_require_script', 'debug'),
-            array('common_require_script', 'prod'),
-            array('common_require_style',  'debug'),
-            array('common_require_style',  'prod'),
-        );
+        return [
+            ['common_require_script', 'debug'],
+            ['common_require_script', 'prod'],
+            ['common_require_style',  'debug'],
+            ['common_require_style',  'prod'],
+        ];
     }
 
     /**
@@ -49,19 +49,19 @@ class CommonRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
         $this->addAsset('@acme_demo/css/asset3.css', '/assets/acemodemo/css/asset3.css');
         $this->addAsset('@acme_demo/css/asset4.css', '/assets/acemodemo/css/asset4.css');
 
-        $this->addFormulaeAsset('common_js', array(
+        $this->addFormulaeAsset('common_js', [
             '@acme_demo/js/asset.js',
             '@acme_demo/js/asset2.js',
-        ), '/assets/acemodemo/js/common.js');
+        ], '/assets/acemodemo/js/common.js');
 
-        $this->addFormulaeAsset('common_css', array(
+        $this->addFormulaeAsset('common_css', [
             '@acme_demo/css/asset.css',
             '@acme_demo/css/asset2.css',
-        ), '/assets/acemodemo/css/common.css');
+        ], '/assets/acemodemo/css/common.css');
 
-        $this->addFormulaeAsset('not_common_css', array(
+        $this->addFormulaeAsset('not_common_css', [
             '@acme_demo/css/asset4.css',
-        ), '/assets/acemodemo/css/not_common.css', false);
+        ], '/assets/acemodemo/css/not_common.css', false);
 
         $this->doValidTagTest($tag, 'test', '_'.$env);
     }

@@ -24,8 +24,8 @@ class FileExtensionUtilsTest extends TestCase
     public function testCreateByConfig()
     {
         $name = 'fileextension';
-        $options = array();
-        $filters = array();
+        $options = [];
+        $filters = [];
         $extension = 'customname';
         $debug = true;
         $exclude = true;

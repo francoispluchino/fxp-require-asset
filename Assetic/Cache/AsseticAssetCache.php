@@ -79,7 +79,7 @@ class AsseticAssetCache implements AsseticAssetCacheInterface
         if ($this->hasResources()) {
             $this->cacheData = unserialize(file_get_contents($this->filename));
         } else {
-            $this->setResources(array());
+            $this->setResources([]);
         }
 
         return $this->cacheData;

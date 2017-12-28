@@ -127,7 +127,7 @@ class WebpackRequireAssetManager implements RequireAssetManagerInterface
             throw new InvalidArgumentException(sprintf('Cannot read the JSON content: %s', json_last_error_msg()));
         }
 
-        return is_array($content) ? $content : array();
+        return is_array($content) ? $content : [];
     }
 
     /**

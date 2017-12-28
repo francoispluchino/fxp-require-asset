@@ -38,7 +38,7 @@ class OutputManager implements OutputManagerInterface
     public function __construct($prefix = 'assets')
     {
         $this->prefix = trim($prefix, '/');
-        $this->patterns = array();
+        $this->patterns = [];
     }
 
     /**

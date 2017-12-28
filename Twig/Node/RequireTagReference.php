@@ -38,15 +38,15 @@ class RequireTagReference extends \Twig_Node
     public function __construct($extension, $name, $tagClass, array $assets, array $attributes, $lineno, $position = null, $twigTag = null)
     {
         $this->extension = $extension;
-        $twigAttributes = array(
+        $twigAttributes = [
             'name' => $name,
             'tagClass' => $tagClass,
             'assets' => $assets,
             'attributes' => $attributes,
             'position' => $position,
-        );
+        ];
 
-        parent::__construct(array(), $twigAttributes, $lineno, $twigTag);
+        parent::__construct([], $twigAttributes, $lineno, $twigTag);
     }
 
     /**

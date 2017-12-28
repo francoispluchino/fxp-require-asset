@@ -57,8 +57,8 @@ class PackageManager extends AbstractConfigManager implements PackageManagerInte
     {
         $this->extManager = $extManager;
         $this->patternManager = $patternManager;
-        $this->configPackages = array();
-        $this->packages = array();
+        $this->configPackages = [];
+        $this->packages = [];
         $this->locked = false;
     }
 
@@ -73,9 +73,9 @@ class PackageManager extends AbstractConfigManager implements PackageManagerInte
     /**
      * {@inheritdoc}
      */
-    public function addPackage($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
+    public function addPackage($name, $sourcePath = null, array $extensions = [], array $patterns = [], $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
     {
-        return $this->doAdd('Fxp\Component\RequireAsset\Assetic\Util\PackageUtils', 'configPackages', array($name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase));
+        return $this->doAdd('Fxp\Component\RequireAsset\Assetic\Util\PackageUtils', 'configPackages', [$name, $sourcePath, $extensions, $patterns, $replaceDefaultExts, $replaceDefaultPatterns, $sourceBase]);
     }
 
     /**
@@ -135,7 +135,7 @@ class PackageManager extends AbstractConfigManager implements PackageManagerInte
             $this->packages[$package->getName()] = $package->getPackage();
         }
 
-        $this->configPackages = array();
+        $this->configPackages = [];
     }
 
     /**

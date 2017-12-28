@@ -31,7 +31,7 @@ class AsseticConfigResources implements AsseticConfigResourcesInterface
      */
     public function __construct()
     {
-        $this->resources = array();
+        $this->resources = [];
     }
 
     /**

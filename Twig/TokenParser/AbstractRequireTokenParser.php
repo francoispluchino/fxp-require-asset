@@ -58,7 +58,7 @@ abstract class AbstractRequireTokenParser extends AbstractTokenParser
         $name = uniqid($this->getTag());
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
-        $assets = array();
+        $assets = [];
 
         while ($stream->test(\Twig_Token::STRING_TYPE)) {
             $assets[] = $this->getRealAssetName($stream->next()->getValue());

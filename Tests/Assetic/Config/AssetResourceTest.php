@@ -27,7 +27,7 @@ class AssetResourceTest extends TestCase
      */
     public function testBasic()
     {
-        $ar = new AssetResource('now', 'DateTime', 'loader', array('name'), 0);
+        $ar = new AssetResource('now', 'DateTime', 'loader', ['name'], 0);
 
         $ar->getNewInstance();
     }

@@ -35,7 +35,7 @@ class LocaleConfiguration extends AbstractConfiguration
                             return is_string($v);
                         })
                         ->then(function ($v) {
-                            return array($v);
+                            return [$v];
                         })
                     ->end()
                     ->validate()

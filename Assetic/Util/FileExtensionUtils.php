@@ -37,14 +37,14 @@ abstract class FileExtensionUtils
     {
         if (!$name instanceof FileExtensionInterface) {
             $config = is_array($name) ? $name
-                : array(
+                : [
                     'name' => $name,
                     'options' => $options,
                     'filters' => $filters,
                     'extension' => $extension === $name ? null : $extension,
                     'debug' => $debug,
                     'exclude' => $exclude,
-                )
+                ]
             ;
 
             $name = FileExtensionFactory::create($config);
@@ -60,27 +60,27 @@ abstract class FileExtensionUtils
      */
     public static function getDefaultConfigs()
     {
-        return array(
-            'map' => array('debug' => true),
-            'js' => array(),
-            'css' => array(),
-            'eot' => array(),
-            'svg' => array(),
-            'ttf' => array(),
-            'woff' => array(),
-            'woff2' => array(),
-            'jpg' => array(),
-            'jpeg' => array(),
-            'png' => array(),
-            'gif' => array(),
-            'webp' => array(),
-            'mp3' => array(),
-            'aac' => array(),
-            'wav' => array(),
-            'ogg' => array(),
-            'webm' => array(),
-            'mp4' => array(),
-            'ogv' => array(),
-        );
+        return [
+            'map' => ['debug' => true],
+            'js' => [],
+            'css' => [],
+            'eot' => [],
+            'svg' => [],
+            'ttf' => [],
+            'woff' => [],
+            'woff2' => [],
+            'jpg' => [],
+            'jpeg' => [],
+            'png' => [],
+            'gif' => [],
+            'webp' => [],
+            'mp3' => [],
+            'aac' => [],
+            'wav' => [],
+            'ogg' => [],
+            'webm' => [],
+            'mp4' => [],
+            'ogv' => [],
+        ];
     }
 }

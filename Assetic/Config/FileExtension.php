@@ -58,7 +58,7 @@ class FileExtension implements FileExtensionInterface
      * @param bool        $debug           The debug mode
      * @param bool        $exclude         This extension must be exclude or not
      */
-    public function __construct($name, array $options = array(), array $filters = array(), $outputExtension = null, $debug = false, $exclude = false)
+    public function __construct($name, array $options = [], array $filters = [], $outputExtension = null, $debug = false, $exclude = false)
     {
         $this->name = $name;
         $this->options = $options;

@@ -21,7 +21,7 @@ abstract class AssetUtils
     /**
      * @var array
      */
-    protected static $nameFilters = array(
+    protected static $nameFilters = [
         '.',
         '/',
         '\\',
@@ -33,7 +33,7 @@ abstract class AssetUtils
         '&',
         '@',
         ':',
-    );
+    ];
 
     /**
      * Gets the formatted name of the asset.

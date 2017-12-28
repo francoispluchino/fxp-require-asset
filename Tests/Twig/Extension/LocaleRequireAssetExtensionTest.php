@@ -32,12 +32,12 @@ class LocaleRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
      */
     public function getLocaleRequireTwigTags()
     {
-        return array(
-            array('locale_require_script', 'debug'),
-            array('locale_require_script', 'prod'),
-            array('locale_require_style',  'debug'),
-            array('locale_require_style',  'prod'),
-        );
+        return [
+            ['locale_require_script', 'debug'],
+            ['locale_require_script', 'prod'],
+            ['locale_require_style',  'debug'],
+            ['locale_require_style',  'prod'],
+        ];
     }
 
     /**
@@ -74,24 +74,24 @@ class LocaleRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
         $this->localeManager->addLocalizedAsset('@acme_demo/css/asset3.css', 'fr_FR', '@acme_demo/css/asset3-fr-fr.css');
 
         // common require assets
-        $this->addFormulaeAsset('common_js', array(
+        $this->addFormulaeAsset('common_js', [
             '@acme_demo/js/asset.js',
             '@acme_demo/js/asset2.js',
-        ), '/assets/acemodemo/js/common.js');
+        ], '/assets/acemodemo/js/common.js');
 
-        $this->addFormulaeAsset('common_css', array(
+        $this->addFormulaeAsset('common_css', [
             '@acme_demo/css/asset.css',
             '@acme_demo/css/asset2.css',
-        ), '/assets/acemodemo/css/common.css');
+        ], '/assets/acemodemo/css/common.css');
 
         // locale common require assets
-        $this->addFormulaeAsset('common_js_fr', array(
+        $this->addFormulaeAsset('common_js_fr', [
                 '@acme_demo/js/asset2-fr.js',
-            ), '/assets/acemodemo/js/common_fr.js');
+            ], '/assets/acemodemo/js/common_fr.js');
 
-        $this->addFormulaeAsset('common_css_fr', array(
+        $this->addFormulaeAsset('common_css_fr', [
                 '@acme_demo/css/asset2-fr.css',
-            ), '/assets/acemodemo/css/common_fr.css');
+            ], '/assets/acemodemo/css/common_fr.css');
 
         $this->localeManager->addLocalizedAsset('@common_js', 'fr', '@common_js_fr');
         $this->localeManager->addLocalizedAsset('@common_css', 'fr', '@common_css_fr');

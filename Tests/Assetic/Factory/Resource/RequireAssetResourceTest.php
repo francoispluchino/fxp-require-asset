@@ -28,8 +28,8 @@ class RequireAssetResourceTest extends TestCase
         $name = 'foobar.js';
         $sourcePath = 'PATH/foobar.js';
         $targetPath = 'output/foobar.js';
-        $filters = array('?yui_js');
-        $options = array();
+        $filters = ['?yui_js'];
+        $options = [];
         $resource = new RequireAssetResource($name, $sourcePath, $targetPath, $filters, $options);
 
         $this->assertSame($formulaeName, (string) $resource);
@@ -38,16 +38,16 @@ class RequireAssetResourceTest extends TestCase
         $this->assertTrue($resource->isFresh($time->getTimestamp()));
         $this->assertSame('', $resource->getContent());
 
-        $validFormulae = array(
-            $formulaeName => array(
-                array($sourcePath),
+        $validFormulae = [
+            $formulaeName => [
+                [$sourcePath],
                 $filters,
-                array_merge($options, array(
+                array_merge($options, [
                     'debug' => false,
                     'output' => $targetPath,
-                )),
-            ),
-        );
+                ]),
+            ],
+        ];
         $this->assertSame($validFormulae, $resource->getFormulae());
     }
 }

@@ -24,11 +24,11 @@ class AssetReplacementManagerTest extends TestCase
     public function testBasic()
     {
         $arm = new AssetReplacementManager();
-        $replacements = array(
+        $replacements = [
             '@asset1/path1.ext' => '@asset5/path1.ext',
             '@asset1/path2.ext' => '@asset5/path2.ext',
             '@asset2/path1.ext' => '@asset5/path3.ext',
-        );
+        ];
 
         $this->assertFalse($arm->hasReplacement('@asset1/path1.ext'));
 

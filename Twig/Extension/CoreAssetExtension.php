@@ -38,12 +38,12 @@ class CoreAssetExtension extends AssetExtension
     public function __construct(LazyAssetManager $manager = null,
                                 LocaleManagerInterface $localeManager = null,
                                 AssetReplacementManagerInterface $replacementManager = null,
-                                array $debugCommonAssets = array(),
+                                array $debugCommonAssets = [],
                                 $webpackAssetsFile = null)
     {
         parent::__construct($replacementManager);
 
-        $renderers = array(new InlineTagRenderer());
+        $renderers = [new InlineTagRenderer()];
 
         if (null !== $webpackAssetsFile) {
             $renderers[] = new WebpackRequireTagRenderer(new WebpackRequireAssetManager($webpackAssetsFile), $localeManager);

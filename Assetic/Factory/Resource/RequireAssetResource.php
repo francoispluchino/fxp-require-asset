@@ -32,7 +32,7 @@ class RequireAssetResource extends AbstractRequireAssetResource
      * @param array  $filters    The asset filters
      * @param array  $options    The asset filters
      */
-    public function __construct($name, $sourcePath, $targetPath, array $filters = array(), array $options = array())
+    public function __construct($name, $sourcePath, $targetPath, array $filters = [], array $options = [])
     {
         parent::__construct($name, $targetPath, $filters, $options);
 
@@ -54,7 +54,7 @@ class RequireAssetResource extends AbstractRequireAssetResource
      */
     public function getInputs()
     {
-        return array($this->sourcePath);
+        return [$this->sourcePath];
     }
 
     /**
@@ -62,6 +62,6 @@ class RequireAssetResource extends AbstractRequireAssetResource
      */
     protected function getFixedOptions()
     {
-        return array('debug' => false);
+        return ['debug' => false];
     }
 }

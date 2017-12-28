@@ -36,11 +36,11 @@ abstract class PackageUtils
      *
      * @return ConfigPackageInterface
      */
-    public static function createByConfig($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
+    public static function createByConfig($name, $sourcePath = null, array $extensions = [], array $patterns = [], $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null)
     {
         if (!$name instanceof ConfigPackageInterface) {
             $config = is_array($name) ? $name
-                : array(
+                : [
                     'name' => $name,
                     'source_path' => $sourcePath,
                     'extensions' => $extensions,
@@ -48,7 +48,7 @@ abstract class PackageUtils
                     'replace_default_extensions' => $replaceDefaultExts,
                     'replace_default_patterns' => $replaceDefaultPatterns,
                     'source_base' => $sourceBase,
-                )
+                ]
             ;
 
             $name = PackageFactory::createConfig($config);
@@ -66,7 +66,7 @@ abstract class PackageUtils
      */
     public static function getPackagePaths(PackageManagerInterface $manager)
     {
-        $packages = array();
+        $packages = [];
 
         foreach ($manager->getPackages() as $package) {
             $packages[$package->getName()] = $package->getSourcePath();

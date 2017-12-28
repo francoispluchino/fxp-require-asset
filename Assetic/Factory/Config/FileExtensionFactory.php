@@ -33,15 +33,15 @@ abstract class FileExtensionFactory
      *
      * @throws InvalidArgumentException When the "name" key does not exist
      */
-    public static function create(array $config = array())
+    public static function create(array $config = [])
     {
         if (!isset($config['name'])) {
             throw new InvalidArgumentException('The key "name" of file extention config must be present');
         }
 
         $name = $config['name'];
-        $options = static::getValues($config, 'options', array());
-        $filters = static::getValues($config, 'filters', array());
+        $options = static::getValues($config, 'options', []);
+        $filters = static::getValues($config, 'filters', []);
         $outputExt = static::getValues($config, 'extension', null);
         $debug = static::getValues($config, 'debug', false);
         $exclude = static::getValues($config, 'exclude', false);
@@ -59,10 +59,10 @@ abstract class FileExtensionFactory
     public static function merge(array $extensions)
     {
         $nodeConfig = FileExtensionConfiguration::getNode();
-        $configs = array();
+        $configs = [];
 
         foreach ($extensions as $extension) {
-            $configs[] = array($extension->getName() => static::convertToArray($extension));
+            $configs[] = [$extension->getName() => static::convertToArray($extension)];
         }
 
         return static::create(Utils::mergeConfigs($nodeConfig, $configs));
@@ -79,9 +79,9 @@ abstract class FileExtensionFactory
     public static function convertToArray(FileExtensionInterface $extension, $allFields = false)
     {
         $outExt = $extension->getName() !== $extension->getOutputExtension();
-        $value = array(
+        $value = [
             'name' => $extension->getName(),
-        );
+        ];
 
         Utils::addArrayField($value, 'options', $extension, 'getOptions', 0, $allFields);
         Utils::addArrayField($value, 'filters', $extension, 'getFilters', 0, $allFields);

@@ -46,7 +46,7 @@ interface FileExtensionManagerInterface
      * @throws BadMethodCallException   When the manager is resolved
      * @throws InvalidArgumentException When the "name" key does not exist
      */
-    public function addDefaultExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false);
+    public function addDefaultExtension($name, array $options = [], array $filters = [], $extension = null, $debug = false, $exclude = false);
 
     /**
      * Adds the configs of default file extension.

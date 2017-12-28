@@ -25,23 +25,23 @@ class AssetReplacementConfigurationTest extends TestCase
     public function testLocale()
     {
         $process = new Processor();
-        $configs = array(
-            array(
+        $configs = [
+            [
                 '@asset1/path1.ext' => '@asset5/path1.ext',
-            ),
-            array(
+            ],
+            [
                 '@asset1/path2.ext' => '@asset5/path2.ext',
                 '@asset2/path1.ext' => '@asset5/path3.ext',
-            ),
-            array(
+            ],
+            [
                 '@asset1/path1.ext' => '@asset7/path1.ext',
-            ),
-        );
-        $validConfig = array(
+            ],
+        ];
+        $validConfig = [
             '@asset1/path1.ext' => '@asset7/path1.ext',
             '@asset1/path2.ext' => '@asset5/path2.ext',
             '@asset2/path1.ext' => '@asset5/path3.ext',
-        );
+        ];
 
         $res = $process->process(AssetReplacementConfiguration::getNode(), $configs);
 

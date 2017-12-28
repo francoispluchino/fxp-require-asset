@@ -55,7 +55,7 @@ abstract class AbstractAssetExtensionTest extends TestCase
     /**
      * @var array
      */
-    protected $debugCommonAssets = array();
+    protected $debugCommonAssets = [];
 
     protected function setUp()
     {
@@ -86,10 +86,10 @@ abstract class AbstractAssetExtensionTest extends TestCase
      */
     public function getInlineTwigTags()
     {
-        return array(
-            array('inline_script'),
-            array('inline_style'),
-        );
+        return [
+            ['inline_script'],
+            ['inline_style'],
+        ];
     }
 
     /**
@@ -97,10 +97,10 @@ abstract class AbstractAssetExtensionTest extends TestCase
      */
     public function getRequireTwigTags()
     {
-        return array(
-            array('require_script'),
-            array('require_style'),
-        );
+        return [
+            ['require_script'],
+            ['require_style'],
+        ];
     }
 
     /**
@@ -123,7 +123,7 @@ abstract class AbstractAssetExtensionTest extends TestCase
     protected function getTemplate($tag, $file)
     {
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../Fixtures/Resources/views/'.$tag);
-        $twig = new \Twig_Environment($loader, array('debug' => true, 'cache' => false));
+        $twig = new \Twig_Environment($loader, ['debug' => true, 'cache' => false]);
         $twig->addExtension($this->ext);
 
         return $twig->load($file);
@@ -137,7 +137,7 @@ abstract class AbstractAssetExtensionTest extends TestCase
     public function doValidTagTest($tag, $testFile = 'test', $validSuffix = '')
     {
         $tpl = $this->getTemplate($tag, $testFile.'.html.twig');
-        $content = $tpl->render(array());
+        $content = $tpl->render([]);
         $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/'.$tag.'/'.$testFile.$validSuffix.'.valid.template');
         $valid = str_replace("\r", '', $valid);
 

@@ -37,11 +37,11 @@ abstract class AbstractRequireAssetExtensionTest extends AbstractAssetExtensionT
         $asset
             ->expects($this->any())
             ->method('getVars')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
         $asset
             ->expects($this->any())
             ->method('getValues')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         /* @var AssetInterface $asset */
         $this->manager->set(AssetUtils::formatName($source), $asset);
@@ -57,14 +57,14 @@ abstract class AbstractRequireAssetExtensionTest extends AbstractAssetExtensionT
      */
     protected function addFormulaeAsset($name, array $inputs, $target, $isCommonAsset = true)
     {
-        $config = array(
-            array(),
-            array(),
-            array(
+        $config = [
+            [],
+            [],
+            [
                 'fxp_require_common_asset' => $isCommonAsset,
                 'output' => $target,
-            ),
-        );
+            ],
+        ];
 
         foreach ($inputs as $input) {
             $config[0][] = '@'.AssetUtils::formatName($input);

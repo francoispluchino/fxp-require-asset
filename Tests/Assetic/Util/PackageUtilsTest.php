@@ -24,11 +24,11 @@ class PackageUtilsTest extends TestCase
 {
     public function testGetPackagePaths()
     {
-        $validPackages = array(
+        $validPackages = [
             '@asset/package1' => 'path_to_package1',
             '@asset/package2' => 'path_to_package2',
             '@asset/vendor_asset_bundle' => 'path_to_bundle',
-        );
+        ];
 
         $manager = $this->getMockBuilder('Fxp\Component\RequireAsset\Assetic\Config\PackageManagerInterface')->getMock();
         $manager->expects($this->any())
@@ -41,7 +41,7 @@ class PackageUtilsTest extends TestCase
 
     protected function createMockPackages(array $packages)
     {
-        $mocks = array();
+        $mocks = [];
 
         foreach ($packages as $name => $path) {
             $mock = $this->getMockBuilder('Fxp\Component\RequireAsset\Assetic\Config\PackageInterface')->getMock();

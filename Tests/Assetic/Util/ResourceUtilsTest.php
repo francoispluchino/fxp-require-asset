@@ -23,10 +23,10 @@ class ResourceUtilsTest extends TestCase
 {
     public function getDebugMode()
     {
-        return array(
-            array(true,  array('filter1', 'filter3')),
-            array(false, array('filter1', 'filter2', 'filter3')),
-        );
+        return [
+            [true,  ['filter1', 'filter3']],
+            [false, ['filter1', 'filter2', 'filter3']],
+        ];
     }
 
     /**
@@ -37,11 +37,11 @@ class ResourceUtilsTest extends TestCase
      */
     public function testCleanDebugFilters($debug, array $valid)
     {
-        $filters = array(
+        $filters = [
             'filter1',
             '?filter2',
             'filter3',
-        );
+        ];
 
         $this->assertSame($valid, ResourceUtils::cleanDebugFilters($filters, $debug));
     }

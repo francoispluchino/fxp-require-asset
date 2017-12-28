@@ -25,35 +25,35 @@ class FileExtensionConfigurationTest extends TestCase
     public function testFileExtension()
     {
         $process = new Processor();
-        $configs = array(
-            array(
-                'js' => array(),
-                'less' => array(
+        $configs = [
+            [
+                'js' => [],
+                'less' => [
                     'extension' => 'css',
-                ),
-            ),
-            array(
-                'less' => array(
-                    'filters' => array('lessphp'),
-                ),
-            ),
-        );
-        $validConfig = array(
-            'js' => array(
-                'filters' => array(),
-                'options' => array(),
+                ],
+            ],
+            [
+                'less' => [
+                    'filters' => ['lessphp'],
+                ],
+            ],
+        ];
+        $validConfig = [
+            'js' => [
+                'filters' => [],
+                'options' => [],
                 'extension' => null,
                 'debug' => false,
                 'exclude' => false,
-            ),
-            'less' => array(
-                'filters' => array('lessphp'),
-                'options' => array(),
+            ],
+            'less' => [
+                'filters' => ['lessphp'],
+                'options' => [],
                 'extension' => 'css',
                 'debug' => false,
                 'exclude' => false,
-            ),
-        );
+            ],
+        ];
 
         $res = $process->process(FileExtensionConfiguration::getNode(), $configs);
 

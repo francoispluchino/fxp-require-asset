@@ -49,8 +49,8 @@ class ConfigPackage extends Package implements ConfigPackageInterface
         $this->name = $name;
         $this->sourcePath = $sourcePath;
         $this->sourceBase = $sourceBase;
-        $this->extensions = array();
-        $this->patterns = array();
+        $this->extensions = [];
+        $this->patterns = [];
         $this->replaceDefaultExtensions = false;
         $this->replaceDefaultPatterns = false;
         $this->locked = false;
@@ -59,14 +59,14 @@ class ConfigPackage extends Package implements ConfigPackageInterface
     /**
      * {@inheritdoc}
      */
-    public function addExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false)
+    public function addExtension($name, array $options = [], array $filters = [], $extension = null, $debug = false, $exclude = false)
     {
         $this->validate();
 
         $name = FileExtensionUtils::createByConfig($name, $options, $filters, $extension, $debug, $exclude);
 
         if ($this->hasExtension($name->getName())) {
-            $name = FileExtensionFactory::merge(array($this->extensions[$name->getName()], $name));
+            $name = FileExtensionFactory::merge([$this->extensions[$name->getName()], $name]);
         }
 
         $this->extensions[$name->getName()] = $name;

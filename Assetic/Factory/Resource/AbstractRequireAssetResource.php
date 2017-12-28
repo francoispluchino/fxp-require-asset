@@ -53,7 +53,7 @@ abstract class AbstractRequireAssetResource implements RequireAssetResourceInter
      * @param array  $filters    The asset filters
      * @param array  $options    The asset filters
      */
-    public function __construct($name, $targetPath, array $filters = array(), array $options = array())
+    public function __construct($name, $targetPath, array $filters = [], array $options = [])
     {
         $this->name = AssetUtils::formatName($name);
         $this->prettyName = $name;
@@ -83,18 +83,18 @@ abstract class AbstractRequireAssetResource implements RequireAssetResourceInter
      */
     public function getFormulae()
     {
-        return array(
-            $this->name => array(
+        return [
+            $this->name => [
                 // inputs
                 $this->getInputs(),
                 // filters
                 $this->filters,
                 // options
-                array_merge($this->options, $this->getFixedOptions(), array(
+                array_merge($this->options, $this->getFixedOptions(), [
                     'output' => $this->targetPath,
-                )),
-            ),
-        );
+                ]),
+            ],
+        ];
     }
 
     /**

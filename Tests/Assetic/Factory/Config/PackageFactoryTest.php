@@ -26,10 +26,10 @@ class PackageFactoryTest extends TestCase
 {
     public function getCreateMethod()
     {
-        return array(
-            array('createConfig'),
-            array('create'),
-        );
+        return [
+            ['createConfig'],
+            ['create'],
+        ];
     }
 
     /**
@@ -41,7 +41,7 @@ class PackageFactoryTest extends TestCase
      */
     public function testCreateWhithoutName($method)
     {
-        PackageFactory::$method(array());
+        PackageFactory::$method([]);
     }
 
     /**
@@ -51,25 +51,25 @@ class PackageFactoryTest extends TestCase
      */
     public function testCreate($method)
     {
-        $config = array(
+        $config = [
             'name' => 'package1',
             'source_path' => 'SOURCE_PATH',
             'source_base' => 'SOURCE_BASE',
-            'extensions' => array(
-                'js' => array(),
-            ),
+            'extensions' => [
+                'js' => [],
+            ],
             'replace_default_extensions' => false,
-            'patterns' => array(
+            'patterns' => [
                 '*/pattern/*',
-            ),
+            ],
             'replace_default_patterns' => false,
-        );
-        $defaultExts = array(
+        ];
+        $defaultExts = [
             'css' => new FileExtension('css'),
-        );
-        $defaultPatterns = array(
+        ];
+        $defaultPatterns = [
             '*/default/*',
-        );
+        ];
 
         $pkg = PackageFactory::$method($config, $defaultExts, $defaultPatterns);
 
@@ -85,10 +85,10 @@ class PackageFactoryTest extends TestCase
         $this->assertSame($config['source_path'], $pkg->getSourcePath());
         $this->assertSame($config['source_base'], $pkg->getSourceBase());
         $this->assertSame(array_merge($defaultPatterns, $config['patterns']), $pkg->getPatterns());
-        $this->assertEquals(array(
+        $this->assertEquals([
             'css' => new FileExtension('css'),
             'js' => new FileExtension('js'),
-        ), $pkg->getExtensions());
+        ], $pkg->getExtensions());
     }
 
     /**
@@ -98,14 +98,14 @@ class PackageFactoryTest extends TestCase
      */
     public function testCreateWithExtensionList($method)
     {
-        $config = array(
+        $config = [
             'name' => 'package1',
             'source_path' => 'SOURCE_PATH',
             'source_base' => 'SOURCE_BASE',
-            'extensions' => array(
+            'extensions' => [
                 'js',
-            ),
-        );
+            ],
+        ];
         $pkg = PackageFactory::$method($config);
 
         if ('createConfig' === $method) {
@@ -117,9 +117,9 @@ class PackageFactoryTest extends TestCase
         $this->assertSame($config['name'], $pkg->getName());
         $this->assertSame($config['source_path'], $pkg->getSourcePath());
         $this->assertSame($config['source_base'], $pkg->getSourceBase());
-        $this->assertEquals(array(
+        $this->assertEquals([
             'js' => new FileExtension('js'),
-        ), $pkg->getExtensions());
+        ], $pkg->getExtensions());
     }
 
     /**
@@ -129,25 +129,25 @@ class PackageFactoryTest extends TestCase
      */
     public function testCreateWithReplaceDefault($method)
     {
-        $config = array(
+        $config = [
             'name' => 'package1',
             'source_path' => 'SOURCE_PATH',
             'source_base' => 'SOURCE_BASE',
-            'extensions' => array(
-                'js' => array(),
-            ),
+            'extensions' => [
+                'js' => [],
+            ],
             'replace_default_extensions' => true,
-            'patterns' => array(
+            'patterns' => [
                 '*/pattern/*',
-            ),
+            ],
             'replace_default_patterns' => true,
-        );
-        $defaultExts = array(
+        ];
+        $defaultExts = [
             'css' => new FileExtension('css'),
-        );
-        $defaultPatterns = array(
+        ];
+        $defaultPatterns = [
             '*/default/*',
-        );
+        ];
 
         $pkg = PackageFactory::$method($config, $defaultExts, $defaultPatterns);
 
@@ -163,18 +163,18 @@ class PackageFactoryTest extends TestCase
         $this->assertSame($config['source_path'], $pkg->getSourcePath());
         $this->assertSame($config['source_base'], $pkg->getSourceBase());
         $this->assertSame($config['patterns'], $pkg->getPatterns());
-        $this->assertEquals(array(
+        $this->assertEquals([
             'js' => new FileExtension('js'),
-        ), $pkg->getExtensions());
+        ], $pkg->getExtensions());
     }
 
     public function testConvertToArraySimple()
     {
         $pkg = new ConfigPackage('NAME');
         $config = $ext = PackageFactory::convertToArray($pkg);
-        $valid = array(
+        $valid = [
             'name' => 'NAME',
-        );
+        ];
 
         $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
@@ -184,15 +184,15 @@ class PackageFactoryTest extends TestCase
     {
         $pkg = new ConfigPackage('NAME', 'SOURCE_PATH', 'SOURCE_BASE');
         $config = $ext = PackageFactory::convertToArray($pkg, true);
-        $valid = array(
+        $valid = [
             'name' => 'NAME',
             'source_path' => 'SOURCE_PATH',
             'source_base' => 'SOURCE_BASE',
             'replace_default_extensions' => false,
             'replace_default_patterns' => false,
-            'extensions' => array(),
-            'patterns' => array(),
-        );
+            'extensions' => [],
+            'patterns' => [],
+        ];
 
         $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
@@ -206,18 +206,18 @@ class PackageFactoryTest extends TestCase
         $pkg->setReplaceDefaultPatterns(true);
 
         $config = $ext = PackageFactory::convertToArray($pkg);
-        $valid = array(
+        $valid = [
             'name' => 'NAME',
             'source_path' => 'SOURCE_PATH',
             'source_base' => 'SOURCE_BASE',
             'replace_default_extensions' => true,
             'replace_default_patterns' => true,
-            'extensions' => array(
-                'js' => array(
+            'extensions' => [
+                'js' => [
                     'name' => 'js',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
@@ -231,19 +231,19 @@ class PackageFactoryTest extends TestCase
         $pkg->setReplaceDefaultPatterns(true);
 
         $config = $ext = PackageFactory::convertToArray($pkg, true);
-        $valid = array(
+        $valid = [
             'name' => 'NAME',
             'source_path' => 'SOURCE_PATH',
             'source_base' => 'SOURCE_BASE',
             'replace_default_extensions' => true,
             'replace_default_patterns' => true,
-            'extensions' => array(
-                'js' => array(
+            'extensions' => [
+                'js' => [
                     'name' => 'js',
-                ),
-            ),
-            'patterns' => array(),
-        );
+                ],
+            ],
+            'patterns' => [],
+        ];
 
         $this->assertInternalType('array', $config);
         $this->assertEquals($valid, $config);
@@ -260,7 +260,7 @@ class PackageFactoryTest extends TestCase
         $pkg1->addExtension('js');
         $pkg2->addExtension('css');
 
-        $pkg = PackageFactory::merge(array($pkg1, $pkg2));
+        $pkg = PackageFactory::merge([$pkg1, $pkg2]);
 
         $this->assertInstanceOf('Fxp\Component\RequireAsset\Assetic\Config\ConfigPackageInterface', $pkg);
         $this->assertSame('NAME', $pkg->getName());
@@ -268,10 +268,10 @@ class PackageFactoryTest extends TestCase
         $this->assertSame('SOURCE_BASE', $pkg->getSourceBase());
         $this->assertTrue($pkg->replaceDefaultExtensions());
         $this->assertTrue($pkg->replaceDefaultPatterns());
-        $this->assertEquals(array(
+        $this->assertEquals([
             'js' => new FileExtension('js'),
             'css' => new FileExtension('css'),
-        ), $pkg->getExtensions());
-        $this->assertEquals(array(), $pkg->getPatterns());
+        ], $pkg->getExtensions());
+        $this->assertEquals([], $pkg->getPatterns());
     }
 }

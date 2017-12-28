@@ -61,7 +61,7 @@ abstract class LocaleUtils
      */
     public static function getLocaleCommonInputs(array $inputs, $locale, LocaleManagerInterface $localeManager)
     {
-        $localeInputs = array();
+        $localeInputs = [];
 
         foreach ($inputs as $input) {
             $localeInputs = array_merge($localeInputs, $localeManager->getLocalizedAsset($input, $locale));
@@ -101,7 +101,7 @@ abstract class LocaleUtils
      */
     public static function findCommonAssetLocales(array $inputs, LocaleManagerInterface $localeManager)
     {
-        $locales = array();
+        $locales = [];
 
         foreach ($inputs as $input) {
             $locales = array_merge($locales, $localeManager->getAssetLocales($input));

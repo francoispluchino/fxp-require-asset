@@ -34,18 +34,18 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
     protected function getTagAttributes()
     {
         $stream = $this->parser->getStream();
-        $attributes = array();
+        $attributes = [];
         $lineno = $stream->getCurrent()->getLine();
         $name = $stream->getSourceContext()->getName();
 
         if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
             do {
-                $this->validateAttributeType($stream, 'name', array('NAME', 'STRING'));
+                $this->validateAttributeType($stream, 'name', ['NAME', 'STRING']);
                 $attr = $stream->getCurrent()->getValue();
                 $stream->next();
                 $this->validateAttributeOperator($stream, $attr);
                 $stream->next();
-                $this->validateAttributeType($stream, 'value', array('NAME', 'STRING', 'NUMBER'));
+                $this->validateAttributeType($stream, 'value', ['NAME', 'STRING', 'NUMBER']);
 
                 $attributes[$attr] = $this->parser->getExpressionParser()->parseExpression()->getAttribute('value');
             } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
@@ -111,7 +111,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
         try {
             $processor = new Processor();
 
-            return $processor->process($this->getAttributeNodeConfig(), array($attributes));
+            return $processor->process($this->getAttributeNodeConfig(), [$attributes]);
         } catch (\Exception $e) {
             throw new \Twig_Error_Syntax($this->getFormattedMessageException($e), $lineno, $name);
         }

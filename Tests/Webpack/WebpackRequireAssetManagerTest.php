@@ -62,15 +62,15 @@ class WebpackRequireAssetManagerTest extends TestCase
 
     public function getPathValues()
     {
-        return array(
-            array('@webpack/asset', 'js', '/assets/asset.js'),
-            array('@webpack/asset', 'script', '/assets/asset.js'),
-            array('@webpack/asset', 'css', '/assets/asset.css'),
-            array('@webpack/asset', 'style', '/assets/asset.css'),
-            array('@webpack/asset_js', null, '/assets/asset_js.js'),
-            array('@webpack/asset_css', null, '/assets/asset_css.css'),
-            array('@webpack/asset_ext', null, '/assets/asset_ext.ext'),
-        );
+        return [
+            ['@webpack/asset', 'js', '/assets/asset.js'],
+            ['@webpack/asset', 'script', '/assets/asset.js'],
+            ['@webpack/asset', 'css', '/assets/asset.css'],
+            ['@webpack/asset', 'style', '/assets/asset.css'],
+            ['@webpack/asset_js', null, '/assets/asset_js.js'],
+            ['@webpack/asset_css', null, '/assets/asset_css.css'],
+            ['@webpack/asset_ext', null, '/assets/asset_ext.ext'],
+        ];
     }
 
     /**

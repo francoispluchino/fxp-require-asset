@@ -91,12 +91,12 @@ class RequireCssRewriteFilterTest extends TestCase
 
     public function getDataForFilterDump()
     {
-        return array(
-            array('url("https://example.tld/web/assets/img/bg.jpg")', 'url("https://example.tld/web/assets/img/bg.jpg")'),
-            array('url("/web/assets/img/bg.jpg")',                    'url("/web/assets/img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg")',                   'url("../img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg?foo=bar")',           'url("../img/bg.jpg?foo=bar")'),
-        );
+        return [
+            ['url("https://example.tld/web/assets/img/bg.jpg")', 'url("https://example.tld/web/assets/img/bg.jpg")'],
+            ['url("/web/assets/img/bg.jpg")',                    'url("/web/assets/img/bg.jpg")'],
+            ['url("../../static/img/bg.jpg")',                   'url("../img/bg.jpg")'],
+            ['url("../../static/img/bg.jpg?foo=bar")',           'url("../img/bg.jpg?foo=bar")'],
+        ];
     }
 
     /**
@@ -110,22 +110,22 @@ class RequireCssRewriteFilterTest extends TestCase
         $cssContent = 'h1 { background: %s; }';
 
         $this->lam->setLoader('requireassetloader', new RequireAssetLoader());
-        $fixtures = array(
-            'foobar/static/img/bg.jpg' => array(
+        $fixtures = [
+            'foobar/static/img/bg.jpg' => [
                 'target' => '/web/assets/img/bg.jpg',
                 'content' => '',
-            ),
-            'foobar/src/css/asset.css' => array(
+            ],
+            'foobar/src/css/asset.css' => [
                 'target' => '/web/assets/css/asset.css',
                 'content' => sprintf($cssContent, $sourceUrl),
-            ),
-        );
+            ],
+        ];
 
         foreach ($fixtures as $filename => $config) {
             $path = $this->getCacheDir().'/'.$filename;
             $rar = new RequireAssetResource(AssetUtils::formatName($filename), $path, $config['target']);
 
-            $this->createFixtures(array($filename => $config['content']));
+            $this->createFixtures([$filename => $config['content']]);
             $this->lam->addResource($rar, 'requireassetloader');
 
             $asset = new FileAsset($path);
@@ -141,12 +141,12 @@ class RequireCssRewriteFilterTest extends TestCase
 
     public function getDataForFilterDumpWithUrl()
     {
-        return array(
-            array('url("https://example.tld/web/assets/img/bg.jpg")', 'url("https://example.tld/web/assets/img/bg.jpg")'),
-            array('url("/foobar/static/img/bg.jpg")',                 'url("https://foobar.tld/foobar/static/img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg")',                   'url("../img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg?foo=bar")',           'url("../img/bg.jpg?foo=bar")'),
-        );
+        return [
+            ['url("https://example.tld/web/assets/img/bg.jpg")', 'url("https://example.tld/web/assets/img/bg.jpg")'],
+            ['url("/foobar/static/img/bg.jpg")',                 'url("https://foobar.tld/foobar/static/img/bg.jpg")'],
+            ['url("../../static/img/bg.jpg")',                   'url("../img/bg.jpg")'],
+            ['url("../../static/img/bg.jpg?foo=bar")',           'url("../img/bg.jpg?foo=bar")'],
+        ];
     }
 
     /**
@@ -160,16 +160,16 @@ class RequireCssRewriteFilterTest extends TestCase
         $cssContent = 'h1 { background: %s; }';
 
         $this->lam->setLoader('requireassetloader', new RequireAssetLoader());
-        $fixtures = array(
-            'https://foobar.tld/foobar/static/img/bg.jpg' => array(
+        $fixtures = [
+            'https://foobar.tld/foobar/static/img/bg.jpg' => [
                 'target' => '/web/assets/img/bg.jpg',
                 'content' => '',
-            ),
-            'https://foobar.tld/foobar/src/css/asset.css' => array(
+            ],
+            'https://foobar.tld/foobar/src/css/asset.css' => [
                 'target' => '/web/assets/css/asset.css',
                 'content' => sprintf($cssContent, $sourceUrl),
-            ),
-        );
+            ],
+        ];
 
         foreach ($fixtures as $filename => $config) {
             $path = $filename;
@@ -190,12 +190,12 @@ class RequireCssRewriteFilterTest extends TestCase
 
     public function getDataForFilterDumpWithPartialUrl()
     {
-        return array(
-            array('url("https://example.tld/web/assets/img/bg.jpg")', 'url("https://example.tld/web/assets/img/bg.jpg")'),
-            array('url("/foobar/static/img/bg.jpg")',                 'url("https://foobar.tld/foobar/static/img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg")',                   'url("../../static/img/bg.jpg")'),
-            array('url("../../static/img/bg.jpg?foo=bar")',           'url("../../static/img/bg.jpg?foo=bar")'),
-        );
+        return [
+            ['url("https://example.tld/web/assets/img/bg.jpg")', 'url("https://example.tld/web/assets/img/bg.jpg")'],
+            ['url("/foobar/static/img/bg.jpg")',                 'url("https://foobar.tld/foobar/static/img/bg.jpg")'],
+            ['url("../../static/img/bg.jpg")',                   'url("../../static/img/bg.jpg")'],
+            ['url("../../static/img/bg.jpg?foo=bar")',           'url("../../static/img/bg.jpg?foo=bar")'],
+        ];
     }
 
     /**
@@ -209,12 +209,12 @@ class RequireCssRewriteFilterTest extends TestCase
         $cssContent = 'h1 { background: %s; }';
 
         $this->lam->setLoader('requireassetloader', new RequireAssetLoader());
-        $fixtures = array(
-            'https://foobar.tld/foobar/src/css/asset.css' => array(
+        $fixtures = [
+            'https://foobar.tld/foobar/src/css/asset.css' => [
                 'target' => '/web/assets/css/asset.css',
                 'content' => sprintf($cssContent, $sourceUrl),
-            ),
-        );
+            ],
+        ];
 
         foreach ($fixtures as $filename => $config) {
             $path = $filename;

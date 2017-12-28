@@ -145,7 +145,7 @@ class AsseticAssetManagerTest extends TestCase
         PackageTest::createFixtures();
 
         $pm = $this->aam->getPackageManager();
-        $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', array('js', 'css'), array(), false, false);
+        $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', ['js', 'css'], [], false, false);
 
         $this->assertCount(0, $this->lam->getResources());
 
@@ -160,10 +160,10 @@ class AsseticAssetManagerTest extends TestCase
 
         $this->assertCount(0, $this->lam->getResources());
 
-        $inputs = array(
+        $inputs = [
             '@foobar/js/component-a.js',
             '@foobar/js/component-b.js',
-        );
+        ];
 
         $this->aam->addCommonAsset('common_js', $inputs, 'TARGET.js');
         $this->aam->addAssetResources($this->lam);
@@ -184,29 +184,29 @@ class AsseticAssetManagerTest extends TestCase
         $this->aam->getLocaleManager()->addLocalizedAsset('@foobar/js/component-b.js', 'fr', '@foobar/js/component-b-fr.js');
         $this->aam->getLocaleManager()->addLocalizedAsset('@foobar/js/component-b.js', 'en_US', '@foobar/js/component-b-en-us.js');
 
-        $inputs = array(
+        $inputs = [
             '@foobar/js/component-a.js',
             '@foobar/js/component-b.js',
             '@foobar/js/component-c.js',
-        );
+        ];
 
         $this->aam->addCommonAsset('common_js', $inputs, 'TARGET.js');
-        $this->aam->addCommonAsset('common_js__fr_fr', array('@foobar_js_component_a_fr_fr_js', '@foobar_js_component_b_fr_js'), 'TARGET-fr-fr-custom.js');
+        $this->aam->addCommonAsset('common_js__fr_fr', ['@foobar_js_component_a_fr_fr_js', '@foobar_js_component_b_fr_js'], 'TARGET-fr-fr-custom.js');
         $this->aam->addAssetResources($this->lam);
 
-        $validLocales = array(
+        $validLocales = [
             'fr',
             'fr_fr',
             'en_us',
-        );
+        ];
         $this->assertSame($validLocales, $this->aam->getLocaleManager()->getAssetLocales());
 
-        $validResources = array(
-            new CommonRequireAssetResource('common_js', $inputs, 'assets/TARGET.js', array(), array()),
-            new CommonRequireAssetResource('common_js__fr', array('@foobar_js_component_a_fr_js', '@foobar_js_component_b_fr_js'), 'assets/TARGET-fr.js', array(), array()),
-            new CommonRequireAssetResource('common_js__en_us', array('@foobar_js_component_a_en_us_js', '@foobar_js_component_b_en_us_js'), 'assets/TARGET-en-us.js', array(), array()),
-            new CommonRequireAssetResource('common_js__fr_fr', array('@foobar_js_component_a_fr_fr_js', '@foobar_js_component_b_fr_js'), 'assets/TARGET-fr-fr-custom.js', array(), array()),
-        );
+        $validResources = [
+            new CommonRequireAssetResource('common_js', $inputs, 'assets/TARGET.js', [], []),
+            new CommonRequireAssetResource('common_js__fr', ['@foobar_js_component_a_fr_js', '@foobar_js_component_b_fr_js'], 'assets/TARGET-fr.js', [], []),
+            new CommonRequireAssetResource('common_js__en_us', ['@foobar_js_component_a_en_us_js', '@foobar_js_component_b_en_us_js'], 'assets/TARGET-en-us.js', [], []),
+            new CommonRequireAssetResource('common_js__fr_fr', ['@foobar_js_component_a_fr_fr_js', '@foobar_js_component_b_fr_js'], 'assets/TARGET-fr-fr-custom.js', [], []),
+        ];
         $this->assertEquals($validResources, $this->lam->getResources());
     }
 
@@ -216,7 +216,7 @@ class AsseticAssetManagerTest extends TestCase
 
         $cache = new AsseticAssetCache(PackageTest::getFixturesDir());
         $pm = $this->aam->getPackageManager();
-        $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', array('js', 'css'), array(), false, false);
+        $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', ['js', 'css'], [], false, false);
 
         $this->aam->setCache($cache);
 
@@ -241,7 +241,7 @@ class AsseticAssetManagerTest extends TestCase
         PackageTest::createFixtures();
 
         $pm = $this->aam->getPackageManager();
-        $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', array('js', 'less'), array(), false, false);
+        $pm->addPackage('foobar', PackageTest::getFixturesDir().'/foobar', ['js', 'less'], [], false, false);
 
         $arm = $this->aam->getAssetReplacementManager();
         $arm->addReplacement('@foobar/less/foobar.less', '@foobar/less/foobar-theme.less');
@@ -279,12 +279,12 @@ class AsseticAssetManagerTest extends TestCase
      */
     public static function getLocalizedFixtureFiles()
     {
-        return array(
+        return [
             'foobar/js/component-a-fr.js',
             'foobar/js/component-a-fr-fr.js',
             'foobar/js/component-a-en-us.js',
             'foobar/js/component-b-fr.js',
             'foobar/js/component-b-en-us.js',
-        );
+        ];
     }
 }

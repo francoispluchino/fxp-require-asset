@@ -26,8 +26,8 @@ class FileExtensionTest extends TestCase
         $ext = new FileExtension('ext');
 
         $this->assertSame('ext', $ext->getName());
-        $this->assertSame(array(), $ext->getOptions());
-        $this->assertSame(array(), $ext->getFilters());
+        $this->assertSame([], $ext->getOptions());
+        $this->assertSame([], $ext->getFilters());
         $this->assertSame('ext', $ext->getOutputExtension());
         $this->assertFalse($ext->isDebug());
         $this->assertFalse($ext->isExclude());
@@ -35,14 +35,14 @@ class FileExtensionTest extends TestCase
 
     public function testSameOutputExtensionName()
     {
-        $ext = new FileExtension('ext', array(), array(), 'ext');
+        $ext = new FileExtension('ext', [], [], 'ext');
 
         $this->assertSame('ext', $ext->getOutputExtension());
     }
 
     public function testDifferentOutputExtensionName()
     {
-        $ext = new FileExtension('ext', array(), array(), 'other');
+        $ext = new FileExtension('ext', [], [], 'other');
 
         $this->assertSame('other', $ext->getOutputExtension());
     }

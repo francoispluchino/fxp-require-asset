@@ -36,13 +36,13 @@ class InlineTagReference extends \Twig_Node
     public function __construct($extension, $name, $tagClass, $lineno, $position = null, $tag = null)
     {
         $this->extension = $extension;
-        $twigAttributes = array(
+        $twigAttributes = [
             'name' => $name,
             'tagClass' => $tagClass,
             'position' => $position,
-        );
+        ];
 
-        parent::__construct(array(), $twigAttributes, $lineno, $tag);
+        parent::__construct([], $twigAttributes, $lineno, $tag);
     }
 
     /**

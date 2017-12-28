@@ -47,7 +47,7 @@ interface PackageManagerInterface
      * @throws BadMethodCallException   When the manager is resolved
      * @throws InvalidArgumentException When the "name" argument is a string and the "sourcePath" argument is empty
      */
-    public function addPackage($name, $sourcePath = null, array $extensions = array(), array $patterns = array(), $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null);
+    public function addPackage($name, $sourcePath = null, array $extensions = [], array $patterns = [], $replaceDefaultExts = false, $replaceDefaultPatterns = false, $sourceBase = null);
 
     /**
      * Adds the configs of package.

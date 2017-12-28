@@ -35,15 +35,15 @@ class ChainRequireAssetManagerTest extends TestCase
     protected function setUp()
     {
         $this->ram = $this->getMockBuilder(RequireAssetManagerInterface::class)->getMock();
-        $this->cram = new ChainRequireAssetManager(array($this->ram));
+        $this->cram = new ChainRequireAssetManager([$this->ram]);
     }
 
     public function getHasValues()
     {
-        return array(
-            array(true),
-            array(false),
-        );
+        return [
+            [true],
+            [false],
+        ];
     }
 
     /**

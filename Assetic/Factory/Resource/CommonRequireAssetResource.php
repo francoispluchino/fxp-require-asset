@@ -34,11 +34,11 @@ class CommonRequireAssetResource extends AbstractRequireAssetResource
      * @param array  $filters    The asset filters
      * @param array  $options    The asset filters
      */
-    public function __construct($name, array $inputs, $targetPath, array $filters = array(), array $options = array())
+    public function __construct($name, array $inputs, $targetPath, array $filters = [], array $options = [])
     {
         parent::__construct($name, $targetPath, $filters, $options);
 
-        $this->inputs = array();
+        $this->inputs = [];
 
         foreach ($inputs as $input) {
             $this->inputs[] = '@'.AssetUtils::formatName($input);
@@ -58,8 +58,8 @@ class CommonRequireAssetResource extends AbstractRequireAssetResource
      */
     protected function getFixedOptions()
     {
-        return array(
+        return [
             'fxp_require_common_asset' => true,
-        );
+        ];
     }
 }

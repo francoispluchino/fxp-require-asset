@@ -25,18 +25,18 @@ class PatternConfigurationTest extends TestCase
     public function testPattern()
     {
         $process = new Processor();
-        $configs = array(
-            array(
+        $configs = [
+            [
                 'js/*',
-            ),
-            array(
+            ],
+            [
                 'css/*',
-            ),
-        );
-        $validConfig = array(
+            ],
+        ];
+        $validConfig = [
             'js/*',
             'css/*',
-        );
+        ];
 
         $res = $process->process(PatternConfiguration::getNode(), $configs);
 

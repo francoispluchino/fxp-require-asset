@@ -30,7 +30,7 @@ class TagPositionFunctionNode extends \Twig_Node_Expression_Function
         $arguments = $function->getArguments();
 
         if (count($arguments) >= 2) {
-            $arguments = array($arguments[0], $arguments[1], $this->getTemplateLine(), $this->getTemplateName());
+            $arguments = [$arguments[0], $arguments[1], $this->getTemplateLine(), $this->getTemplateName()];
         }
 
         $function->setArguments($arguments);

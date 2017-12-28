@@ -26,12 +26,12 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
      */
     public function getContainerServiceConfig()
     {
-        $configs = array();
+        $configs = [];
 
         foreach ($this->getRequireTwigTags() as $tags) {
-            $configs[] = array($tags[0], false, false, false, 'The twig tag "%s" require the container service');
-            $configs[] = array($tags[0], true,  false, false, 'The twig tag "%s" require the service "assetic.asset_manager"');
-            $configs[] = array($tags[0], true,  true,  false, 'The twig tag "%s" require the service "templating.helper.assets"');
+            $configs[] = [$tags[0], false, false, false, 'The twig tag "%s" require the container service'];
+            $configs[] = [$tags[0], true,  false, false, 'The twig tag "%s" require the service "assetic.asset_manager"'];
+            $configs[] = [$tags[0], true,  true,  false, 'The twig tag "%s" require the service "templating.helper.assets"'];
         }
 
         return $configs;
@@ -134,9 +134,9 @@ class RequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 
     public function getRequireTwigAsset()
     {
-        return array(
-            array(new RequireScriptTag('asset_source_path')),
-            array(new RequireStyleTag('asset_source_path')),
-        );
+        return [
+            [new RequireScriptTag('asset_source_path')],
+            [new RequireStyleTag('asset_source_path')],
+        ];
     }
 }

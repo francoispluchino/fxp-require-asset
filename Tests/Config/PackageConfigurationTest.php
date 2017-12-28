@@ -25,64 +25,64 @@ class PackageConfigurationTest extends TestCase
     public function testFileExtension()
     {
         $process = new Processor();
-        $configs = array(
-            array(
-                'package1' => array(
+        $configs = [
+            [
+                'package1' => [
                     'source_path' => 'PACKAGE1_PATH',
-                ),
-                'package2' => array(
+                ],
+                'package2' => [
                     'source_path' => 'PACKAGE2_PATH',
-                    'extensions' => array(
-                        'js' => array(),
-                        'less' => array(
+                    'extensions' => [
+                        'js' => [],
+                        'less' => [
                             'extension' => 'css',
-                        ),
-                    ),
-                ),
-            ),
-            array(
-                'package2' => array(
-                    'extensions' => array(
-                        'less' => array(
-                            'filters' => array('lessphp'),
-                        ),
-                    ),
-                ),
-            ),
-        );
-        $validConfig = array(
-            'package1' => array(
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'package2' => [
+                    'extensions' => [
+                        'less' => [
+                            'filters' => ['lessphp'],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $validConfig = [
+            'package1' => [
                 'source_path' => 'PACKAGE1_PATH',
                 'source_base' => null,
                 'replace_default_extensions' => false,
                 'replace_default_patterns' => false,
-                'extensions' => array(),
-                'patterns' => array(),
-            ),
-            'package2' => array(
+                'extensions' => [],
+                'patterns' => [],
+            ],
+            'package2' => [
                 'source_path' => 'PACKAGE2_PATH',
                 'source_base' => null,
                 'replace_default_extensions' => false,
                 'replace_default_patterns' => false,
-                'extensions' => array(
-                    'js' => array(
-                        'filters' => array(),
-                        'options' => array(),
+                'extensions' => [
+                    'js' => [
+                        'filters' => [],
+                        'options' => [],
                         'extension' => null,
                         'debug' => false,
                         'exclude' => false,
-                    ),
-                    'less' => array(
-                        'filters' => array('lessphp'),
-                        'options' => array(),
+                    ],
+                    'less' => [
+                        'filters' => ['lessphp'],
+                        'options' => [],
                         'extension' => 'css',
                         'debug' => false,
                         'exclude' => false,
-                    ),
-                ),
-                'patterns' => array(),
-            ),
-        );
+                    ],
+                ],
+                'patterns' => [],
+            ],
+        ];
 
         $res = $process->process(PackageConfiguration::getNode(), $configs);
 

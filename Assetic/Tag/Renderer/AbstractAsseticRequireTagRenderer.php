@@ -47,7 +47,7 @@ abstract class AbstractAsseticRequireTagRenderer extends BaseRequireTagRenderer
      */
     public function __construct(LazyAssetManager $manager,
                                 LocaleManagerInterface $localeManager = null,
-                                array $debugCommonAssets = array())
+                                array $debugCommonAssets = [])
     {
         $this->manager = $manager;
         $this->debugCommonAssets = $debugCommonAssets;

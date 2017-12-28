@@ -48,7 +48,7 @@ abstract class BaseRequireTagRenderer implements RequireTagRendererInterface
      */
     public function reset()
     {
-        $this->renderedTags = array();
+        $this->renderedTags = [];
     }
 
     /**
@@ -64,7 +64,7 @@ abstract class BaseRequireTagRenderer implements RequireTagRendererInterface
             return $this->localeManager->getLocalizedAsset($asset);
         }
 
-        return array();
+        return [];
     }
 
     /**

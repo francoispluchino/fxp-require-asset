@@ -27,6 +27,6 @@ class InlineTagRendererUtilsTest extends TestCase
      */
     public function testWrongCallable()
     {
-        InlineTagRendererUtils::renderBody(array(), array(), array());
+        InlineTagRendererUtils::renderBody([], [], []);
     }
 }

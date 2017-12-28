@@ -42,8 +42,8 @@ class FileExtensionManager extends AbstractConfigManager implements FileExtensio
      */
     public function __construct()
     {
-        $this->defaults = array();
-        $this->unresolvedDefaults = array();
+        $this->defaults = [];
+        $this->unresolvedDefaults = [];
         $this->locked = false;
     }
 
@@ -58,9 +58,9 @@ class FileExtensionManager extends AbstractConfigManager implements FileExtensio
     /**
      * {@inheritdoc}
      */
-    public function addDefaultExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false)
+    public function addDefaultExtension($name, array $options = [], array $filters = [], $extension = null, $debug = false, $exclude = false)
     {
-        return $this->doAdd('Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils', 'unresolvedDefaults', array($name, $options, $filters, $extension, $debug, $exclude));
+        return $this->doAdd('Fxp\Component\RequireAsset\Assetic\Util\FileExtensionUtils', 'unresolvedDefaults', [$name, $options, $filters, $extension, $debug, $exclude]);
     }
 
     /**
@@ -119,7 +119,7 @@ class FileExtensionManager extends AbstractConfigManager implements FileExtensio
             $this->defaults[$ext->getName()] = $ext;
         }
 
-        $this->unresolvedDefaults = array();
+        $this->unresolvedDefaults = [];
     }
 
     /**

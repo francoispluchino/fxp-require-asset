@@ -84,7 +84,7 @@ abstract class AbstractAsseticAssetManager implements AsseticAssetManagerInterfa
     public function __construct()
     {
         $this->initialized = false;
-        $this->commons = array();
+        $this->commons = [];
     }
 
     /**

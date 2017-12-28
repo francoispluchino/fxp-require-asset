@@ -25,18 +25,18 @@ class InlineTagConfigurationTest extends TestCase
     public function testInlineAsset()
     {
         $process = new Processor();
-        $configs = array(
-            array(
+        $configs = [
+            [
                 'position' => 'head',
-            ),
-            array(
+            ],
+            [
                 'keep_html_tag' => false,
-            ),
-        );
-        $validConfig = array(
+            ],
+        ];
+        $validConfig = [
             'position' => 'head',
             'keep_html_tag' => false,
-        );
+        ];
 
         $res = $process->process(InlineTagConfiguration::getNode(), $configs);
 

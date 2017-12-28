@@ -26,10 +26,10 @@ class CommonRequireAssetResourceTest extends TestCase
         $time = new \DateTime();
         $formulaeName = 'foobar_js';
         $name = 'foobar.js';
-        $inputs = array('@asset/foobar/foobar.js');
+        $inputs = ['@asset/foobar/foobar.js'];
         $targetPath = 'output/foobar.js';
-        $filters = array('?yui_js');
-        $options = array();
+        $filters = ['?yui_js'];
+        $options = [];
         $resource = new CommonRequireAssetResource($name, $inputs, $targetPath, $filters, $options);
 
         $this->assertSame($formulaeName, (string) $resource);
@@ -37,16 +37,16 @@ class CommonRequireAssetResourceTest extends TestCase
         $this->assertTrue($resource->isFresh($time->getTimestamp()));
         $this->assertSame('', $resource->getContent());
 
-        $validFormulae = array(
-            $formulaeName => array(
-                array('@asset_foobar_foobar_js'),
+        $validFormulae = [
+            $formulaeName => [
+                ['@asset_foobar_foobar_js'],
                 $filters,
-                array_merge($options, array(
+                array_merge($options, [
                     'fxp_require_common_asset' => true,
                     'output' => $targetPath,
-                )),
-            ),
-        );
+                ]),
+            ],
+        ];
         $this->assertSame($validFormulae, $resource->getFormulae());
     }
 }

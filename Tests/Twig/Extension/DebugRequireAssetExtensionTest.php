@@ -20,16 +20,16 @@ class DebugRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
 {
     protected function setUp()
     {
-        $this->debugCommonAssets = array(
-            'common_js' => array(
+        $this->debugCommonAssets = [
+            'common_js' => [
                 '@acme_demo/js/asset.js',
                 '@acme_demo/js/asset2.js',
-            ),
-            'common_css' => array(
+            ],
+            'common_css' => [
                 '@acme_demo/css/asset.css',
                 '@acme_demo/css/asset2.css',
-            ),
-        );
+            ],
+        ];
 
         parent::setUp();
     }
@@ -39,10 +39,10 @@ class DebugRequireAssetExtensionTest extends AbstractRequireAssetExtensionTest
      */
     public function getDebugRequireTwigTags()
     {
-        return array(
-            array('debug_require_script'),
-            array('debug_require_style'),
-        );
+        return [
+            ['debug_require_script'],
+            ['debug_require_style'],
+        ];
     }
 
     /**

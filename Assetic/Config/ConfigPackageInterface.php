@@ -30,7 +30,7 @@ interface ConfigPackageInterface extends PackageInterface
      *
      * @return self
      */
-    public function addExtension($name, array $options = array(), array $filters = array(), $extension = null, $debug = false, $exclude = false);
+    public function addExtension($name, array $options = [], array $filters = [], $extension = null, $debug = false, $exclude = false);
 
     /**
      * Removes the config of extension.

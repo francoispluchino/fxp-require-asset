@@ -31,7 +31,7 @@ class RequireAssetLoaderTest extends TestCase
             ->getMock();
 
         $loader = new RequireAssetLoader();
-        $valid = array('RESOURCE_FORMULAE_CONFIG');
+        $valid = ['RESOURCE_FORMULAE_CONFIG'];
 
         $resource->expects($this->any())
             ->method('getFormulae')
@@ -46,6 +46,6 @@ class RequireAssetLoaderTest extends TestCase
         $resource = $this->getMockBuilder('Assetic\Factory\Resource\ResourceInterface')->getMock();
         $loader = new RequireAssetLoader();
 
-        $this->assertSame(array(), $loader->load($resource));
+        $this->assertSame([], $loader->load($resource));
     }
 }

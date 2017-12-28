@@ -24,14 +24,14 @@ class AssetReplacementManager implements AssetReplacementManagerInterface
     /**
      * @var array
      */
-    protected $replacements = array();
+    protected $replacements = [];
 
     /**
      * {@inheritdoc}
      */
     public function addReplacement($assetName, $replacementName)
     {
-        $this->replacements[AssetUtils::formatName($assetName)] = array($assetName, $replacementName);
+        $this->replacements[AssetUtils::formatName($assetName)] = [$assetName, $replacementName];
 
         return $this;
     }
@@ -83,7 +83,7 @@ class AssetReplacementManager implements AssetReplacementManagerInterface
      */
     public function getReplacements()
     {
-        $replacements = array();
+        $replacements = [];
 
         foreach ($this->replacements as $replacementConfig) {
             $replacements[$replacementConfig[0]] = $replacementConfig[1];

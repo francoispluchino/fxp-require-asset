@@ -42,7 +42,7 @@ class LessVariableFilter implements FilterInterface
      * @param array $packages  The map of asset package name and path
      * @param array $variables The map of custom variable and value
      */
-    public function __construct(array $packages = array(), array $variables = array())
+    public function __construct(array $packages = [], array $variables = [])
     {
         $this->packages = $packages;
         $this->variables = $variables;
@@ -112,7 +112,7 @@ class LessVariableFilter implements FilterInterface
      */
     protected function dumpVariable($name, $value, $suffix = '')
     {
-        $name = strtolower(str_replace(array('.', '_', '/'), '-', $name));
+        $name = strtolower(str_replace(['.', '_', '/'], '-', $name));
         $name = trim($name, '@');
 
         return '@'.$name.$suffix.': "'.(string) $value.'";';

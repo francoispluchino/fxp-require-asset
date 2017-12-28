@@ -56,8 +56,8 @@ class LocaleManager implements LocaleManagerInterface
     {
         $this->setLocale(null !== $locale ? $locale : \Locale::getDefault());
         $this->setFallbackLocale($fallback);
-        $this->assets = array();
-        $this->mapAssets = array();
+        $this->assets = [];
+        $this->mapAssets = [];
     }
 
     /**
@@ -179,7 +179,7 @@ class LocaleManager implements LocaleManagerInterface
 
             return isset($this->mapAssets[$name])
                 ? array_keys($this->mapAssets[$name])
-                : array();
+                : [];
         }
 
         return array_keys($this->assets);
@@ -222,7 +222,7 @@ class LocaleManager implements LocaleManagerInterface
             return $this->doFindLocalizedAsset(substr($locale, 0, $pos), $asset);
         }
 
-        return array();
+        return [];
     }
 
     /**

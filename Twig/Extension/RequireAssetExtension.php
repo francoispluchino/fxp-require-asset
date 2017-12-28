@@ -40,9 +40,9 @@ class RequireAssetExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-            new \Twig_Function('requireAsset', array($this, 'requireAsset')),
-        );
+        return [
+            new \Twig_Function('requireAsset', [$this, 'requireAsset']),
+        ];
     }
 
     /**

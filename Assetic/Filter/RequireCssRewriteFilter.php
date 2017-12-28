@@ -101,7 +101,7 @@ class RequireCssRewriteFilter implements FilterInterface, HashableInterface
      */
     protected function getResourcePaths()
     {
-        $resources = array();
+        $resources = [];
 
         foreach ($this->manager->getResources() as $resource) {
             if ($resource instanceof RequireAssetResource) {

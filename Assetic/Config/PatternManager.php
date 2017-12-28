@@ -35,7 +35,7 @@ class PatternManager implements PatternManagerInterface
      */
     public function __construct()
     {
-        $this->defaults = array();
+        $this->defaults = [];
         $this->locked = false;
     }
 
