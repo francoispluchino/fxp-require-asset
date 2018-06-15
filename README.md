@@ -27,7 +27,9 @@ right place in the template, while removing duplicates.
   - the replacement of assets by other assets
 - Automatic addition of localized commons assets
 - Compiling the final list of asset in cache for increase performance
-- Compatible with [Webpack](https://webpack.js.org) and source maps (require the plugin [assets-webpack-plugin](https://github.com/kossnocorp/assets-webpack-plugin))
+- Compatible with [Webpack](https://webpack.js.org) and source maps (require the plugin
+  [webpack-manifest-plugin](https://github.com/danethurber/webpack-manifest-plugin) or
+  [assets-webpack-plugin](https://github.com/kossnocorp/assets-webpack-plugin))
 - Assetic filters:
   - `requirecssrewrite`: for rewrite the url of another require asset in css file
   - `lessvariable`: for inject the asset package paths as variables

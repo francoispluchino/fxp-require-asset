@@ -16,6 +16,7 @@ use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Assetic\Tag\Renderer\AsseticRequireTagRenderer;
 use Fxp\Component\RequireAsset\Tag\Renderer\InlineTagRenderer;
+use Fxp\Component\RequireAsset\Webpack\Adapter\AssetsAdapter;
 use Fxp\Component\RequireAsset\Webpack\Tag\Renderer\WebpackRequireTagRenderer;
 use Fxp\Component\RequireAsset\Webpack\WebpackRequireAssetManager;
 
@@ -46,7 +47,8 @@ class CoreAssetExtension extends AssetExtension
         $renderers = [new InlineTagRenderer()];
 
         if (null !== $webpackAssetsFile) {
-            $renderers[] = new WebpackRequireTagRenderer(new WebpackRequireAssetManager($webpackAssetsFile), $localeManager);
+            $wpManager = new WebpackRequireAssetManager(new AssetsAdapter($webpackAssetsFile));
+            $renderers[] = new WebpackRequireTagRenderer($wpManager, $localeManager);
         }
 
         if (null !== $manager) {

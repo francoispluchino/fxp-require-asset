@@ -11,10 +11,10 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Webpack;
 
+use Fxp\Component\RequireAsset\Exception\AssetNotFoundException;
+use Fxp\Component\RequireAsset\Webpack\Adapter\AdapterInterface;
 use Fxp\Component\RequireAsset\Webpack\WebpackRequireAssetManager;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * Webpack Require Asset Manager Tests.
@@ -24,185 +24,76 @@ use Psr\Cache\CacheItemPoolInterface;
 class WebpackRequireAssetManagerTest extends TestCase
 {
     /**
+     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $adapter;
+
+    /**
      * @var WebpackRequireAssetManager
      */
     protected $ram;
 
     protected function setUp()
     {
-        $this->ram = new WebpackRequireAssetManager(
-            realpath(__DIR__.'/../Fixtures/Webpack/assets.json')
-        );
+        $this->adapter = $this->getMockBuilder(AdapterInterface::class)->getMock();
+        $this->ram = new WebpackRequireAssetManager($this->adapter);
     }
 
     protected function tearDown()
     {
+        $this->adapter = null;
         $this->ram = null;
     }
 
     public function testHas()
     {
         $asset = '@webpack/asset_js';
-        $expectedResult = true;
 
-        $res = $this->ram->has($asset);
+        $this->adapter->expects($this->once())
+            ->method('getPath')
+            ->with($asset, null)
+            ->willReturn('/assets.js');
 
-        $this->assertSame($expectedResult, $res);
+        $this->assertTrue($this->ram->has($asset));
     }
 
     public function testHasNotAsset()
     {
         $asset = '@webpack/asset_not_found';
-        $expectedResult = false;
 
-        $res = $this->ram->has($asset);
+        $this->adapter->expects($this->once())
+            ->method('getPath')
+            ->with($asset, null)
+            ->willThrowException(new AssetNotFoundException('Not Found'));
 
-        $this->assertSame($expectedResult, $res);
+        $this->assertFalse($this->ram->has($asset));
     }
 
-    public function getPathValues()
+    public function testGet()
     {
-        return [
-            ['@webpack/asset', 'js', '/assets/asset.js'],
-            ['@webpack/asset', 'script', '/assets/asset.js'],
-            ['@webpack/asset', 'css', '/assets/asset.css'],
-            ['@webpack/asset', 'style', '/assets/asset.css'],
-            ['@webpack/asset_js', null, '/assets/asset_js.js'],
-            ['@webpack/asset_css', null, '/assets/asset_css.css'],
-            ['@webpack/asset_ext', null, '/assets/asset_ext.ext'],
-        ];
-    }
+        $asset = '@webpack/asset_js';
 
-    /**
-     * @dataProvider getPathValues
-     *
-     * @param string      $asset
-     * @param string|null $type
-     * @param string      $expectedResult
-     */
-    public function testGet($asset, $type, $expectedResult)
-    {
-        $res = $this->ram->getPath($asset, $type);
+        $this->adapter->expects($this->once())
+            ->method('getPath')
+            ->with($asset, null)
+            ->willReturn('/assets.js');
 
-        $this->assertSame($expectedResult, $res);
-    }
-
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The asset type is required for the asset "@webpack/asset_ext2"
-     */
-    public function testGetWithRequireType()
-    {
-        $this->ram->getPath('@webpack/asset_ext2');
+        $this->assertSame('/assets.js', $this->ram->getPath($asset, null));
     }
 
     /**
      * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage The asset "@webpack/asset_not_found" is not found
+     * @expectedExceptionMessage Not Found
      */
-    public function testGetWithoutAsset()
+    public function testGetNotAsset()
     {
         $asset = '@webpack/asset_not_found';
 
-        $this->ram->getPath($asset);
-    }
+        $this->adapter->expects($this->once())
+            ->method('getPath')
+            ->with($asset, null)
+            ->willThrowException(new AssetNotFoundException('Not Found'));
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Cannot access "INVALID_ASSET.json" to read the JSON file
-     */
-    public function testInvalidJsonFilename()
-    {
-        $this->ram = new WebpackRequireAssetManager('INVALID_ASSET.json');
-
-        $this->ram->getPath('@webpack/asset');
-    }
-
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Cannot read the JSON content: Syntax error
-     */
-    public function testInvalidJsonContent()
-    {
-        $this->ram = new WebpackRequireAssetManager(
-            realpath(__DIR__.'/../Fixtures/Webpack/assets_invalid.json')
-        );
-
-        $this->ram->getPath('@webpack/asset');
-    }
-
-    public function testGetPathWithCache()
-    {
-        /* @var CacheItemPoolInterface|\PHPUnit_Framework_MockObject_MockObject $cache */
-        $cache = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();
-        $cacheKey = 'custom_key';
-        $asset = '@webpack/asset_js';
-        $expected = '/assets/asset_js.js';
-        $assetFile = realpath(__DIR__.'/../Fixtures/Webpack/assets.json');
-
-        $this->ram = new WebpackRequireAssetManager(
-            $assetFile,
-            $cache,
-            $cacheKey
-        );
-
-        $cacheItem = $this->getMockBuilder(CacheItemInterface::class)->getMock();
-
-        $cacheItem->expects($this->once())
-            ->method('get')
-            ->willReturn(json_decode(file_get_contents($assetFile), true));
-
-        $cacheItem->expects($this->once())
-            ->method('isHit')
-            ->willReturn(true);
-
-        $cache->expects($this->at(0))
-            ->method('getItem')
-            ->with($cacheKey)
-            ->willReturn($cacheItem);
-
-        $res = $this->ram->getPath($asset);
-        $this->assertSame($expected, $res);
-    }
-
-    public function testGetPathWithEmptyCache()
-    {
-        /* @var CacheItemPoolInterface|\PHPUnit_Framework_MockObject_MockObject $cache */
-        $cache = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();
-        $cacheKey = 'custom_key';
-        $asset = '@webpack/asset_js';
-        $expected = '/assets/asset_js.js';
-        $assetFile = realpath(__DIR__.'/../Fixtures/Webpack/assets.json');
-
-        $this->ram = new WebpackRequireAssetManager(
-            $assetFile,
-            $cache,
-            $cacheKey
-        );
-
-        $cacheItem = $this->getMockBuilder(CacheItemInterface::class)->getMock();
-
-        $cacheItem->expects($this->once())
-            ->method('get')
-            ->willReturn(null);
-
-        $cacheItem->expects($this->once())
-            ->method('isHit')
-            ->willReturn(false);
-
-        $cacheItem->expects($this->once())
-            ->method('set');
-
-        $cache->expects($this->at(0))
-            ->method('getItem')
-            ->with($cacheKey)
-            ->willReturn($cacheItem);
-
-        $cache->expects($this->at(1))
-            ->method('save')
-            ->with($cacheItem);
-
-        $res = $this->ram->getPath($asset);
-        $this->assertSame($expected, $res);
+        $this->ram->getPath($asset, null);
     }
 }
