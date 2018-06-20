@@ -11,8 +11,6 @@
 
 namespace Fxp\Component\RequireAsset\Asset\Util;
 
-use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
-
 /**
  * Asset Locale Utils.
  *
@@ -35,78 +33,5 @@ abstract class LocaleUtils
         }
 
         return $locale;
-    }
-
-    /**
-     * Format the locale common name.
-     *
-     * @param string $name   The common asset name
-     * @param string $locale The locale
-     *
-     * @return string
-     */
-    public static function formatLocaleCommonName($name, $locale)
-    {
-        return $name.'__'.static::formatLocale($locale);
-    }
-
-    /**
-     * Get the locale common inputs.
-     *
-     * @param array                  $inputs        The formulae inputs
-     * @param string                 $locale        The locale
-     * @param LocaleManagerInterface $localeManager The locale manager
-     *
-     * @return string[]
-     */
-    public static function getLocaleCommonInputs(array $inputs, $locale, LocaleManagerInterface $localeManager)
-    {
-        $localeInputs = [];
-
-        foreach ($inputs as $input) {
-            $localeInputs = array_merge($localeInputs, $localeManager->getLocalizedAsset($input, $locale));
-        }
-
-        return $localeInputs;
-    }
-
-    /**
-     * Convert the target path to the locale target path.
-     *
-     * @param string $targetPath The require target path
-     * @param string $locale     The locale
-     *
-     * @return string
-     */
-    public static function convertLocaleTartgetPath($targetPath, $locale)
-    {
-        $pos = strrpos($targetPath, '.');
-
-        if (false !== $pos) {
-            $a = substr($targetPath, 0, $pos);
-            $b = substr($targetPath, $pos);
-            $targetPath = $a.'-'.str_replace('_', '-', strtolower($locale)).$b;
-        }
-
-        return $targetPath;
-    }
-
-    /**
-     * Finds the locales of common asset.
-     *
-     * @param array                  $inputs        The formulae inputs
-     * @param LocaleManagerInterface $localeManager The locale manager
-     *
-     * @return string[]
-     */
-    public static function findCommonAssetLocales(array $inputs, LocaleManagerInterface $localeManager)
-    {
-        $locales = [];
-
-        foreach ($inputs as $input) {
-            $locales = array_merge($locales, $localeManager->getAssetLocales($input));
-        }
-
-        return array_unique($locales);
     }
 }

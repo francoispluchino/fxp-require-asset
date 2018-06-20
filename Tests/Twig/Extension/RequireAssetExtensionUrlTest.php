@@ -55,21 +55,21 @@ class RequireAssetExtensionUrlTest extends TestCase
     {
         $this->manager->expects($this->at(0))
             ->method('has')
-            ->with('@acme_demo/js/asset.js')
+            ->with('@webpack/asset')
             ->willReturn(true);
 
         $this->manager->expects($this->at(1))
             ->method('getPath')
-            ->with('@acme_demo/js/asset.js')
-            ->willReturn('/assets/acemodemo/js/asset.js');
+            ->with('@webpack/asset')
+            ->willReturn('/assets/asset.js');
 
         $this->manager->expects($this->at(2))
             ->method('has')
-            ->with('@acme_demo/js/asset2.js')
+            ->with('@webpack/asset2')
             ->willReturn(false);
 
         $this->assertCount(1, $this->ext->getFunctions());
-        $this->assertSame('/assets/acemodemo/js/asset.js', $this->ext->requireAsset('@acme_demo/js/asset.js'));
-        $this->assertSame('@acme_demo/js/asset2.js', $this->ext->requireAsset('@acme_demo/js/asset2.js'));
+        $this->assertSame('/assets/asset.js', $this->ext->requireAsset('@webpack/asset'));
+        $this->assertSame('@webpack/asset2', $this->ext->requireAsset('@webpack/asset2'));
     }
 }

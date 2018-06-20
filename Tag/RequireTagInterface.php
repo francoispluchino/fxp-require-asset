@@ -40,24 +40,6 @@ interface RequireTagInterface extends TagInterface
     public function getPath();
 
     /**
-     * Set the inputs.
-     * Use only by the order of the renderer.
-     *
-     * @param array $inputs The inputs
-     *
-     * @return self
-     */
-    public function setInputs(array $inputs);
-
-    /**
-     * Get the inputs.
-     * Use only by the order of the renderer.
-     *
-     * @return array
-     */
-    public function getInputs();
-
-    /**
      * Check if the end HTML tag must be in a short or long format.
      *
      * @return bool

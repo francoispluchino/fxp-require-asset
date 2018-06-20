@@ -1,9 +1,0 @@
-{% extends "base.html.twig" %}
-
-{% block body %}
-{% set id = 'myblock' %}
-<div id="{{ id }}">Hello world</div>
-{% require_style '@common_css' %}
-{% require_style '@acme_demo/css/asset.css' %}
-{% require_style '@acme_demo/css/asset3.css' %}
-{% endblock %}

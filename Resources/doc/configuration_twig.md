@@ -7,13 +7,7 @@ register it to your Twig environment:
 ```php
 <?php
 
-use Assetic\Factory\AssetFactory;
-use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Twig\Extension\CoreAssetExtension;
-
-// assetic lazy asset manager
-$factory = new AssetFactory('web');
-$lam = new LazyAssetManager($factory);
 
 // twig environment
 $loader = new Twig_Loader_Filesystem('/path/to/templates');
@@ -22,10 +16,10 @@ $twig = new Twig_Environment($loader, array(
 ));
 
 // require asset twig extension
-$twig->addExtension(new CoreAssetExtension($lam));
+$twig->addExtension(new CoreAssetExtension('/path/to/webpack/manifest.json', 'manifest'));
 ```
 
-If you prefer to create your asset extension from scratch, to avoid using the assetic for example,
+If you prefer to create your asset extension from scratch,
 you can use the `Fxp\Component\RequireAsset\Twig\Extension\AssetExtension` class directly.
 
 ```php

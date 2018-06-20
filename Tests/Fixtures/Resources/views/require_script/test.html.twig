@@ -3,5 +3,5 @@
 {% block body %}
 {% set id = 'myblock' %}
 <div id="{{ id }}">Hello world</div>
-{% require_script '@acme_demo/js/asset.js' async=true %}
+{% require_script '@webpack/asset' async=true %}
 {% endblock %}

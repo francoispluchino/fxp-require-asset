@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
 use Fxp\Component\RequireAsset\Tag\Config\RequireStyleTagConfiguration;
+use Fxp\Component\RequireAsset\Tag\RequireStyleTag;
 
 /**
  * Token Parser for the 'require_style' tag.
@@ -41,6 +42,6 @@ class RequireStyleTokenParser extends AbstractRequireTokenParser
      */
     protected function getTagClass()
     {
-        return 'Fxp\Component\RequireAsset\Tag\RequireStyleTag';
+        return RequireStyleTag::class;
     }
 }

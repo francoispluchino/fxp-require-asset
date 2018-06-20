@@ -11,12 +11,11 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
-use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
-use Fxp\Component\RequireAsset\Assetic\Tag\Renderer\AsseticRequireTagRenderer;
 use Fxp\Component\RequireAsset\Tag\Renderer\InlineTagRenderer;
 use Fxp\Component\RequireAsset\Webpack\Adapter\AssetsAdapter;
+use Fxp\Component\RequireAsset\Webpack\Adapter\ManifestAdapter;
 use Fxp\Component\RequireAsset\Webpack\Tag\Renderer\WebpackRequireTagRenderer;
 use Fxp\Component\RequireAsset\Webpack\WebpackRequireAssetManager;
 
@@ -30,29 +29,24 @@ class CoreAssetExtension extends AssetExtension
     /**
      * Constructor.
      *
-     * @param LazyAssetManager|null                 $manager            The lazy assetic manager
+     * @param string|null                           $webpackFile        The filename of webpack manifest or assets
+     * @param string                                $webpackAdapter     The webpack adapter (manifest of assets)
      * @param LocaleManagerInterface|null           $localeManager      The require locale asset manager
      * @param AssetReplacementManagerInterface|null $replacementManager The asset replacement manager
-     * @param array                                 $debugCommonAssets  The common assets for debug mode without assetic common parts
-     * @param string|null                           $webpackAssetsFile  The filename of webpack assets
      */
-    public function __construct(LazyAssetManager $manager = null,
+    public function __construct($webpackFile = null,
+                                $webpackAdapter = 'manifest',
                                 LocaleManagerInterface $localeManager = null,
-                                AssetReplacementManagerInterface $replacementManager = null,
-                                array $debugCommonAssets = [],
-                                $webpackAssetsFile = null)
+                                AssetReplacementManagerInterface $replacementManager = null)
     {
         parent::__construct($replacementManager);
 
         $renderers = [new InlineTagRenderer()];
 
-        if (null !== $webpackAssetsFile) {
-            $wpManager = new WebpackRequireAssetManager(new AssetsAdapter($webpackAssetsFile));
+        if (null !== $webpackFile) {
+            $adapter = 'manifest' === $webpackAdapter ? new ManifestAdapter($webpackFile) : new AssetsAdapter($webpackFile);
+            $wpManager = new WebpackRequireAssetManager($adapter);
             $renderers[] = new WebpackRequireTagRenderer($wpManager, $localeManager);
-        }
-
-        if (null !== $manager) {
-            $renderers[] = new AsseticRequireTagRenderer($manager, $localeManager, $debugCommonAssets);
         }
 
         $this->setRenderers($renderers);

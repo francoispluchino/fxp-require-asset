@@ -65,25 +65,7 @@ before the attributes.
 |------------|--------|---------------|-----------------------------------------------------|
 | `position` | string | `null`        | The position of script links in the global template |
 
-### Full example
+### Usage
 
-```html+jinja
-<html>
-    <head>
-    {{ requireStylesPosition() }}
-    {{ requireScriptsPosition('head') }}
-    </head>
-    <body>
-        {% require_style '@acme_demo/css/asset1.css', '@acme_demo/css/asset2.css' %}
-        {% require_script '@acme_demo/js/asset_head.js' async = true position = 'head' %}
-        {% require_script '@acme_demo/js/asset1.js', '@acme_demo/js/asset2.js' %}
-        {% require_script '@common_asset_javascript_name' %}
-
-        {% set foo: 'bar' %}
-        <div id="#{{ foo }}"></div>
-
-        {{ requireScriptsPosition() }}
-    </body>
-<html>
-{{ renderAssetTags() }}
-```
+- [Usage with Webpack Manifest Plugin](usage_twig_require_asset_webpack_manifest.md)
+- [Usage with Webpack Assets Plugin](usage_twig_require_asset_webpack_assets.md)

@@ -1,9 +1,0 @@
-<html>
-<head>
-<link href="/assets/acemodemo/css/asset.css" rel="stylesheet" /><link href="/assets/acemodemo/css/asset2.css" rel="stylesheet" /><link href="/assets/acemodemo/css/asset3.css" rel="stylesheet" /><link href="/assets/acemodemo/css/not_common.css" rel="stylesheet" />
-</head>
-<body>
-<div id="myblock">Hello world</div>
-</body>
-</html>
-

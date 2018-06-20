@@ -1,7 +1,7 @@
 <html>
 <body>
 <div id="myblock">Hello world</div>
-<script async="async" src="/assets/acemodemo/js/asset.js"></script><script src="/assets/acemodemo/js/asset2.js"></script><script src="/assets/asset_js.js"></script>
+<script async="async" src="/assets/asset.js"></script><script src="/assets/asset_js.js"></script>
 </body>
 </html>
 

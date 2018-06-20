@@ -182,6 +182,10 @@ class AssetExtension extends \Twig_Extension
      * @param bool $allPosition Check if all asset position must be rendered.
      *
      * Replaces the current buffer with the new edited buffer content
+     *
+     * @throws MissingTagPositionException
+     * @throws RequireTagException
+     * @throws RuntimeTagRendererException
      */
     public function renderTags($allPosition = true)
     {
@@ -209,6 +213,9 @@ class AssetExtension extends \Twig_Extension
      * @param string $output  The output
      * @param array  $matches The matches of tag position
      * @param int    $start   The start position for sub string
+     *
+     * @throws RequireTagException
+     * @throws RuntimeTagRendererException
      */
     protected function renderContents($output, array $matches, &$start)
     {
@@ -226,6 +233,9 @@ class AssetExtension extends \Twig_Extension
      * Do render the tags by type.
      *
      * @param string $contentType The content type
+     *
+     * @throws RequireTagException
+     * @throws RuntimeTagRendererException
      */
     protected function doRenderTags($contentType)
     {
@@ -277,8 +287,6 @@ class AssetExtension extends \Twig_Extension
      * @param TagInterface $tag
      *
      * @return RuntimeTagRendererException
-     *
-     * @throws RuntimeTagRendererException When no template tag renderer has been found
      */
     protected function buildRuntimeTagRendererException(TagInterface $tag)
     {

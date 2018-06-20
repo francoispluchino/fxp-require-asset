@@ -8,40 +8,26 @@ Fxp Require Asset
 [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/43b207f9-6d4c-4d99-927d-e7bbd710d6ee.svg)](https://insight.sensiolabs.com/projects/43b207f9-6d4c-4d99-927d-e7bbd710d6ee)
 
 The Fxp Require Asset is a helper for twig to manage automatically the required assets
-with Assetic or Webpack. It allows to define the required assets (script, style) directly
+with Webpack. It allows to define the required assets (script, style) directly
 in the Twig template and adds the HTML links of the assets automatically to the
 right place in the template, while removing duplicates.
 
 ##### Features include:
 
-- Filter the copy of the assets of each packages by:
-  - file extensions (and debug mode)
-  - glob patterns
-- Configure:
-  - the assetic filters of asset package by the extensions
-  - the assetic filters for all asset packages
-  - the custom asset package
-  - the rewrite output path of asset
-  - the common assets (assetic formulae dedicated to the require assets)
-  - the locale asset defined by each asset and/or common assets
-  - the replacement of assets by other assets
-- Automatic addition of localized commons assets
-- Compiling the final list of asset in cache for increase performance
 - Compatible with [Webpack](https://webpack.js.org) and source maps (require the plugin
   [webpack-manifest-plugin](https://github.com/danethurber/webpack-manifest-plugin) or
   [assets-webpack-plugin](https://github.com/kossnocorp/assets-webpack-plugin))
-- Assetic filters:
-  - `requirecssrewrite`: for rewrite the url of another require asset in css file
-  - `lessvariable`: for inject the asset package paths as variables
+- Configure:
+  - the locale asset defined by each entry
+  - the replacement of assets by other assets
+- Compiling the final list of asset in cache to increase performance for `assets-webpack-plugin`
 - Twig features:
   - possibility to defined the asset in one or more template Twig:
-    - reference to the source file of the asset in the Twig template, and not the target path of the asset defined in the Assetic Manager
     - one only link will be added in the final Twig template (no duplicates)
     - the link will be placed in the right place in the final Twig template (defined in the twig base template)
-    - the generated link will corresponding to the link defined by the rewrite rules of assets (the asset target path in Assetic Manager)
-    - ability to define an require asset as an optional (compatible with common assets)
-    - automatically add the localized assets after the common assets or individual assets, without duplication
-    - automatically add the localized assets for the inputs of the common asset, even if the common asset does not exist, or that it does not include all the localized inputs
+    - the generated link will corresponding to the link defined by the asset target path in Webpack Manifest/Assets
+    - ability to define an require asset as an optional
+    - automatically add the localized assets after the assets, without duplication
   - tags:
     - `require_script`: for require a script and inject the link in the good place defined in the twig base template
     - `require_style`: for require a style and inject the link in the good place defined in the twig base template

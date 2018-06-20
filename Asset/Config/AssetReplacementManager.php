@@ -11,7 +11,6 @@
 
 namespace Fxp\Component\RequireAsset\Asset\Config;
 
-use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 use Fxp\Component\RequireAsset\Exception\InvalidArgumentException;
 
 /**
@@ -31,7 +30,7 @@ class AssetReplacementManager implements AssetReplacementManagerInterface
      */
     public function addReplacement($assetName, $replacementName)
     {
-        $this->replacements[AssetUtils::formatName($assetName)] = [$assetName, $replacementName];
+        $this->replacements[$assetName] = [$assetName, $replacementName];
 
         return $this;
     }
@@ -53,7 +52,7 @@ class AssetReplacementManager implements AssetReplacementManagerInterface
      */
     public function removeReplacement($assetName)
     {
-        unset($this->replacements[AssetUtils::formatName($assetName)]);
+        unset($this->replacements[$assetName]);
 
         return $this;
     }
@@ -63,7 +62,7 @@ class AssetReplacementManager implements AssetReplacementManagerInterface
      */
     public function hasReplacement($assetName)
     {
-        return isset($this->replacements[AssetUtils::formatName($assetName)]);
+        return isset($this->replacements[$assetName]);
     }
 
     /**
@@ -75,7 +74,7 @@ class AssetReplacementManager implements AssetReplacementManagerInterface
             throw new InvalidArgumentException(sprintf('The "%s" asset replacement does not exist in require asset manager', $assetName));
         }
 
-        return $this->replacements[AssetUtils::formatName($assetName)][1];
+        return $this->replacements[$assetName][1];
     }
 
     /**

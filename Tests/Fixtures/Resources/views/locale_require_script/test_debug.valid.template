@@ -1,7 +1,0 @@
-<html>
-<body>
-<div id="myblock">Hello world</div>
-<script src="/assets/acemodemo/js/asset.js"></script><script src="/assets/acemodemo/js/asset2.js"></script><script src="/assets/acemodemo/js/locale/asset2.fr.js"></script><script src="/assets/acemodemo/js/locale/asset.fr.js"></script><script src="/assets/acemodemo/js/asset3.js"></script><script src="/assets/acemodemo/js/locale/asset3.fr-fr.js"></script><script src="/assets/asset_js.js"></script><script src="/assets/asset_js_fr.js"></script>
-</body>
-</html>
-

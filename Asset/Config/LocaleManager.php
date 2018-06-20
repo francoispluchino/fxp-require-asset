@@ -11,7 +11,6 @@
 
 namespace Fxp\Component\RequireAsset\Asset\Config;
 
-use Fxp\Component\RequireAsset\Asset\Util\AssetUtils;
 use Fxp\Component\RequireAsset\Asset\Util\LocaleUtils;
 
 /**
@@ -103,7 +102,7 @@ class LocaleManager implements LocaleManagerInterface
     {
         $locale = $this->getCurrentLocale($locale);
 
-        return isset($this->assets[$locale][AssetUtils::formatName($asset)]);
+        return isset($this->assets[$locale][$asset]);
     }
 
     /**
@@ -111,11 +110,10 @@ class LocaleManager implements LocaleManagerInterface
      */
     public function addLocalizedAsset($asset, $locale, $localizedAsset)
     {
-        $name = AssetUtils::formatName($asset);
         $locale = LocaleUtils::formatLocale($locale);
-        $this->assets[$locale][$name] = (array) $localizedAsset;
-        $this->mapAssets[$name][$locale] = true;
-        unset($this->cache[$this->getCacheKey($locale, $name)]);
+        $this->assets[$locale][$asset] = (array) $localizedAsset;
+        $this->mapAssets[$asset][$locale] = true;
+        unset($this->cache[$this->getCacheKey($locale, $asset)]);
 
         return $this;
     }
@@ -125,12 +123,11 @@ class LocaleManager implements LocaleManagerInterface
      */
     public function removeLocalizedAsset($asset, $locale)
     {
-        $name = AssetUtils::formatName($asset);
         $locale = LocaleUtils::formatLocale($locale);
 
-        $this->cleanArray('assets', $locale, $name);
-        $this->cleanArray('mapAssets', $name, $locale);
-        unset($this->cache[$this->getCacheKey($locale, $name)]);
+        $this->cleanArray('assets', $locale, $asset);
+        $this->cleanArray('mapAssets', $asset, $locale);
+        unset($this->cache[$this->getCacheKey($locale, $asset)]);
 
         return $this;
     }
@@ -140,15 +137,14 @@ class LocaleManager implements LocaleManagerInterface
      */
     public function getLocalizedAsset($asset, $locale = null)
     {
-        $name = AssetUtils::formatName($asset);
         $locale = $this->getCurrentLocale($locale);
-        $cacheKey = $this->getCacheKey($locale, $name);
+        $cacheKey = $this->getCacheKey($locale, $asset);
 
         if (isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }
 
-        $this->cache[$cacheKey] = $this->findLocalizedAsset($locale, $name);
+        $this->cache[$cacheKey] = $this->findLocalizedAsset($locale, $asset);
 
         return $this->cache[$cacheKey];
     }
@@ -175,10 +171,8 @@ class LocaleManager implements LocaleManagerInterface
     public function getAssetLocales($asset = null)
     {
         if (null !== $asset) {
-            $name = AssetUtils::formatName($asset);
-
-            return isset($this->mapAssets[$name])
-                ? array_keys($this->mapAssets[$name])
+            return isset($this->mapAssets[$asset])
+                ? array_keys($this->mapAssets[$asset])
                 : [];
         }
 

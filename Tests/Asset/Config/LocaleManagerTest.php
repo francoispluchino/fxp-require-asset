@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
  * Require Locale Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ * @group fxp
  */
 class LocaleManagerTest extends TestCase
 {
@@ -50,6 +51,7 @@ class LocaleManagerTest extends TestCase
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
         $this->assertTrue($rlm->hasAssetLocale(\Locale::getDefault()));
         $this->assertSame([strtolower(\Locale::getDefault())], $rlm->getAssetLocales());
+        $this->assertSame([strtolower(\Locale::getDefault())], $rlm->getAssetLocales('@asset/source/path.ext'));
 
         // cache
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -68,6 +70,7 @@ class LocaleManagerTest extends TestCase
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
         $this->assertTrue($rlm->hasAssetLocale(\Locale::getDefault()));
         $this->assertSame([strtolower(\Locale::getDefault())], $rlm->getAssetLocales());
+        $this->assertSame([strtolower(\Locale::getDefault())], $rlm->getAssetLocales('@asset/source/path.ext'));
 
         // cache
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -88,6 +91,7 @@ class LocaleManagerTest extends TestCase
         $this->assertFalse($rlm->hasAssetLocale('fr_FR'));
         $this->assertTrue($rlm->hasAssetLocale('fr'));
         $this->assertSame([strtolower('fr')], $rlm->getAssetLocales());
+        $this->assertSame([strtolower('fr')], $rlm->getAssetLocales('@asset/source/path.ext'));
 
         // cache
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -110,6 +114,7 @@ class LocaleManagerTest extends TestCase
         $this->assertFalse($rlm->hasAssetLocale('en_US'));
         $this->assertTrue($rlm->hasAssetLocale('en'));
         $this->assertSame([strtolower('en')], $rlm->getAssetLocales());
+        $this->assertSame([strtolower('en')], $rlm->getAssetLocales('@asset/source/path.ext'));
 
         // cache
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -130,6 +135,7 @@ class LocaleManagerTest extends TestCase
         $this->assertFalse($rlm->hasAssetLocale('fr_FR'));
         $this->assertTrue($rlm->hasAssetLocale('en'));
         $this->assertSame([strtolower('en')], $rlm->getAssetLocales());
+        $this->assertSame([strtolower('en')], $rlm->getAssetLocales('@asset/source/path.ext'));
 
         // cache
         $this->assertCount(0, $rlm->getLocalizedAsset('@asset/source/path.ext'));
@@ -142,15 +148,20 @@ class LocaleManagerTest extends TestCase
         $rlm->addLocalizedAsset('@asset/source/path.ext', 'en', '@asset/source/path/locale/en.ext');
         $this->assertTrue($rlm->hasAssetLocale('en'));
         $this->assertCount(1, $rlm->getAssetLocales());
+        $this->assertSame([strtolower('en')], $rlm->getAssetLocales('@asset/source/path.ext'));
 
         $rlm->addLocalizedAsset('@asset/source/path2.ext', 'en', '@asset/source/path2/locale/en.ext');
         $this->assertTrue($rlm->hasAssetLocale('en'));
         $this->assertCount(1, $rlm->getAssetLocales());
+        $this->assertSame([strtolower('en')], $rlm->getAssetLocales('@asset/source/path2.ext'));
 
         $rlm->removeLocalizedAsset('@asset/source/path2.ext', 'en');
         $this->assertCount(1, $rlm->getAssetLocales());
+        $this->assertSame([strtolower('en')], $rlm->getAssetLocales('@asset/source/path.ext'));
+        $this->assertSame([], $rlm->getAssetLocales('@asset/source/path2.ext'));
 
         $rlm->removeLocalizedAsset('@asset/source/path.ext', 'en');
         $this->assertCount(0, $rlm->getAssetLocales());
+        $this->assertSame([], $rlm->getAssetLocales('@asset/source/path.ext'));
     }
 }

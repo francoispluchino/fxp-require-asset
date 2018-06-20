@@ -11,8 +11,6 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
-use Assetic\Factory\AssetFactory;
-use Assetic\Factory\LazyAssetManager;
 use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManager;
 use Fxp\Component\RequireAsset\Asset\Config\AssetReplacementManagerInterface;
 use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
@@ -33,16 +31,6 @@ abstract class AbstractAssetExtensionTest extends TestCase
     protected $ext;
 
     /**
-     * @var LazyAssetManager
-     */
-    protected $manager;
-
-    /**
-     * @var AssetFactory
-     */
-    protected $factory;
-
-    /**
      * @var LocaleManagerInterface
      */
     protected $localeManager;
@@ -59,24 +47,18 @@ abstract class AbstractAssetExtensionTest extends TestCase
 
     protected function setUp()
     {
-        $this->factory = new AssetFactory('web');
-        $this->manager = new LazyAssetManager($this->factory);
         $this->replacementManager = new AssetReplacementManager();
-        $this->factory->setAssetManager($this->manager);
         $this->ext = new CoreAssetExtension(
-            $this->manager,
+            realpath(__DIR__.'/../../Fixtures/Webpack/assets.json'),
+            'assets',
             $this->localeManager,
-            $this->replacementManager,
-            $this->debugCommonAssets,
-            realpath(__DIR__.'/../../Fixtures/Webpack/assets.json')
+            $this->replacementManager
         );
     }
 
     protected function tearDown()
     {
         $this->ext = null;
-        $this->manager = null;
-        $this->factory = null;
         $this->replacementManager = null;
         $this->localeManager = null;
     }

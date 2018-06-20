@@ -1,0 +1,9 @@
+<html>
+<head>
+<link href="/assets/asset.css" rel="stylesheet" /><link href="/assets/asset_css.css" rel="stylesheet" /><link href="/assets/asset_css_fr.css" rel="stylesheet" />
+</head>
+<body>
+<div id="myblock">Hello world</div>
+</body>
+</html>
+

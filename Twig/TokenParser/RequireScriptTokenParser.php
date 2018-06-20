@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
 use Fxp\Component\RequireAsset\Tag\Config\RequireScriptTagConfiguration;
+use Fxp\Component\RequireAsset\Tag\RequireScriptTag;
 
 /**
  * Token Parser for the 'require_script' tag.
@@ -41,6 +42,6 @@ class RequireScriptTokenParser extends AbstractRequireTokenParser
      */
     protected function getTagClass()
     {
-        return 'Fxp\Component\RequireAsset\Tag\RequireScriptTag';
+        return RequireScriptTag::class;
     }
 }

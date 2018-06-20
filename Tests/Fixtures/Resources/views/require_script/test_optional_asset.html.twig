@@ -3,7 +3,7 @@
 {% block body %}
 {% set id = 'myblock' %}
 <div id="{{ id }}">Hello world</div>
-{% require_script '?@acme_demo/js/asset.js' async=true %}
-{% require_script '?@acme_demo/js/asset2.js' %}
+{% require_script '?@webpack/asset' async=true %}
+{% require_script '?@webpack/asset_ext' %}
 {% require_script '?@webpack/asset_not_found' %}
 {% endblock %}

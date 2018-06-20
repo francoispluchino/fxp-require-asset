@@ -11,6 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
+use Fxp\Component\RequireAsset\Tag\InlineStyleTag;
+
 /**
  * Token Parser for the 'inline_style' tag.
  *
@@ -31,6 +33,6 @@ class InlineStyleTokenParser extends AbstractInlineTokenParser
      */
     protected function getTagClass()
     {
-        return 'Fxp\Component\RequireAsset\Tag\InlineStyleTag';
+        return InlineStyleTag::class;
     }
 }

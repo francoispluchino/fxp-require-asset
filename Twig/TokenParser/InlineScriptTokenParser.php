@@ -11,6 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 
+use Fxp\Component\RequireAsset\Tag\InlineScriptTag;
+
 /**
  * Token Parser for the 'inline_script' tag.
  *
@@ -31,6 +33,6 @@ class InlineScriptTokenParser extends AbstractInlineTokenParser
      */
     protected function getTagClass()
     {
-        return 'Fxp\Component\RequireAsset\Tag\InlineScriptTag';
+        return InlineScriptTag::class;
     }
 }
