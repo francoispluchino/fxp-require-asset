@@ -35,7 +35,7 @@ abstract class InlineTagRendererUtils
      */
     public static function renderBody(array $callable, array $context, array $blocks, $lineno = -1, $name = null)
     {
-        if (2 !== count($callable) || !$callable[0] instanceof \Twig_Template || !is_string($callable[1])) {
+        if (2 !== \count($callable) || !$callable[0] instanceof \Twig_Template || !\is_string($callable[1])) {
             throw new BodyTagRendererException('The callable argument must be an array with Twig_Template instance and name function of the block to rendering', $lineno, $name);
         }
 

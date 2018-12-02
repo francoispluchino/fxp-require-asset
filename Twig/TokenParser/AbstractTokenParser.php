@@ -68,7 +68,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
         $valid = false;
 
         foreach ($allowed as $aType) {
-            if ($stream->test(constant('\Twig_Token::'.$aType.'_TYPE'))) {
+            if ($stream->test(\constant('\Twig_Token::'.$aType.'_TYPE'))) {
                 $valid = true;
                 break;
             }

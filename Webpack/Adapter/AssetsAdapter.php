@@ -84,9 +84,9 @@ class AssetsAdapter extends AbstractAdapter
     {
         $type = null;
 
-        if (in_array('css', $availables)) {
+        if (\in_array('css', $availables)) {
             $type = 'css';
-        } elseif (1 === count($availables)) {
+        } elseif (1 === \count($availables)) {
             $type = current($availables);
         }
 
@@ -130,7 +130,7 @@ class AssetsAdapter extends AbstractAdapter
             throw new InvalidArgumentException(sprintf('Cannot read the JSON content: %s', json_last_error_msg()));
         }
 
-        return is_array($content) ? $content : [];
+        return \is_array($content) ? $content : [];
     }
 
     /**

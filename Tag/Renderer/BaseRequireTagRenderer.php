@@ -77,6 +77,6 @@ abstract class BaseRequireTagRenderer implements RequireTagRendererInterface
      */
     protected function canBeRendered($assetName, $type)
     {
-        return !in_array($type.'::'.$assetName, $this->renderedTags);
+        return !\in_array($type.'::'.$assetName, $this->renderedTags);
     }
 }

@@ -51,6 +51,6 @@ abstract class RequireUtil
      */
     public static function isValidValue($value)
     {
-        return !empty($value) && is_scalar($value) && !is_bool($value);
+        return !empty($value) && is_scalar($value) && !\is_bool($value);
     }
 }

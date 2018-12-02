@@ -27,7 +27,7 @@ abstract class LocaleUtils
      */
     public static function formatLocale($locale)
     {
-        if (is_string($locale)) {
+        if (\is_string($locale)) {
             $locale = strtolower($locale);
             $locale = str_replace('-', '_', $locale);
         }

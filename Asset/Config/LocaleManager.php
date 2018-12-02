@@ -191,7 +191,7 @@ class LocaleManager implements LocaleManagerInterface
     {
         $localized = $this->doFindLocalizedAsset($locale, $asset);
 
-        if (0 === count($localized)) {
+        if (0 === \count($localized)) {
             $localized = $this->doFindLocalizedAsset($this->getFallbackLocale(), $asset);
         }
 
@@ -258,7 +258,7 @@ class LocaleManager implements LocaleManagerInterface
         $val = &$this->$property;
         unset($val[$key][$subKey]);
 
-        if (array_key_exists($key, $val) && 0 === count($val[$key])) {
+        if (array_key_exists($key, $val) && 0 === \count($val[$key])) {
             unset($val[$key]);
         }
     }

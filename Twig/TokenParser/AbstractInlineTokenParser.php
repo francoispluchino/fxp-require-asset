@@ -109,12 +109,12 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
      */
     protected function removeHtmlTag(\Twig_Node $body, $lineno)
     {
-        if (0 === count($body)) {
+        if (0 === \count($body)) {
             $body = new \Twig_Node([$body], [], $lineno);
         }
 
         $this->removeTagContent($body, 0, '/(|\ \\t|\\n|\\n\ \\t)<([a-zA-Z0-9]+)[a-zA-Z\=\'\"\ \/]+>(\\n?|\\r?)/');
-        $this->removeTagContent($body, count($body) - 1, '/(|\ \\t|\\n|\\n\ \\t|\\n)<\/[a-zA-Z]+>/');
+        $this->removeTagContent($body, \count($body) - 1, '/(|\ \\t|\\n|\\n\ \\t|\\n)<\/[a-zA-Z]+>/');
 
         return $body;
     }

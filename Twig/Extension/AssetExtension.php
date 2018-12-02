@@ -85,10 +85,10 @@ class AssetExtension extends \Twig_Extension
     public function getTokenParsers()
     {
         $tokens = [
-            new InlineScriptTokenParser(get_class($this)),
-            new InlineStyleTokenParser(get_class($this)),
-            new RequireScriptTokenParser($this->replacementManager, get_class($this)),
-            new RequireStyleTokenParser($this->replacementManager, get_class($this)),
+            new InlineScriptTokenParser(\get_class($this)),
+            new InlineStyleTokenParser(\get_class($this)),
+            new RequireScriptTokenParser($this->replacementManager, \get_class($this)),
+            new RequireStyleTokenParser($this->replacementManager, \get_class($this)),
         ];
 
         return $tokens;
@@ -167,7 +167,7 @@ class AssetExtension extends \Twig_Extension
     {
         $tag = $this->formatTagPosition($category, $type, $position);
 
-        if (in_array($tag, $this->tagPositions)) {
+        if (\in_array($tag, $this->tagPositions)) {
             throw new AlreadyExistTagPositionException($category, $type, $position, $lineno, $name);
         }
 
@@ -224,7 +224,7 @@ class AssetExtension extends \Twig_Extension
             $contentType = $matches[2][$i][0];
             echo substr($output, $start, $end);
             $this->doRenderTags($contentType);
-            $start = $match[1] + strlen($match[0]);
+            $start = $match[1] + \strlen($match[0]);
         }
         echo substr($output, $start);
     }
