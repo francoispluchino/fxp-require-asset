@@ -15,12 +15,12 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.1.0",
-        "symfony/filesystem": "^4.1.0",
-        "symfony/finder": "^4.1.0",
-        "symfony/config": "^4.1.0"
+        "symfony/filesystem": "^4.2.0",
+        "symfony/finder": "^4.2.0",
+        "symfony/config": "^4.2.0"
     },
     "require-dev": {
-        "twig/twig": "^2.4.0",
+        "twig/twig": "^2.5.0",
         "psr/cache": "^1.0.0"
     },
     "suggest": {
@@ -35,7 +35,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "1.1-dev"
         }
     }
 }
