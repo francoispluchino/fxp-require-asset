@@ -38,9 +38,9 @@ abstract class AbstractConfiguration implements ConfigurationInterface
      */
     protected static function createRoot($name)
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder($name);
         /* @var ArrayNodeDefinition $node */
-        $node = $treeBuilder->root($name);
+        $node = $treeBuilder->getRootNode();
 
         return $node;
     }
