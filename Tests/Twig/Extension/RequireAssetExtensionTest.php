@@ -12,6 +12,7 @@
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Fxp\Component\RequireAsset\Exception\Twig\RequireTagException;
+use Twig\Error\SyntaxError;
 
 /**
  * Require Asset Extension Tests.
@@ -68,7 +69,7 @@ final class RequireAssetExtensionTest extends AbstractAssetExtensionTest
         return [
             ['test'],
             ['test_multi_asset'],
-            ['test_without_asset', '\Twig_Error_Syntax', '/The twig tag "(\w+)" require a lest one asset/'],
+            ['test_without_asset', SyntaxError::class, '/The twig tag "(\w+)" require a lest one asset/'],
             ['test_replacement_asset'],
             ['test_optional_asset'],
             ['invalid_webpack_asset', RequireTagException::class, 'is not managed by the Webpack Require Asset Manager'],

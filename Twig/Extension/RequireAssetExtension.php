@@ -12,13 +12,15 @@
 namespace Fxp\Component\RequireAsset\Twig\Extension;
 
 use Fxp\Component\RequireAsset\Asset\RequireAssetManagerInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * RequireAssetExtension extends Twig with global assets rendering capabilities.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireAssetExtension extends \Twig_Extension
+class RequireAssetExtension extends AbstractExtension
 {
     /**
      * @var null|RequireAssetManagerInterface
@@ -41,7 +43,7 @@ class RequireAssetExtension extends \Twig_Extension
     public function getFunctions()
     {
         return [
-            new \Twig_Function('requireAsset', [$this, 'requireAsset']),
+            new TwigFunction('requireAsset', [$this, 'requireAsset']),
         ];
     }
 

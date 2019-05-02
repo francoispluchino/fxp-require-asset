@@ -15,19 +15,24 @@ use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 use Symfony\Component\Config\Definition\NodeInterface;
 use Symfony\Component\Config\Definition\Processor;
+use Twig\Error\SyntaxError;
+use Twig\Source;
+use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser as BaseAbstractTokenParser;
+use Twig\TokenStream;
 
 /**
  * Token Parser for the 'asset' tag.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-abstract class AbstractTokenParser extends \Twig_TokenParser
+abstract class AbstractTokenParser extends BaseAbstractTokenParser
 {
     /**
      * Gets the attributes of the twig tag.
      *
-     * @throws \Twig_Error_Syntax When the attribute does not exist
-     * @throws \Twig_Error_Syntax When the attribute is not followed by "=" operator
+     * @throws SyntaxError When the attribute does not exist
+     * @throws SyntaxError When the attribute is not followed by "=" operator
      *
      * @return array The tag attributes
      */
@@ -38,7 +43,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
         $lineno = $stream->getCurrent()->getLine();
         $name = $stream->getSourceContext()->getName();
 
-        if (!$stream->test(\Twig_Token::BLOCK_END_TYPE)) {
+        if (!$stream->test(Token::BLOCK_END_TYPE)) {
             do {
                 $this->validateAttributeType($stream, 'name', ['NAME', 'STRING']);
                 $attr = $stream->getCurrent()->getValue();
@@ -48,7 +53,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
                 $this->validateAttributeType($stream, 'value', ['NAME', 'STRING', 'NUMBER']);
 
                 $attributes[$attr] = $this->parser->getExpressionParser()->parseExpression()->getAttribute('value');
-            } while (!$stream->test(\Twig_Token::BLOCK_END_TYPE));
+            } while (!$stream->test(Token::BLOCK_END_TYPE));
         }
 
         return $this->formatAttributes($attributes, $lineno, $name);
@@ -57,18 +62,18 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
     /**
      * Validate the current attribute type.
      *
-     * @param \Twig_TokenStream $stream
-     * @param string            $type
-     * @param string[]          $allowed
+     * @param TokenStream $stream
+     * @param string      $type
+     * @param string[]    $allowed
      *
-     * @throws \Twig_Error_Syntax When the attribute type is not allowed
+     * @throws SyntaxError When the attribute type is not allowed
      */
-    protected function validateAttributeType(\Twig_TokenStream $stream, $type, array $allowed): void
+    protected function validateAttributeType(TokenStream $stream, $type, array $allowed): void
     {
         $valid = false;
 
         foreach ($allowed as $aType) {
-            if ($stream->test(\constant('\Twig_Token::'.$aType.'_TYPE'))) {
+            if ($stream->test(\constant(Token::class.'::'.$aType.'_TYPE'))) {
                 $valid = true;
 
                 break;
@@ -78,22 +83,22 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
         if (!$valid) {
             $message = 'The attribute %s "%s" must be an %s';
 
-            throw new \Twig_Error_Syntax(sprintf($message, $type, $stream->getCurrent()->getValue(), implode(', ', $allowed)), $stream->getCurrent()->getLine(), $stream->getSourceContext());
+            throw new SyntaxError(sprintf($message, $type, $stream->getCurrent()->getValue(), implode(', ', $allowed)), $stream->getCurrent()->getLine(), $stream->getSourceContext());
         }
     }
 
     /**
      * Validate the current attribute operator.
      *
-     * @param \Twig_TokenStream $stream The token stream
-     * @param string            $attr   The attribute name
+     * @param TokenStream $stream The token stream
+     * @param string      $attr   The attribute name
      *
-     * @throws \Twig_Error_Syntax When the attribute is not following by "="
+     * @throws SyntaxError When the attribute is not following by "="
      */
-    protected function validateAttributeOperator(\Twig_TokenStream $stream, $attr): void
+    protected function validateAttributeOperator(TokenStream $stream, $attr): void
     {
-        if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
-            throw new \Twig_Error_Syntax(sprintf('The attribute "%s" must be followed by "=" operator', $attr), $stream->getCurrent()->getLine(), $stream->getSourceContext());
+        if (!$stream->test(Token::OPERATOR_TYPE, '=')) {
+            throw new SyntaxError(sprintf('The attribute "%s" must be followed by "=" operator', $attr), $stream->getCurrent()->getLine(), $stream->getSourceContext());
         }
     }
 
@@ -104,7 +109,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
      * @param int    $lineno
      * @param string $name
      *
-     * @throws \Twig_Error_Syntax When the attribute does not exist
+     * @throws SyntaxError When the attribute does not exist
      *
      * @return array The formatted attributes
      */
@@ -115,7 +120,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
 
             return $processor->process($this->getAttributeNodeConfig(), [$attributes]);
         } catch (\Exception $e) {
-            throw new \Twig_Error_Syntax($this->getFormattedMessageException($e), $lineno, new \Twig_Source('', $name));
+            throw new SyntaxError($this->getFormattedMessageException($e), $lineno, new Source('', $name));
         }
     }
 

@@ -11,6 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Exception\Twig;
 
+use Twig\Source;
+
 /**
  * AlreadyExistTagPositionException for the already exist the twig function of tag position.
  *
@@ -34,6 +36,6 @@ class AlreadyExistTagPositionException extends RuntimeException
         $positionName = empty($position) ? '' : '"'.$position.'"';
         $message = sprintf('The twig function "%s(%s)" is already defined', $functionName, $positionName);
 
-        parent::__construct($message, $lineno, $name ? new \Twig_Source('', $name) : null, $previous);
+        parent::__construct($message, $lineno, $name ? new Source('', $name) : null, $previous);
     }
 }

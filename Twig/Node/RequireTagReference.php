@@ -11,12 +11,15 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Node;
 
+use Twig\Compiler;
+use Twig\Node\Node;
+
 /**
  * Represents a require tag node.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RequireTagReference extends \Twig_Node
+class RequireTagReference extends Node
 {
     /**
      * @var string
@@ -52,9 +55,9 @@ class RequireTagReference extends \Twig_Node
     /**
      * Compiles the node to PHP.
      *
-     * @param \Twig_Compiler $compiler A Twig_Compiler instance
+     * @param Compiler $compiler A Twig_Compiler instance
      */
-    public function compile(\Twig_Compiler $compiler): void
+    public function compile(Compiler $compiler): void
     {
         $compiler
             ->addDebugInfo($this)
@@ -74,9 +77,9 @@ class RequireTagReference extends \Twig_Node
     /**
      * Compile the tags.
      *
-     * @param \Twig_Compiler $compiler
+     * @param Compiler $compiler
      */
-    protected function compileTags(\Twig_Compiler $compiler): void
+    protected function compileTags(Compiler $compiler): void
     {
         $tagClass = $this->getAttribute('tagClass');
         $assets = $this->getAttribute('assets');

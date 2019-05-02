@@ -13,6 +13,7 @@ namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
 use Fxp\Component\RequireAsset\Tag\TagInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
+use Twig\Error\SyntaxError;
 
 /**
  * Common Asset Extension Tests.
@@ -122,7 +123,7 @@ final class CommonAssetExtensionTest extends AbstractAssetExtensionTest
      */
     public function testInvalidTypeAttributeName($tag): void
     {
-        $this->expectException(\Twig_Error_Syntax::class);
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessageRegExp('/^The attribute name "(\\w+)" must be an NAME, STRING/');
 
         $this->getTemplate($tag, 'invalid_attr_type.html.twig');
@@ -135,7 +136,7 @@ final class CommonAssetExtensionTest extends AbstractAssetExtensionTest
      */
     public function testInvalidTypeAttributeValue($tag): void
     {
-        $this->expectException(\Twig_Error_Syntax::class);
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessageRegExp('/^The attribute value "([w\\/]+)" must be an NAME, STRING, NUMBER/');
 
         $this->getTemplate($tag, 'invalid_attr_value.html.twig');
@@ -148,7 +149,7 @@ final class CommonAssetExtensionTest extends AbstractAssetExtensionTest
      */
     public function testInvalidConfigTypeAttributeValue($tag): void
     {
-        $this->expectException(\Twig_Error_Syntax::class);
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessageRegExp('/^Invalid type for attribute "(\\w+)". Expected /');
 
         $this->getTemplate($tag, 'invalid_attr_value_config.html.twig');
@@ -161,7 +162,7 @@ final class CommonAssetExtensionTest extends AbstractAssetExtensionTest
      */
     public function testInvalidAttributeName($tag): void
     {
-        $this->expectException(\Twig_Error_Syntax::class);
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessageRegExp('/^The attribute "(\\w+)" does not exist for the "(\\w+)" tag. Only attributes "([A-Za-z0-9_, "]+)" are available/');
 
         $this->getTemplate($tag, 'invalid_attr_name.html.twig');
@@ -174,7 +175,7 @@ final class CommonAssetExtensionTest extends AbstractAssetExtensionTest
      */
     public function testInvalidAttributeOperator($tag): void
     {
-        $this->expectException(\Twig_Error_Syntax::class);
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessage('must be followed by "=" operator');
 
         $this->getTemplate($tag, 'invalid_attr_operator.html.twig');

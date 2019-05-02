@@ -11,12 +11,15 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Node;
 
+use Twig\Compiler;
+use Twig\Node\Node;
+
 /**
  * Represents a inline tag node.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class InlineTagReference extends \Twig_Node
+class InlineTagReference extends Node
 {
     /**
      * @var string
@@ -48,9 +51,9 @@ class InlineTagReference extends \Twig_Node
     /**
      * Compiles the node to PHP.
      *
-     * @param \Twig_Compiler $compiler A Twig_Compiler instance
+     * @param Compiler $compiler A Twig_Compiler instance
      */
-    public function compile(\Twig_Compiler $compiler): void
+    public function compile(Compiler $compiler): void
     {
         $name = $this->getAttribute('name');
         $tagClass = $this->getAttribute('tagClass');

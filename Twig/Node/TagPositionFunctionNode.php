@@ -11,19 +11,22 @@
 
 namespace Fxp\Component\RequireAsset\Twig\Node;
 
+use Twig\Compiler;
+use Twig\Node\Expression\FunctionExpression;
+
 /**
  * Node of twig function of template tag position.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class TagPositionFunctionNode extends \Twig_Node_Expression_Function
+class TagPositionFunctionNode extends FunctionExpression
 {
     /**
      * Compile.
      *
-     * @param \Twig_Compiler $compiler
+     * @param Compiler $compiler
      */
-    public function compile(\Twig_Compiler $compiler): void
+    public function compile(Compiler $compiler): void
     {
         $name = $this->getAttribute('name');
         $function = $compiler->getEnvironment()->getFunction($name);

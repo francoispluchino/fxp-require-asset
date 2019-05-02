@@ -11,6 +11,8 @@
 
 namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
 
+use Twig\TemplateWrapper;
+
 /**
  * Inline Asset Extension Tests.
  *
@@ -27,7 +29,7 @@ final class InlineAssetExtensionTest extends AbstractAssetExtensionTest
      */
     public function testEmptyBody($tag): void
     {
-        $this->assertInstanceOf(\Twig_TemplateWrapper::class, $this->getTemplate($tag, 'empty_body.html.twig'));
+        $this->assertInstanceOf(TemplateWrapper::class, $this->getTemplate($tag, 'empty_body.html.twig'));
     }
 
     /**

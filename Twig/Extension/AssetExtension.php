@@ -24,13 +24,16 @@ use Fxp\Component\RequireAsset\Twig\TokenParser\InlineScriptTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\InlineStyleTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\RequireScriptTokenParser;
 use Fxp\Component\RequireAsset\Twig\TokenParser\RequireStyleTokenParser;
+use Twig\Extension\AbstractExtension;
+use Twig\Source;
+use Twig\TwigFunction;
 
 /**
  * AssetExtension extends Twig with global assets rendering capabilities.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class AssetExtension extends \Twig_Extension
+class AssetExtension extends AbstractExtension
 {
     /**
      * @var null|AssetReplacementManagerInterface
@@ -75,7 +78,7 @@ class AssetExtension extends \Twig_Extension
             $this->createTagPositionFunction('inlineStylesPosition', ['category' => 'inline',  'type' => 'style']),
             $this->createTagPositionFunction('requireScriptsPosition', ['category' => 'require',  'type' => 'script']),
             $this->createTagPositionFunction('requireStylesPosition', ['category' => 'require',  'type' => 'style']),
-            new \Twig_Function('renderAssetTags', [$this, 'renderTags'], ['is_safe' => ['html']]),
+            new TwigFunction('renderAssetTags', [$this, 'renderTags'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -316,7 +319,7 @@ class AssetExtension extends \Twig_Extension
         } catch (TagRendererExceptionInterface $e) {
             $tag = $e->getTag();
 
-            throw new RequireTagException($e->getMessage(), $tag->getTemplateLine(), $tag->getTemplateName() ? new \Twig_Source('', $tag->getTemplateName()) : null, $e->getPrevious());
+            throw new RequireTagException($e->getMessage(), $tag->getTemplateLine(), $tag->getTemplateName() ? new Source('', $tag->getTemplateName()) : null, $e->getPrevious());
         }
 
         return $content;
@@ -385,7 +388,7 @@ class AssetExtension extends \Twig_Extension
      * @param string $name    The name of function
      * @param array  $options The options of function
      *
-     * @return \Twig_Function
+     * @return TwigFunction
      */
     private function createTagPositionFunction($name, array $options)
     {
@@ -397,7 +400,7 @@ class AssetExtension extends \Twig_Extension
         ], $options);
         $callable = [$this, 'createTagPosition'];
 
-        $tagPosition = new \Twig_Function($name, $callable, $options);
+        $tagPosition = new TwigFunction($name, $callable, $options);
         $tagPosition->setArguments([
             $options['category'],
             $options['type'],

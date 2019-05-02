@@ -17,6 +17,9 @@ use Fxp\Component\RequireAsset\Asset\Config\LocaleManagerInterface;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 use Fxp\Component\RequireAsset\Twig\Extension\CoreAssetExtension;
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+use Twig\TemplateWrapper;
 
 /**
  * Abstract Asset Extension Tests.
@@ -115,12 +118,12 @@ abstract class AbstractAssetExtensionTest extends TestCase
      * @param string $tag
      * @param string $file
      *
-     * @return \Twig_TemplateWrapper
+     * @return TemplateWrapper
      */
     protected function getTemplate($tag, $file)
     {
-        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../Fixtures/Resources/views/'.$tag);
-        $twig = new \Twig_Environment($loader, ['debug' => true, 'cache' => false]);
+        $loader = new FilesystemLoader(__DIR__.'/../../Fixtures/Resources/views/'.$tag);
+        $twig = new Environment($loader, ['debug' => true, 'cache' => false]);
         $twig->addExtension($this->ext);
 
         return $twig->load($file);

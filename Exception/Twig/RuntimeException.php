@@ -11,11 +11,13 @@
 
 namespace Fxp\Component\RequireAsset\Exception\Twig;
 
+use Twig\Error\RuntimeError;
+
 /**
  * Twig RuntimeException for the Require asset.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
  */
-class RuntimeException extends \Twig_Error_Runtime implements ExceptionInterface
+class RuntimeException extends RuntimeError implements ExceptionInterface
 {
 }

@@ -14,6 +14,11 @@ namespace Fxp\Component\RequireAsset\Twig\TokenParser;
 use Fxp\Component\RequireAsset\Tag\Config\InlineTagConfiguration;
 use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
 use Fxp\Component\RequireAsset\Twig\Node\InlineTagReference;
+use Twig\Error\SyntaxError;
+use Twig\Node\BlockNode;
+use Twig\Node\Node;
+use Twig\Node\TextNode;
+use Twig\Token;
 
 /**
  * Abstract Token Parser for the 'inline_TYPE' tag.
@@ -40,23 +45,23 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
     /**
      * Parses a token and returns a node.
      *
-     * @param \Twig_Token $token A Twig_Token instance
+     * @param Token $token A Twig_Token instance
      *
-     * @throws \Twig_Error_Syntax When attribute name is not a string or constant
-     * @throws \Twig_Error_Syntax When attribute does not exist
-     * @throws \Twig_Error_Syntax When attribute is not followed by "=" operator
-     * @throws \Twig_Error_Syntax When the value name is not a string or constant
+     * @throws SyntaxError When attribute name is not a string or constant
+     * @throws SyntaxError When attribute does not exist
+     * @throws SyntaxError When attribute is not followed by "=" operator
+     * @throws SyntaxError When the value name is not a string or constant
      *
-     * @return \Twig_Node A Twig_Node instance
+     * @return Node A Twig_Node instance
      */
-    public function parse(\Twig_Token $token)
+    public function parse(Token $token)
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
         $attributes = $this->getTagAttributes();
         $position = $this->getPosition($attributes);
 
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
         $name = uniqid($this->getTag());
         $body = $this->parser->subparse([$this, 'decideBlockEnd'], true);
@@ -65,13 +70,13 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
             $this->removeHtmlTag($body, $lineno);
         }
 
-        $body = new \Twig_Node_Block($name, $body, $lineno);
+        $body = new BlockNode($name, $body, $lineno);
 
         $this->parser->setBlock($name, $body);
         $this->parser->pushLocalScope();
         $this->parser->pushBlockStack($name);
 
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
         $this->parser->popBlockStack();
         $this->parser->popLocalScope();
@@ -82,11 +87,11 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
     /**
      * Decide block end.
      *
-     * @param \Twig_Token $token
+     * @param Token $token
      *
      * @return bool
      */
-    public function decideBlockEnd(\Twig_Token $token)
+    public function decideBlockEnd(Token $token)
     {
         return $token->test('end'.$this->getTag());
     }
@@ -102,15 +107,15 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
     /**
      * Removes tag.
      *
-     * @param \Twig_Node $body
-     * @param int        $lineno
+     * @param Node $body
+     * @param int  $lineno
      *
-     * @return \Twig_Node
+     * @return Node
      */
-    protected function removeHtmlTag(\Twig_Node $body, $lineno)
+    protected function removeHtmlTag(Node $body, $lineno)
     {
         if (0 === \count($body)) {
-            $body = new \Twig_Node([$body], [], $lineno);
+            $body = new Node([$body], [], $lineno);
         }
 
         $this->removeTagContent($body, 0, '/(|\ \\t|\\n|\\n\ \\t)<([a-zA-Z0-9]+)[a-zA-Z\=\'\"\ \/]+>(\\n?|\\r?)/');
@@ -122,13 +127,13 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
     /**
      * Removes html tag defined by pattern.
      *
-     * @param \Twig_Node $body
-     * @param int        $position
-     * @param string     $pattern
+     * @param Node   $body
+     * @param int    $position
+     * @param string $pattern
      */
-    protected function removeTagContent(\Twig_Node $body, $position, $pattern): void
+    protected function removeTagContent(Node $body, $position, $pattern): void
     {
-        if ($body->getNode($position) instanceof \Twig_Node_Text) {
+        if ($body->getNode($position) instanceof TextNode) {
             $positionBody = $body->getNode($position)->getAttribute('data');
             $positionBody = preg_replace($pattern, '', $positionBody);
 
