@@ -34,6 +34,6 @@ class AlreadyExistTagPositionException extends RuntimeException
         $positionName = empty($position) ? '' : '"'.$position.'"';
         $message = sprintf('The twig function "%s(%s)" is already defined', $functionName, $positionName);
 
-        parent::__construct($message, $lineno, $name, $previous);
+        parent::__construct($message, $lineno, $name ? new \Twig_Source('', $name) : null, $previous);
     }
 }

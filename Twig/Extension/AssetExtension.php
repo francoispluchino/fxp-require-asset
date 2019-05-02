@@ -317,7 +317,7 @@ class AssetExtension extends \Twig_Extension
             $content .= $renderer->render($tag);
         } catch (TagRendererExceptionInterface $e) {
             $tag = $e->getTag();
-            throw new RequireTagException($e->getMessage(), $tag->getTemplateLine(), $tag->getTemplateName(), $e->getPrevious());
+            throw new RequireTagException($e->getMessage(), $tag->getTemplateLine(), $tag->getTemplateName() ? new \Twig_Source('', $tag->getTemplateName()) : null, $e->getPrevious());
         }
 
         return $content;

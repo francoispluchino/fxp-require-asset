@@ -34,6 +34,6 @@ class MissingTagPositionException extends RuntimeException
         $positionName = empty($positionName) ? 'without position' : '"'.$positionName.'"';
         $message = sprintf('The twig function "%s(%s)" must be defined in the template, because it is required by a twig tag "%s" (%s)', $functionName, $positionName, $tagName, $positionName);
 
-        parent::__construct($message, $asset->getTemplateLine(), $asset->getTemplateName(), $previous);
+        parent::__construct($message, $asset->getTemplateLine(), $asset->getTemplateName() ? new \Twig_Source('', $asset->getTemplateName()) : null, $previous);
     }
 }

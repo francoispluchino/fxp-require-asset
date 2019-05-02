@@ -40,6 +40,10 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
             ->expects($this->any())
             ->method('getTagPositionName')
             ->will($this->returnValue('category:type:position'));
+        $tag
+            ->expects($this->any())
+            ->method('getTemplateLine')
+            ->willReturn(-1);
 
         /* @var TagInterface $tag */
         $this->ext->addTag($tag);

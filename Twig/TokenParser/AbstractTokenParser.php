@@ -76,7 +76,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
 
         if (!$valid) {
             $message = 'The attribute %s "%s" must be an %s';
-            throw new \Twig_Error_Syntax(sprintf($message, $type, $stream->getCurrent()->getValue(), implode(', ', $allowed)), $stream->getCurrent()->getLine(), $stream->getSourceContext()->getName());
+            throw new \Twig_Error_Syntax(sprintf($message, $type, $stream->getCurrent()->getValue(), implode(', ', $allowed)), $stream->getCurrent()->getLine(), $stream->getSourceContext());
         }
     }
 
@@ -91,7 +91,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
     protected function validateAttributeOperator(\Twig_TokenStream $stream, $attr)
     {
         if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
-            throw new \Twig_Error_Syntax(sprintf('The attribute "%s" must be followed by "=" operator', $attr), $stream->getCurrent()->getLine(), $stream->getSourceContext()->getName());
+            throw new \Twig_Error_Syntax(sprintf('The attribute "%s" must be followed by "=" operator', $attr), $stream->getCurrent()->getLine(), $stream->getSourceContext());
         }
     }
 
@@ -113,7 +113,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
 
             return $processor->process($this->getAttributeNodeConfig(), [$attributes]);
         } catch (\Exception $e) {
-            throw new \Twig_Error_Syntax($this->getFormattedMessageException($e), $lineno, $name);
+            throw new \Twig_Error_Syntax($this->getFormattedMessageException($e), $lineno, new \Twig_Source('', $name));
         }
     }
 
