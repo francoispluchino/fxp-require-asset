@@ -62,9 +62,9 @@ interface AssetReplacementManagerInterface
      *
      * @param string $assetName The asset name
      *
-     * @return string
-     *
      * @throws InvalidArgumentException When the asset replacement does not exist
+     *
+     * @return string
      */
     public function getReplacement($assetName);
 

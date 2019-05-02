@@ -27,25 +27,25 @@ class LocaleConfiguration extends AbstractConfiguration
             ->useAttributeAsKey('locale', false)
             ->normalizeKeys(false)
             ->prototype('array')
-                ->prototype('array')
-                    ->normalizeKeys(false)
-                    ->beforeNormalization()
+            ->prototype('array')
+            ->normalizeKeys(false)
+            ->beforeNormalization()
                         // a scalar is a simple formula of one input file
-                        ->ifTrue(function ($v) {
+            ->ifTrue(function ($v) {
                             return \is_string($v);
                         })
-                        ->then(function ($v) {
+            ->then(function ($v) {
                             return [$v];
                         })
-                    ->end()
-                    ->validate()
-                    ->ifTrue(function ($v) {
+            ->end()
+            ->validate()
+            ->ifTrue(function ($v) {
                         return 0 === \count($v);
                     })
-                        ->thenInvalid('The localized asset must be present')
-                    ->end()
-                    ->prototype('scalar')->end()
-                ->end()
+            ->thenInvalid('The localized asset must be present')
+            ->end()
+            ->prototype('scalar')->end()
+            ->end()
             ->end()
         ;
 

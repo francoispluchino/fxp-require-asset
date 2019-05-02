@@ -27,28 +27,28 @@ class RequireScriptTagConfiguration extends AbstractConfiguration
     {
         $node = static::createRoot('require_script')
             ->children()
-                ->scalarNode('position')->defaultNull()->end()
-                ->scalarNode('src')->defaultNull()->end()
-                ->booleanNode('async')
-                    ->defaultNull()
-                    ->validate()
-                        ->always()
-                        ->then(function ($value) {
+            ->scalarNode('position')->defaultNull()->end()
+            ->scalarNode('src')->defaultNull()->end()
+            ->booleanNode('async')
+            ->defaultNull()
+            ->validate()
+            ->always()
+            ->then(function ($value) {
                             return $value ? 'async' : null;
                         })
-                    ->end()
-                ->end()
-                ->booleanNode('defer')
-                    ->defaultNull()
-                    ->validate()
-                        ->always()
-                        ->then(function ($value) {
+            ->end()
+            ->end()
+            ->booleanNode('defer')
+            ->defaultNull()
+            ->validate()
+            ->always()
+            ->then(function ($value) {
                             return $value ? 'defer' : null;
                         })
-                    ->end()
-                ->end()
-                ->scalarNode('charset')->defaultNull()->end()
-                ->scalarNode('type')->defaultNull()->end()
+            ->end()
+            ->end()
+            ->scalarNode('charset')->defaultNull()->end()
+            ->scalarNode('type')->defaultNull()->end()
             ->end()
         ;
 

@@ -19,10 +19,12 @@ use Symfony\Component\Config\Definition\Processor;
  * Tequire script template tag configuration tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class RequireStyleTagConfigurationTest extends TestCase
+final class RequireStyleTagConfigurationTest extends TestCase
 {
-    public function testRequireStyle()
+    public function testRequireStyle(): void
     {
         $process = new Processor();
         $configs = [

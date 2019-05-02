@@ -23,7 +23,7 @@ class TagPositionFunctionNode extends \Twig_Node_Expression_Function
      *
      * @param \Twig_Compiler $compiler
      */
-    public function compile(\Twig_Compiler $compiler)
+    public function compile(\Twig_Compiler $compiler): void
     {
         $name = $this->getAttribute('name');
         $function = $compiler->getEnvironment()->getFunction($name);

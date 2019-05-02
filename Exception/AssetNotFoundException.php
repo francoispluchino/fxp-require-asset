@@ -20,9 +20,9 @@ class AssetNotFoundException extends InvalidArgumentException
 {
     /**
      * @param string          $asset    The asset
-     * @param string|null     $type     The asset type
+     * @param null|string     $type     The asset type
      * @param int             $code     The exception code
-     * @param \Exception|null $previous The previous exception
+     * @param null|\Exception $previous The previous exception
      */
     public function __construct($asset, $type = null, $code = 0, \Exception $previous = null)
     {

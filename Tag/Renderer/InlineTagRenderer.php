@@ -50,7 +50,7 @@ class InlineTagRenderer implements TagRendererInterface
     /**
      * {@inheritdoc}
      */
-    public function reset()
+    public function reset(): void
     {
         // nothing
     }

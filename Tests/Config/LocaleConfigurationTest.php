@@ -19,10 +19,12 @@ use Symfony\Component\Config\Definition\Processor;
  * Locale Configuration Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class LocaleConfigurationTest extends TestCase
+final class LocaleConfigurationTest extends TestCase
 {
-    public function testLocale()
+    public function testLocale(): void
     {
         $process = new Processor();
         $configs = [

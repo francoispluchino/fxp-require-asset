@@ -17,10 +17,12 @@ use Fxp\Component\RequireAsset\Asset\Config\LocaleManager;
  * Locale Require Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class LocaleRequireAssetExtensionTest extends AbstractAssetExtensionTest
+final class LocaleRequireAssetExtensionTest extends AbstractAssetExtensionTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeManager = new LocaleManager();
 
@@ -43,7 +45,7 @@ class LocaleRequireAssetExtensionTest extends AbstractAssetExtensionTest
      *
      * @param string $tag
      */
-    public function testLocaleRequireAsset($tag)
+    public function testLocaleRequireAsset($tag): void
     {
         $this->localeManager->setLocale('fr_FR');
 

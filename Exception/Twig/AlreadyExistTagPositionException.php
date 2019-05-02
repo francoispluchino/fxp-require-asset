@@ -23,9 +23,9 @@ class AlreadyExistTagPositionException extends RuntimeException
      *
      * @param string      $category The template tag category
      * @param string      $type     The template tag type
-     * @param string|null $position The position in template
+     * @param null|string $position The position in template
      * @param int         $lineno   The template line where the error occurred
-     * @param string|null $name     The template logical name where the error occurred
+     * @param null|string $name     The template logical name where the error occurred
      * @param \Exception  $previous The previous exception used for the exception chaining
      */
     public function __construct($category, $type, $position = null, $lineno = -1, $name = null, \Exception $previous = null)

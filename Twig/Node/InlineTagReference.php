@@ -30,7 +30,7 @@ class InlineTagReference extends \Twig_Node
      * @param string      $name      The node name
      * @param string      $tagClass  The template tag classname
      * @param int         $lineno    The lineno
-     * @param string|null $position  The position in template
+     * @param null|string $position  The position in template
      * @param string      $tag       The twig tag
      */
     public function __construct($extension, $name, $tagClass, $lineno, $position = null, $tag = null)
@@ -50,7 +50,7 @@ class InlineTagReference extends \Twig_Node
      *
      * @param \Twig_Compiler $compiler A Twig_Compiler instance
      */
-    public function compile(\Twig_Compiler $compiler)
+    public function compile(\Twig_Compiler $compiler): void
     {
         $name = $this->getAttribute('name');
         $tagClass = $this->getAttribute('tagClass');
@@ -69,6 +69,7 @@ class InlineTagReference extends \Twig_Node
             ->raw(', ')->repr($position)
             ->raw(', ')->repr($this->getTemplateLine())
             ->raw(', ')->repr($this->getTemplateName())
-            ->raw('));'.PHP_EOL);
+            ->raw('));'.PHP_EOL)
+        ;
     }
 }

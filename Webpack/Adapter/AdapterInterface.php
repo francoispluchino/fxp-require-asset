@@ -24,11 +24,11 @@ interface AdapterInterface
      * Get the public path of the asset.
      *
      * @param string      $asset The asset name
-     * @param string|null $type  The asset type
-     *
-     * @return string
+     * @param null|string $type  The asset type
      *
      * @throws AssetNotFoundException When the asset is not found
+     *
+     * @return string
      */
     public function getPath($asset, $type = null);
 }

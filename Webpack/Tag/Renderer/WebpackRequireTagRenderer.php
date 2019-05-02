@@ -35,11 +35,12 @@ class WebpackRequireTagRenderer extends BaseRequireTagRenderer
      * Constructor.
      *
      * @param WebpackRequireAssetManager  $manager       The webpack require asset manager
-     * @param LocaleManagerInterface|null $localeManager The require locale asset manager
+     * @param null|LocaleManagerInterface $localeManager The require locale asset manager
      */
-    public function __construct(WebpackRequireAssetManager $manager,
-                                LocaleManagerInterface $localeManager = null)
-    {
+    public function __construct(
+        WebpackRequireAssetManager $manager,
+        LocaleManagerInterface $localeManager = null
+    ) {
         $this->manager = $manager;
 
         parent::__construct($localeManager);
@@ -91,9 +92,9 @@ class WebpackRequireTagRenderer extends BaseRequireTagRenderer
      *
      * @param RequireTagInterface $tag The require template tag
      *
-     * @return string The output render
-     *
      * @throws RequireTagRendererException When the asset in template tag is not managed by the Webpack Require Asset Manager
+     *
+     * @return string The output render
      */
     protected function preRender(RequireTagInterface $tag)
     {
@@ -177,9 +178,9 @@ class WebpackRequireTagRenderer extends BaseRequireTagRenderer
         if (!$this->manager->has($tag->getPath(), $tag->getType())) {
             if ($tag->isOptional()) {
                 return true;
-            } else {
-                throw new RequireTagRendererException($tag, sprintf('The %s %s "%s" is not managed by the Webpack Require Asset Manager', $tag->getCategory(), $tag->getType(), $tag->getPath()));
             }
+
+            throw new RequireTagRendererException($tag, sprintf('The %s %s "%s" is not managed by the Webpack Require Asset Manager', $tag->getCategory(), $tag->getType(), $tag->getPath()));
         }
 
         return false;
@@ -191,7 +192,7 @@ class WebpackRequireTagRenderer extends BaseRequireTagRenderer
      * @param array|string $assets The asset name or list of asset name
      * @param string       $type   The require tag type
      */
-    protected function assetRendered($assets, $type)
+    protected function assetRendered($assets, $type): void
     {
         $assets = (array) $assets;
 

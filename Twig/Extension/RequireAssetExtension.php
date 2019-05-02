@@ -21,14 +21,14 @@ use Fxp\Component\RequireAsset\Asset\RequireAssetManagerInterface;
 class RequireAssetExtension extends \Twig_Extension
 {
     /**
-     * @var RequireAssetManagerInterface|null
+     * @var null|RequireAssetManagerInterface
      */
     protected $manager;
 
     /**
      * Constructor.
      *
-     * @param RequireAssetManagerInterface|null $manager The require asset manager
+     * @param null|RequireAssetManagerInterface $manager The require asset manager
      */
     public function __construct(RequireAssetManagerInterface $manager = null)
     {
@@ -49,7 +49,7 @@ class RequireAssetExtension extends \Twig_Extension
      * Get the target path of the require asset.
      *
      * @param string      $asset The require asset name
-     * @param string|null $type  The asset type
+     * @param null|string $type  The asset type
      *
      * @return string
      */

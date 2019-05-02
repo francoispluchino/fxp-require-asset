@@ -32,8 +32,8 @@ class RequireTagReference extends \Twig_Node
      * @param array       $assets     The assets
      * @param array       $attributes The attributes of tags
      * @param int         $lineno     The template lineno
-     * @param string|null $position   The require position in template
-     * @param string|null $twigTag    The twig tag
+     * @param null|string $position   The require position in template
+     * @param null|string $twigTag    The twig tag
      */
     public function __construct($extension, $name, $tagClass, array $assets, array $attributes, $lineno, $position = null, $twigTag = null)
     {
@@ -54,7 +54,7 @@ class RequireTagReference extends \Twig_Node
      *
      * @param \Twig_Compiler $compiler A Twig_Compiler instance
      */
-    public function compile(\Twig_Compiler $compiler)
+    public function compile(\Twig_Compiler $compiler): void
     {
         $compiler
             ->addDebugInfo($this)
@@ -76,7 +76,7 @@ class RequireTagReference extends \Twig_Node
      *
      * @param \Twig_Compiler $compiler
      */
-    protected function compileTags(\Twig_Compiler $compiler)
+    protected function compileTags(\Twig_Compiler $compiler): void
     {
         $tagClass = $this->getAttribute('tagClass');
         $assets = $this->getAttribute('assets');

@@ -45,7 +45,7 @@ abstract class AbstractAssetExtensionTest extends TestCase
      */
     protected $debugCommonAssets = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->replacementManager = new AssetReplacementManager();
         $this->ext = new CoreAssetExtension(
@@ -56,7 +56,7 @@ abstract class AbstractAssetExtensionTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->ext = null;
         $this->replacementManager = null;
@@ -98,6 +98,21 @@ abstract class AbstractAssetExtensionTest extends TestCase
 
     /**
      * @param string $tag
+     * @param string $testFile
+     * @param string $validSuffix
+     */
+    public function doValidTagTest($tag, $testFile = 'test', $validSuffix = ''): void
+    {
+        $tpl = $this->getTemplate($tag, $testFile.'.html.twig');
+        $content = $tpl->render([]);
+        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/'.$tag.'/'.$testFile.$validSuffix.'.valid.template');
+        $valid = str_replace("\r", '', $valid);
+
+        $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
+    }
+
+    /**
+     * @param string $tag
      * @param string $file
      *
      * @return \Twig_TemplateWrapper
@@ -109,20 +124,5 @@ abstract class AbstractAssetExtensionTest extends TestCase
         $twig->addExtension($this->ext);
 
         return $twig->load($file);
-    }
-
-    /**
-     * @param string $tag
-     * @param string $testFile
-     * @param string $validSuffix
-     */
-    public function doValidTagTest($tag, $testFile = 'test', $validSuffix = '')
-    {
-        $tpl = $this->getTemplate($tag, $testFile.'.html.twig');
-        $content = $tpl->render([]);
-        $valid = file_get_contents(__DIR__.'/../../Fixtures/Resources/views/'.$tag.'/'.$testFile.$validSuffix.'.valid.template');
-        $valid = str_replace("\r", '', $valid);
-
-        $this->assertEquals(mb_convert_encoding($valid, 'utf8'), $content);
     }
 }

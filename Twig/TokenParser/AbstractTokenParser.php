@@ -26,10 +26,10 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
     /**
      * Gets the attributes of the twig tag.
      *
-     * @return array The tag attributes
-     *
      * @throws \Twig_Error_Syntax When the attribute does not exist
      * @throws \Twig_Error_Syntax When the attribute is not followed by "=" operator
+     *
+     * @return array The tag attributes
      */
     protected function getTagAttributes()
     {
@@ -63,19 +63,21 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
      *
      * @throws \Twig_Error_Syntax When the attribute type is not allowed
      */
-    protected function validateAttributeType(\Twig_TokenStream $stream, $type, array $allowed)
+    protected function validateAttributeType(\Twig_TokenStream $stream, $type, array $allowed): void
     {
         $valid = false;
 
         foreach ($allowed as $aType) {
             if ($stream->test(\constant('\Twig_Token::'.$aType.'_TYPE'))) {
                 $valid = true;
+
                 break;
             }
         }
 
         if (!$valid) {
             $message = 'The attribute %s "%s" must be an %s';
+
             throw new \Twig_Error_Syntax(sprintf($message, $type, $stream->getCurrent()->getValue(), implode(', ', $allowed)), $stream->getCurrent()->getLine(), $stream->getSourceContext());
         }
     }
@@ -88,7 +90,7 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
      *
      * @throws \Twig_Error_Syntax When the attribute is not following by "="
      */
-    protected function validateAttributeOperator(\Twig_TokenStream $stream, $attr)
+    protected function validateAttributeOperator(\Twig_TokenStream $stream, $attr): void
     {
         if (!$stream->test(\Twig_Token::OPERATOR_TYPE, '=')) {
             throw new \Twig_Error_Syntax(sprintf('The attribute "%s" must be followed by "=" operator', $attr), $stream->getCurrent()->getLine(), $stream->getSourceContext());
@@ -102,9 +104,9 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
      * @param int    $lineno
      * @param string $name
      *
-     * @return array The formatted attributes
-     *
      * @throws \Twig_Error_Syntax When the attribute does not exist
+     *
+     * @return array The formatted attributes
      */
     protected function formatAttributes(array $attributes, $lineno, $name)
     {
@@ -166,11 +168,11 @@ abstract class AbstractTokenParser extends \Twig_TokenParser
      *
      * @param array $attributes The attributes of twig tag
      *
-     * @return string|null The name position in the template
+     * @return null|string The name position in the template
      */
     protected function getPosition(array &$attributes)
     {
-        $position = isset($attributes['position']) ? $attributes['position'] : null;
+        $position = $attributes['position'] ?? null;
         unset($attributes['position']);
 
         return $position;

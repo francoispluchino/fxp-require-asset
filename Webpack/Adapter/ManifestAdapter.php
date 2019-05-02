@@ -26,7 +26,7 @@ class ManifestAdapter extends AbstractAdapter
     private $manifestPath;
 
     /**
-     * @var array|null
+     * @var null|array
      */
     private $manifestData;
 
@@ -66,7 +66,7 @@ class ManifestAdapter extends AbstractAdapter
     {
         $ext = pathinfo($asset, PATHINFO_EXTENSION);
 
-        return \in_array($ext, $availables) ? $ext : null;
+        return \in_array($ext, $availables, true) ? $ext : null;
     }
 
     /**

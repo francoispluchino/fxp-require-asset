@@ -19,10 +19,12 @@ use Symfony\Component\Config\Definition\Processor;
  * Inline template tag configuration tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class InlineTagConfigurationTest extends TestCase
+final class InlineTagConfigurationTest extends TestCase
 {
-    public function testInlineAsset()
+    public function testInlineAsset(): void
     {
         $process = new Processor();
         $configs = [

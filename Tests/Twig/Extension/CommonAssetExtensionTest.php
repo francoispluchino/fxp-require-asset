@@ -18,58 +18,62 @@ use Fxp\Component\RequireAsset\Twig\Extension\AssetExtension;
  * Common Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class CommonAssetExtensionTest extends AbstractAssetExtensionTest
+final class CommonAssetExtensionTest extends AbstractAssetExtensionTest
 {
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistTagPositionException
-     */
-    public function testTagPositionIsAlreadyIncluded()
+    public function testTagPositionIsAlreadyIncluded(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\Twig\AlreadyExistTagPositionException::class);
+
         $this->ext->createTagPosition('category', 'type');
         $this->ext->createTagPosition('category', 'type');
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\Twig\MissingTagPositionException
-     */
-    public function testContentIsNotRenderingBecauseTheTagPositionIsMissing()
+    public function testContentIsNotRenderingBecauseTheTagPositionIsMissing(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\Twig\MissingTagPositionException::class);
+
         $tag = $this->getMockBuilder('Fxp\Component\RequireAsset\Tag\TagInterface')->getMock();
         $tag
             ->expects($this->any())
             ->method('getTagPositionName')
-            ->will($this->returnValue('category:type:position'));
+            ->will($this->returnValue('category:type:position'))
+        ;
         $tag
             ->expects($this->any())
             ->method('getTemplateLine')
-            ->willReturn(-1);
+            ->willReturn(-1)
+        ;
 
         /* @var TagInterface $tag */
         $this->ext->addTag($tag);
         $this->ext->renderTags();
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\Twig\RuntimeTagRendererException
-     * @expectedExceptionMessage No template tag renderer has been found for the "category_type" tag
-     */
-    public function testAssetRendererNotFound()
+    public function testAssetRendererNotFound(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\Twig\RuntimeTagRendererException::class);
+        $this->expectExceptionMessage('No template tag renderer has been found for the "category_type" tag');
+
         $ext = new AssetExtension();
         $tag = $this->getMockBuilder('Fxp\Component\RequireAsset\Tag\TagInterface')->getMock();
         $tag
             ->expects($this->any())
             ->method('getTagPositionName')
-            ->will($this->returnValue('category:type:position'));
+            ->will($this->returnValue('category:type:position'))
+        ;
         $tag
             ->expects($this->any())
             ->method('getCategory')
-            ->will($this->returnValue('category'));
+            ->will($this->returnValue('category'))
+        ;
         $tag
             ->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('type'));
+            ->will($this->returnValue('type'))
+        ;
 
         /* @var TagInterface $tag */
         echo $ext->createTagPosition('category', 'type', -1, null, 'position');
@@ -77,30 +81,33 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
         $ext->renderTags();
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\Twig\RuntimeTagRendererException
-     * @expectedExceptionMessage No template tag renderer has been found for the "category_type" tag with the asset "ASSET_PATH"
-     */
-    public function testAssetRendererNotFoundForRequireTag()
+    public function testAssetRendererNotFoundForRequireTag(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\Twig\RuntimeTagRendererException::class);
+        $this->expectExceptionMessage('No template tag renderer has been found for the "category_type" tag with the asset "ASSET_PATH"');
+
         $ext = new AssetExtension();
         $tag = $this->getMockBuilder('Fxp\Component\RequireAsset\Tag\RequireTagInterface')->getMock();
         $tag
             ->expects($this->any())
             ->method('getTagPositionName')
-            ->will($this->returnValue('category:type:position'));
+            ->will($this->returnValue('category:type:position'))
+        ;
         $tag
             ->expects($this->any())
             ->method('getCategory')
-            ->will($this->returnValue('category'));
+            ->will($this->returnValue('category'))
+        ;
         $tag
             ->expects($this->any())
             ->method('getType')
-            ->will($this->returnValue('type'));
+            ->will($this->returnValue('type'))
+        ;
         $tag
             ->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValue('ASSET_PATH'));
+            ->will($this->returnValue('ASSET_PATH'))
+        ;
 
         /* @var TagInterface $tag */
         echo $ext->createTagPosition('category', 'type', -1, null, 'position');
@@ -112,12 +119,12 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
      * @dataProvider getTwigTags
      *
      * @param string $tag
-     *
-     * @expectedException \Twig_Error_Syntax
-     * @expectedExceptionMessageRegExp /^The attribute name "(\w+)" must be an NAME, STRING/
      */
-    public function testInvalidTypeAttributeName($tag)
+    public function testInvalidTypeAttributeName($tag): void
     {
+        $this->expectException(\Twig_Error_Syntax::class);
+        $this->expectExceptionMessageRegExp('/^The attribute name "(\\w+)" must be an NAME, STRING/');
+
         $this->getTemplate($tag, 'invalid_attr_type.html.twig');
     }
 
@@ -125,12 +132,12 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
      * @dataProvider getTwigTags
      *
      * @param string $tag
-     *
-     * @expectedException \Twig_Error_Syntax
-     * @expectedExceptionMessageRegExp /^The attribute value "([w\/]+)" must be an NAME, STRING, NUMBER/
      */
-    public function testInvalidTypeAttributeValue($tag)
+    public function testInvalidTypeAttributeValue($tag): void
     {
+        $this->expectException(\Twig_Error_Syntax::class);
+        $this->expectExceptionMessageRegExp('/^The attribute value "([w\\/]+)" must be an NAME, STRING, NUMBER/');
+
         $this->getTemplate($tag, 'invalid_attr_value.html.twig');
     }
 
@@ -138,12 +145,12 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
      * @dataProvider getTwigTags
      *
      * @param string $tag
-     *
-     * @expectedException \Twig_Error_Syntax
-     * @expectedExceptionMessageRegExp /^Invalid type for attribute "(\w+)". Expected /
      */
-    public function testInvalidConfigTypeAttributeValue($tag)
+    public function testInvalidConfigTypeAttributeValue($tag): void
     {
+        $this->expectException(\Twig_Error_Syntax::class);
+        $this->expectExceptionMessageRegExp('/^Invalid type for attribute "(\\w+)". Expected /');
+
         $this->getTemplate($tag, 'invalid_attr_value_config.html.twig');
     }
 
@@ -151,12 +158,12 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
      * @dataProvider getTwigTags
      *
      * @param string $tag
-     *
-     * @expectedException \Twig_Error_Syntax
-     * @expectedExceptionMessageRegExp /^The attribute "(\w+)" does not exist for the "(\w+)" tag. Only attributes "([A-Za-z0-9_, "]+)" are available/
      */
-    public function testInvalidAttributeName($tag)
+    public function testInvalidAttributeName($tag): void
     {
+        $this->expectException(\Twig_Error_Syntax::class);
+        $this->expectExceptionMessageRegExp('/^The attribute "(\\w+)" does not exist for the "(\\w+)" tag. Only attributes "([A-Za-z0-9_, "]+)" are available/');
+
         $this->getTemplate($tag, 'invalid_attr_name.html.twig');
     }
 
@@ -164,12 +171,12 @@ class CommonAssetExtensionTest extends AbstractAssetExtensionTest
      * @dataProvider getTwigTags
      *
      * @param string $tag
-     *
-     * @expectedException \Twig_Error_Syntax
-     * @expectedExceptionMessage must be followed by "=" operator
      */
-    public function testInvalidAttributeOperator($tag)
+    public function testInvalidAttributeOperator($tag): void
     {
+        $this->expectException(\Twig_Error_Syntax::class);
+        $this->expectExceptionMessage('must be followed by "=" operator');
+
         $this->getTemplate($tag, 'invalid_attr_operator.html.twig');
     }
 }

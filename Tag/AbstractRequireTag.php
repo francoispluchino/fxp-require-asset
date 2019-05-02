@@ -41,9 +41,9 @@ abstract class AbstractRequireTag extends AbstractTag implements RequireTagInter
     /**
      * @param string      $assetPath  The asset source path
      * @param array       $attributes The HTML attributes
-     * @param string|null $position   The position in the template
+     * @param null|string $position   The position in the template
      * @param int         $lineno     The template line
-     * @param string|null $name       The template logical name
+     * @param null|string $name       The template logical name
      */
     public function __construct($assetPath, array $attributes = [], $position = null, $lineno = -1, $name = null)
     {

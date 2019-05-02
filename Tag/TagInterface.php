@@ -35,7 +35,7 @@ interface TagInterface
     /**
      * Get the position of template tag.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getPosition();
 
@@ -56,7 +56,7 @@ interface TagInterface
     /**
      * Get the template logical name.
      *
-     * @return string|null
+     * @return null|string
      */
     public function getTemplateName();
 }

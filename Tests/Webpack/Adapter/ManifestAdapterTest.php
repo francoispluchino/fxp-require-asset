@@ -18,22 +18,24 @@ use PHPUnit\Framework\TestCase;
  * Webpack Manifest Adapter Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class ManifestAdapterTest extends TestCase
+final class ManifestAdapterTest extends TestCase
 {
     /**
      * @var ManifestAdapter
      */
     protected $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapter = new ManifestAdapter(
             realpath(__DIR__.'/../../Fixtures/Webpack/manifest.json')
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapter = null;
     }
@@ -54,71 +56,65 @@ class ManifestAdapterTest extends TestCase
      * @dataProvider getPathValues
      *
      * @param string      $asset
-     * @param string|null $type
+     * @param null|string $type
      * @param string      $expectedResult
      */
-    public function testGet($asset, $type, $expectedResult)
+    public function testGet($asset, $type, $expectedResult): void
     {
         $res = $this->adapter->getPath($asset, $type);
 
         $this->assertSame($expectedResult, $res);
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage The asset "assets/asset.ext" is not found
-     */
-    public function testGetWithInvalidAssetExtension()
+    public function testGetWithInvalidAssetExtension(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\AssetNotFoundException::class);
+        $this->expectExceptionMessage('The asset "assets/asset.ext" is not found');
+
         $this->adapter->getPath('assets/asset.ext', null);
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage The script asset "assets/asset.ext" is not found
-     */
-    public function testGetWithInvalidScriptExtension()
+    public function testGetWithInvalidScriptExtension(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\AssetNotFoundException::class);
+        $this->expectExceptionMessage('The script asset "assets/asset.ext" is not found');
+
         $this->adapter->getPath('assets/asset.ext', 'script');
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage The style asset "assets/asset.ext" is not found
-     */
-    public function testGetWithInvalidStyleExtension()
+    public function testGetWithInvalidStyleExtension(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\AssetNotFoundException::class);
+        $this->expectExceptionMessage('The style asset "assets/asset.ext" is not found');
+
         $this->adapter->getPath('assets/asset.ext', 'style');
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage The asset "@webpack/asset_not_found" is not found
-     */
-    public function testGetWithoutAsset()
+    public function testGetWithoutAsset(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\AssetNotFoundException::class);
+        $this->expectExceptionMessage('The asset "@webpack/asset_not_found" is not found');
+
         $asset = '@webpack/asset_not_found';
 
         $this->adapter->getPath($asset);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Asset manifest file "INVALID_MANIFEST.json" does not exist.
-     */
-    public function testInvalidJsonFilename()
+    public function testInvalidJsonFilename(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Asset manifest file "INVALID_MANIFEST.json" does not exist.');
+
         $this->adapter = new ManifestAdapter('INVALID_MANIFEST.json');
 
         $this->adapter->getPath('@webpack/asset');
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Error parsing JSON from asset manifest file
-     */
-    public function testInvalidJsonContent()
+    public function testInvalidJsonContent(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Error parsing JSON from asset manifest file');
+
         $this->adapter = new ManifestAdapter(
             realpath(__DIR__.'/../../Fixtures/Webpack/manifest_invalid.json')
         );

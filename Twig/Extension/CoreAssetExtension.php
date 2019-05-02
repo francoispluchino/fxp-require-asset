@@ -29,16 +29,17 @@ class CoreAssetExtension extends AssetExtension
     /**
      * Constructor.
      *
-     * @param string|null                           $webpackFile        The filename of webpack manifest or assets
+     * @param null|string                           $webpackFile        The filename of webpack manifest or assets
      * @param string                                $webpackAdapter     The webpack adapter (manifest of assets)
-     * @param LocaleManagerInterface|null           $localeManager      The require locale asset manager
-     * @param AssetReplacementManagerInterface|null $replacementManager The asset replacement manager
+     * @param null|LocaleManagerInterface           $localeManager      The require locale asset manager
+     * @param null|AssetReplacementManagerInterface $replacementManager The asset replacement manager
      */
-    public function __construct($webpackFile = null,
-                                $webpackAdapter = 'manifest',
-                                LocaleManagerInterface $localeManager = null,
-                                AssetReplacementManagerInterface $replacementManager = null)
-    {
+    public function __construct(
+        $webpackFile = null,
+        $webpackAdapter = 'manifest',
+        LocaleManagerInterface $localeManager = null,
+        AssetReplacementManagerInterface $replacementManager = null
+    ) {
         parent::__construct($replacementManager);
 
         $renderers = [new InlineTagRenderer()];

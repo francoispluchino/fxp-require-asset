@@ -18,15 +18,16 @@ use PHPUnit\Framework\TestCase;
  * Inline Tag Renderer Utils Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class InlineTagRendererUtilsTest extends TestCase
+final class InlineTagRendererUtilsTest extends TestCase
 {
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\Twig\BodyTagRendererException
-     * @expectedExceptionMessage The callable argument must be an array with Twig_Template instance and name function of the block to rendering
-     */
-    public function testWrongCallable()
+    public function testWrongCallable(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\Twig\BodyTagRendererException::class);
+        $this->expectExceptionMessage('The callable argument must be an array with Twig_Template instance and name function of the block to rendering');
+
         InlineTagRendererUtils::renderBody([], [], []);
     }
 }

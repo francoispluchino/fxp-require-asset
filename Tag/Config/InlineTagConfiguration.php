@@ -27,8 +27,8 @@ class InlineTagConfiguration extends AbstractConfiguration
     {
         $node = static::createRoot('inline_tag')
             ->children()
-                ->scalarNode('position')->defaultNull()->end()
-                ->booleanNode('keep_html_tag')->defaultFalse()->end()
+            ->scalarNode('position')->defaultNull()->end()
+            ->booleanNode('keep_html_tag')->defaultFalse()->end()
             ->end()
         ;
 

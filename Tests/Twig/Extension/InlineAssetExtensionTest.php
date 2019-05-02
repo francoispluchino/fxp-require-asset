@@ -15,15 +15,17 @@ namespace Fxp\Component\RequireAsset\Tests\Twig\Extension;
  * Inline Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class InlineAssetExtensionTest extends AbstractAssetExtensionTest
+final class InlineAssetExtensionTest extends AbstractAssetExtensionTest
 {
     /**
      * @dataProvider getInlineTwigTags
      *
      * @param string $tag
      */
-    public function testEmptyBody($tag)
+    public function testEmptyBody($tag): void
     {
         $this->assertInstanceOf(\Twig_TemplateWrapper::class, $this->getTemplate($tag, 'empty_body.html.twig'));
     }
@@ -33,7 +35,7 @@ class InlineAssetExtensionTest extends AbstractAssetExtensionTest
      *
      * @param string $tag
      */
-    public function testTwigTags($tag)
+    public function testTwigTags($tag): void
     {
         $this->doValidTagTest($tag);
     }

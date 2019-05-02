@@ -30,7 +30,7 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
     /**
      * Constructor.
      *
-     * @param string|null $extension The class name of twig extension
+     * @param null|string $extension The class name of twig extension
      */
     public function __construct($extension = null)
     {
@@ -42,12 +42,12 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
      *
      * @param \Twig_Token $token A Twig_Token instance
      *
-     * @return \Twig_Node A Twig_Node instance
-     *
      * @throws \Twig_Error_Syntax When attribute name is not a string or constant
      * @throws \Twig_Error_Syntax When attribute does not exist
      * @throws \Twig_Error_Syntax When attribute is not followed by "=" operator
      * @throws \Twig_Error_Syntax When the value name is not a string or constant
+     *
+     * @return \Twig_Node A Twig_Node instance
      */
     public function parse(\Twig_Token $token)
     {
@@ -126,7 +126,7 @@ abstract class AbstractInlineTokenParser extends AbstractTokenParser
      * @param int        $position
      * @param string     $pattern
      */
-    protected function removeTagContent(\Twig_Node $body, $position, $pattern)
+    protected function removeTagContent(\Twig_Node $body, $position, $pattern): void
     {
         if ($body->getNode($position) instanceof \Twig_Node_Text) {
             $positionBody = $body->getNode($position)->getAttribute('data');

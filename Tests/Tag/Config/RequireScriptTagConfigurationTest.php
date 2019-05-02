@@ -19,10 +19,12 @@ use Symfony\Component\Config\Definition\Processor;
  * Require script template tag configuration tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class RequireScriptTagConfigurationTest extends TestCase
+final class RequireScriptTagConfigurationTest extends TestCase
 {
-    public function testRequireScript()
+    public function testRequireScript(): void
     {
         $process = new Processor();
         $configs = [

@@ -29,7 +29,7 @@ class AssetsAdapter extends AbstractAdapter
     protected $filename;
 
     /**
-     * @var CacheItemPoolInterface|null
+     * @var null|CacheItemPoolInterface
      */
     protected $cache;
 
@@ -39,7 +39,7 @@ class AssetsAdapter extends AbstractAdapter
     protected $cacheKey;
 
     /**
-     * @var array|null
+     * @var null|array
      */
     protected $contentCache;
 
@@ -47,7 +47,7 @@ class AssetsAdapter extends AbstractAdapter
      * Constructor.
      *
      * @param string                      $filename The filename of webpack assets
-     * @param CacheItemPoolInterface|null $cache    The cache
+     * @param null|CacheItemPoolInterface $cache    The cache
      * @param string                      $cacheKey The key for the cache
      */
     public function __construct($filename, CacheItemPoolInterface $cache = null, $cacheKey = 'fxp_require_asset_webpack_assets')
@@ -84,7 +84,7 @@ class AssetsAdapter extends AbstractAdapter
     {
         $type = null;
 
-        if (\in_array('css', $availables)) {
+        if (\in_array('css', $availables, true)) {
             $type = 'css';
         } elseif (1 === \count($availables)) {
             $type = current($availables);
@@ -136,7 +136,7 @@ class AssetsAdapter extends AbstractAdapter
     /**
      * Get the cached content.
      *
-     * @return CacheItemInterface|null
+     * @return null|CacheItemInterface
      */
     private function getCachedContent()
     {
@@ -157,7 +157,7 @@ class AssetsAdapter extends AbstractAdapter
     /**
      * Save the content in the cache and returns the content.
      *
-     * @param CacheItemInterface|null $item    The cache item
+     * @param null|CacheItemInterface $item    The cache item
      * @param array                   $content The content
      *
      * @return array

@@ -26,7 +26,7 @@ class LocaleManager implements LocaleManagerInterface
     protected $locale;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     protected $fallback;
 
@@ -48,8 +48,8 @@ class LocaleManager implements LocaleManagerInterface
     /**
      * Constructor.
      *
-     * @param string|null $locale   The current locale
-     * @param string|null $fallback The fallback locale
+     * @param null|string $locale   The current locale
+     * @param null|string $fallback The fallback locale
      */
     public function __construct($locale = null, $fallback = null)
     {
@@ -222,7 +222,7 @@ class LocaleManager implements LocaleManagerInterface
     /**
      * Get the current locale.
      *
-     * @param string|null $locale The locale
+     * @param null|string $locale The locale
      *
      * @return string
      */
@@ -253,12 +253,12 @@ class LocaleManager implements LocaleManagerInterface
      * @param string $key      The first key of array
      * @param string $subKey   The sub key of array
      */
-    protected function cleanArray($property, $key, $subKey)
+    protected function cleanArray($property, $key, $subKey): void
     {
-        $val = &$this->$property;
+        $val = &$this->{$property};
         unset($val[$key][$subKey]);
 
-        if (array_key_exists($key, $val) && 0 === \count($val[$key])) {
+        if (\array_key_exists($key, $val) && 0 === \count($val[$key])) {
             unset($val[$key]);
         }
     }

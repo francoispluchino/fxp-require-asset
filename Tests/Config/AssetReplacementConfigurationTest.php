@@ -19,10 +19,12 @@ use Symfony\Component\Config\Definition\Processor;
  * Asset Replacement Configuration Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class AssetReplacementConfigurationTest extends TestCase
+final class AssetReplacementConfigurationTest extends TestCase
 {
-    public function testLocale()
+    public function testLocale(): void
     {
         $process = new Processor();
         $configs = [

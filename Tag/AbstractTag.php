@@ -19,7 +19,7 @@ namespace Fxp\Component\RequireAsset\Tag;
 abstract class AbstractTag implements TagInterface
 {
     /**
-     * @var string|null
+     * @var null|string
      */
     protected $position;
 
@@ -29,16 +29,16 @@ abstract class AbstractTag implements TagInterface
     protected $lineno;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     protected $name;
 
     /**
      * Constructor.
      *
-     * @param string|null $position The positon in template
+     * @param null|string $position The positon in template
      * @param int         $lineno   The template line
-     * @param string|null $name     The template logical name
+     * @param null|string $name     The template logical name
      */
     public function __construct($position = null, $lineno = -1, $name = null)
     {

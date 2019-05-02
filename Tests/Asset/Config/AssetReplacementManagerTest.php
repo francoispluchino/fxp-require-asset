@@ -18,10 +18,12 @@ use PHPUnit\Framework\TestCase;
  * Require Locale Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class AssetReplacementManagerTest extends TestCase
+final class AssetReplacementManagerTest extends TestCase
 {
-    public function testBasic()
+    public function testBasic(): void
     {
         $arm = new AssetReplacementManager();
         $replacements = [
@@ -44,12 +46,11 @@ class AssetReplacementManagerTest extends TestCase
         $this->assertSame('@asset5/path2.ext', $arm->getReplacement('@asset1/path2.ext'));
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The "@asset1/path1.ext" asset replacement does not exist in require asset manager
-     */
-    public function testInvalidGetReplacement()
+    public function testInvalidGetReplacement(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "@asset1/path1.ext" asset replacement does not exist in require asset manager');
+
         $arm = new AssetReplacementManager();
         $arm->getReplacement('@asset1/path1.ext');
     }

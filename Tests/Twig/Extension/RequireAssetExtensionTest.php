@@ -17,21 +17,11 @@ use Fxp\Component\RequireAsset\Exception\Twig\RequireTagException;
  * Require Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class RequireAssetExtensionTest extends AbstractAssetExtensionTest
+final class RequireAssetExtensionTest extends AbstractAssetExtensionTest
 {
-    protected function getRequireTwigTemplateConfigs()
-    {
-        return [
-            ['test'],
-            ['test_multi_asset'],
-            ['test_without_asset', '\Twig_Error_Syntax', '/The twig tag "(\w+)" require a lest one asset/'],
-            ['test_replacement_asset'],
-            ['test_optional_asset'],
-            ['invalid_webpack_asset', RequireTagException::class, 'is not managed by the Webpack Require Asset Manager'],
-        ];
-    }
-
     public function getRequireTwigTemplates()
     {
         $tests = [];
@@ -53,7 +43,7 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
      * @param string $exceptionClass
      * @param string $exceptionMessage
      */
-    public function testTwigTags($tag, $testFile, $exceptionClass = null, $exceptionMessage = null)
+    public function testTwigTags($tag, $testFile, $exceptionClass = null, $exceptionMessage = null): void
     {
         if (null !== $exceptionClass) {
             $this->expectException($exceptionClass);
@@ -71,5 +61,17 @@ class RequireAssetExtensionTest extends AbstractAssetExtensionTest
         $this->replacementManager->addReplacement('@virtual_asset/css/asset.css', '@webpack/asset');
 
         $this->doValidTagTest($tag, $testFile);
+    }
+
+    protected function getRequireTwigTemplateConfigs()
+    {
+        return [
+            ['test'],
+            ['test_multi_asset'],
+            ['test_without_asset', '\Twig_Error_Syntax', '/The twig tag "(\w+)" require a lest one asset/'],
+            ['test_replacement_asset'],
+            ['test_optional_asset'],
+            ['invalid_webpack_asset', RequireTagException::class, 'is not managed by the Webpack Require Asset Manager'],
+        ];
     }
 }

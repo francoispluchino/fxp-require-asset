@@ -19,11 +19,13 @@ use PHPUnit\Framework\TestCase;
  * Require Locale Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class ChainRequireAssetManagerTest extends TestCase
+final class ChainRequireAssetManagerTest extends TestCase
 {
     /**
-     * @var RequireAssetManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|RequireAssetManagerInterface
      */
     protected $ram;
 
@@ -32,7 +34,7 @@ class ChainRequireAssetManagerTest extends TestCase
      */
     protected $cram;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ram = $this->getMockBuilder(RequireAssetManagerInterface::class)->getMock();
         $this->cram = new ChainRequireAssetManager([$this->ram]);
@@ -51,21 +53,22 @@ class ChainRequireAssetManagerTest extends TestCase
      *
      * @param bool $expectedResult
      */
-    public function testHas($expectedResult)
+    public function testHas($expectedResult): void
     {
         $asset = '@package/asset.ext';
 
         $this->ram->expects($this->once())
             ->method('has')
             ->with($asset)
-            ->willReturn($expectedResult);
+            ->willReturn($expectedResult)
+        ;
 
         $res = $this->cram->has($asset);
 
         $this->assertSame($expectedResult, $res);
     }
 
-    public function testGetPath()
+    public function testGetPath(): void
     {
         $asset = '@package/asset.ext';
         $expectedResult = '/assets/asset.ext';
@@ -73,54 +76,58 @@ class ChainRequireAssetManagerTest extends TestCase
         $this->ram->expects($this->once())
             ->method('has')
             ->with($asset)
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $this->ram->expects($this->once())
             ->method('getPath')
             ->with($asset)
-            ->willReturn($expectedResult);
+            ->willReturn($expectedResult)
+        ;
 
         $res = $this->cram->getPath($asset);
 
         $this->assertSame($expectedResult, $res);
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage The asset "@package/asset.ext" is not found
-     */
-    public function testGetPathWithoutAsset()
+    public function testGetPathWithoutAsset(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\AssetNotFoundException::class);
+        $this->expectExceptionMessage('The asset "@package/asset.ext" is not found');
+
         $asset = '@package/asset.ext';
 
         $this->ram->expects($this->once())
             ->method('has')
             ->with($asset)
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         $this->ram->expects($this->never())
-            ->method('getPath');
+            ->method('getPath')
+        ;
 
         $this->cram->getPath($asset);
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage The asset "@package/asset.ext" is not found
-     */
-    public function testGetPathWithException()
+    public function testGetPathWithException(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\AssetNotFoundException::class);
+        $this->expectExceptionMessage('The asset "@package/asset.ext" is not found');
+
         $asset = '@package/asset.ext';
 
         $this->ram->expects($this->once())
             ->method('has')
             ->with($asset)
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $this->ram->expects($this->once())
             ->method('getPath')
             ->with($asset)
-            ->willThrowException(new \Exception('TEST'));
+            ->willThrowException(new \Exception('TEST'))
+        ;
 
         $this->cram->getPath($asset);
     }

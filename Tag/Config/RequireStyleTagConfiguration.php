@@ -27,13 +27,13 @@ class RequireStyleTagConfiguration extends AbstractConfiguration
     {
         $node = static::createRoot('require_style')
             ->children()
-                ->scalarNode('position')->defaultNull()->end()
-                ->scalarNode('href')->defaultNull()->end()
-                ->scalarNode('rel')->defaultValue('stylesheet')->end()
-                ->scalarNode('media')->defaultNull()->end()
-                ->scalarNode('type')->defaultNull()->end()
-                ->scalarNode('hreflang')->defaultNull()->end()
-                ->integerNode('sizes')->defaultNull()->end()
+            ->scalarNode('position')->defaultNull()->end()
+            ->scalarNode('href')->defaultNull()->end()
+            ->scalarNode('rel')->defaultValue('stylesheet')->end()
+            ->scalarNode('media')->defaultNull()->end()
+            ->scalarNode('type')->defaultNull()->end()
+            ->scalarNode('hreflang')->defaultNull()->end()
+            ->integerNode('sizes')->defaultNull()->end()
             ->end()
         ;
 

@@ -20,8 +20,10 @@ use PHPUnit\Framework\TestCase;
  * Webpack Require Asset Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class WebpackRequireAssetManagerTest extends TestCase
+final class WebpackRequireAssetManagerTest extends TestCase
 {
     /**
      * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -33,66 +35,69 @@ class WebpackRequireAssetManagerTest extends TestCase
      */
     protected $ram;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapter = $this->getMockBuilder(AdapterInterface::class)->getMock();
         $this->ram = new WebpackRequireAssetManager($this->adapter);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapter = null;
         $this->ram = null;
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $asset = '@webpack/asset_js';
 
         $this->adapter->expects($this->once())
             ->method('getPath')
             ->with($asset, null)
-            ->willReturn('/assets.js');
+            ->willReturn('/assets.js')
+        ;
 
         $this->assertTrue($this->ram->has($asset));
     }
 
-    public function testHasNotAsset()
+    public function testHasNotAsset(): void
     {
         $asset = '@webpack/asset_not_found';
 
         $this->adapter->expects($this->once())
             ->method('getPath')
             ->with($asset, null)
-            ->willThrowException(new AssetNotFoundException('Not Found'));
+            ->willThrowException(new AssetNotFoundException('Not Found'))
+        ;
 
         $this->assertFalse($this->ram->has($asset));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $asset = '@webpack/asset_js';
 
         $this->adapter->expects($this->once())
             ->method('getPath')
             ->with($asset, null)
-            ->willReturn('/assets.js');
+            ->willReturn('/assets.js')
+        ;
 
         $this->assertSame('/assets.js', $this->ram->getPath($asset, null));
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage Not Found
-     */
-    public function testGetNotAsset()
+    public function testGetNotAsset(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\AssetNotFoundException::class);
+        $this->expectExceptionMessage('Not Found');
+
         $asset = '@webpack/asset_not_found';
 
         $this->adapter->expects($this->once())
             ->method('getPath')
             ->with($asset, null)
-            ->willThrowException(new AssetNotFoundException('Not Found'));
+            ->willThrowException(new AssetNotFoundException('Not Found'))
+        ;
 
         $this->ram->getPath($asset, null);
     }

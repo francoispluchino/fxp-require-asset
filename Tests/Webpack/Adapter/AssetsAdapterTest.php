@@ -20,22 +20,24 @@ use Psr\Cache\CacheItemPoolInterface;
  * Webpack Assets Adapter Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class AssetsAdapterTest extends TestCase
+final class AssetsAdapterTest extends TestCase
 {
     /**
      * @var AssetsAdapter
      */
     protected $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapter = new AssetsAdapter(
             realpath(__DIR__.'/../../Fixtures/Webpack/assets.json')
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapter = null;
     }
@@ -57,53 +59,49 @@ class AssetsAdapterTest extends TestCase
      * @dataProvider getPathValues
      *
      * @param string      $asset
-     * @param string|null $type
+     * @param null|string $type
      * @param string      $expectedResult
      */
-    public function testGet($asset, $type, $expectedResult)
+    public function testGet($asset, $type, $expectedResult): void
     {
         $res = $this->adapter->getPath($asset, $type);
 
         $this->assertSame($expectedResult, $res);
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The asset type is required for the asset "@webpack/asset_ext2"
-     */
-    public function testGetWithRequireType()
+    public function testGetWithRequireType(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The asset type is required for the asset "@webpack/asset_ext2"');
+
         $this->adapter->getPath('@webpack/asset_ext2');
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage The asset "@webpack/asset_not_found" is not found
-     */
-    public function testGetWithoutAsset()
+    public function testGetWithoutAsset(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\AssetNotFoundException::class);
+        $this->expectExceptionMessage('The asset "@webpack/asset_not_found" is not found');
+
         $asset = '@webpack/asset_not_found';
 
         $this->adapter->getPath($asset);
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Cannot access "INVALID_ASSET.json" to read the JSON file
-     */
-    public function testInvalidJsonFilename()
+    public function testInvalidJsonFilename(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot access "INVALID_ASSET.json" to read the JSON file');
+
         $this->adapter = new AssetsAdapter('INVALID_ASSET.json');
 
         $this->adapter->getPath('@webpack/asset');
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Cannot read the JSON content: Syntax error
-     */
-    public function testInvalidJsonContent()
+    public function testInvalidJsonContent(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot read the JSON content: Syntax error');
+
         $this->adapter = new AssetsAdapter(
             realpath(__DIR__.'/../../Fixtures/Webpack/assets_invalid.json')
         );
@@ -111,9 +109,9 @@ class AssetsAdapterTest extends TestCase
         $this->adapter->getPath('@webpack/asset');
     }
 
-    public function testGetPathWithCache()
+    public function testGetPathWithCache(): void
     {
-        /* @var CacheItemPoolInterface|\PHPUnit_Framework_MockObject_MockObject $cache */
+        /** @var CacheItemPoolInterface|\PHPUnit_Framework_MockObject_MockObject $cache */
         $cache = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();
         $cacheKey = 'custom_key';
         $asset = '@webpack/asset_js';
@@ -130,24 +128,27 @@ class AssetsAdapterTest extends TestCase
 
         $cacheItem->expects($this->once())
             ->method('get')
-            ->willReturn(json_decode(file_get_contents($assetFile), true));
+            ->willReturn(json_decode(file_get_contents($assetFile), true))
+        ;
 
         $cacheItem->expects($this->once())
             ->method('isHit')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $cache->expects($this->at(0))
             ->method('getItem')
             ->with($cacheKey)
-            ->willReturn($cacheItem);
+            ->willReturn($cacheItem)
+        ;
 
         $res = $this->adapter->getPath($asset);
         $this->assertSame($expected, $res);
     }
 
-    public function testGetPathWithEmptyCache()
+    public function testGetPathWithEmptyCache(): void
     {
-        /* @var CacheItemPoolInterface|\PHPUnit_Framework_MockObject_MockObject $cache */
+        /** @var CacheItemPoolInterface|\PHPUnit_Framework_MockObject_MockObject $cache */
         $cache = $this->getMockBuilder(CacheItemPoolInterface::class)->getMock();
         $cacheKey = 'custom_key';
         $asset = '@webpack/asset_js';
@@ -164,23 +165,28 @@ class AssetsAdapterTest extends TestCase
 
         $cacheItem->expects($this->once())
             ->method('get')
-            ->willReturn(null);
+            ->willReturn(null)
+        ;
 
         $cacheItem->expects($this->once())
             ->method('isHit')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         $cacheItem->expects($this->once())
-            ->method('set');
+            ->method('set')
+        ;
 
         $cache->expects($this->at(0))
             ->method('getItem')
             ->with($cacheKey)
-            ->willReturn($cacheItem);
+            ->willReturn($cacheItem)
+        ;
 
         $cache->expects($this->at(1))
             ->method('save')
-            ->with($cacheItem);
+            ->with($cacheItem)
+        ;
 
         $res = $this->adapter->getPath($asset);
         $this->assertSame($expected, $res);

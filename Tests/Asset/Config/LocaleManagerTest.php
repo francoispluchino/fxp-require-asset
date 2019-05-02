@@ -18,10 +18,12 @@ use PHPUnit\Framework\TestCase;
  * Require Locale Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class LocaleManagerTest extends TestCase
+final class LocaleManagerTest extends TestCase
 {
-    public function testBasicWithoutAsset()
+    public function testBasicWithoutAsset(): void
     {
         $rlm = new LocaleManager();
 
@@ -37,7 +39,7 @@ class LocaleManagerTest extends TestCase
         $this->assertCount(0, $rlm->getLocalizedAsset('@asset/source/path.ext'));
     }
 
-    public function testWithDefaultLocaleAsset()
+    public function testWithDefaultLocaleAsset(): void
     {
         $valid = [
             '@asset/source/path/locale/'.\Locale::getDefault().'.ext',
@@ -56,7 +58,7 @@ class LocaleManagerTest extends TestCase
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
     }
 
-    public function testWithDefaultLocaleArrayAsset()
+    public function testWithDefaultLocaleArrayAsset(): void
     {
         $valid = [
             '@asset/source/path/locale/'.\Locale::getDefault().'.ext',
@@ -75,7 +77,7 @@ class LocaleManagerTest extends TestCase
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
     }
 
-    public function testParentLocale()
+    public function testParentLocale(): void
     {
         $valid = [
             '@asset/source/path/locale/fr.ext',
@@ -96,7 +98,7 @@ class LocaleManagerTest extends TestCase
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
     }
 
-    public function testFallbackLocale()
+    public function testFallbackLocale(): void
     {
         $valid = [
             '@asset/source/path/locale/en.ext',
@@ -119,7 +121,7 @@ class LocaleManagerTest extends TestCase
         $this->assertSame($valid, $rlm->getLocalizedAsset('@asset/source/path.ext'));
     }
 
-    public function testEmptyFallbackLocale()
+    public function testEmptyFallbackLocale(): void
     {
         $valid = [
             '@asset/source/path/locale/en.ext',
@@ -140,7 +142,7 @@ class LocaleManagerTest extends TestCase
         $this->assertCount(0, $rlm->getLocalizedAsset('@asset/source/path.ext'));
     }
 
-    public function testRemoveLocalizedAsset()
+    public function testRemoveLocalizedAsset(): void
     {
         $rlm = new LocaleManager();
 

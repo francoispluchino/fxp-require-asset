@@ -51,7 +51,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string      $asset      The asset name
      * @param string[]    $availables The available types
-     * @param string|null $type       The asset type
+     * @param null|string $type       The asset type
      *
      * @return string
      */
@@ -92,7 +92,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string   $asset      The asset name
      * @param string[] $availables The available types
      *
-     * @return string|null
+     * @return null|string
      */
     abstract protected function findAssetType($asset, array $availables);
 }

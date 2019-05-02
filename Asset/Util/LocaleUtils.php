@@ -21,7 +21,7 @@ abstract class LocaleUtils
     /**
      * Format the locale.
      *
-     * @param string|null $locale The locale
+     * @param null|string $locale The locale
      *
      * @return string
      */

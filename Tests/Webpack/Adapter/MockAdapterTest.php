@@ -18,20 +18,22 @@ use PHPUnit\Framework\TestCase;
  * Mock Manifest Adapter Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class MockAdapterTest extends TestCase
+final class MockAdapterTest extends TestCase
 {
     /**
      * @var MockAdapter
      */
     protected $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->adapter = new MockAdapter();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->adapter = null;
     }
@@ -52,49 +54,45 @@ class MockAdapterTest extends TestCase
      * @dataProvider getPathValues
      *
      * @param string      $asset
-     * @param string|null $type
+     * @param null|string $type
      * @param string      $expectedResult
      */
-    public function testGet($asset, $type, $expectedResult)
+    public function testGet($asset, $type, $expectedResult): void
     {
         $res = $this->adapter->getPath($asset, $type);
 
         $this->assertSame($expectedResult, $res);
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The asset type is required for the asset "assets/asset.ext"
-     */
-    public function testGetWithInvalidAssetExtension()
+    public function testGetWithInvalidAssetExtension(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The asset type is required for the asset "assets/asset.ext"');
+
         $this->adapter->getPath('assets/asset.ext', null);
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage The script asset "assets/asset.ext" is not found
-     */
-    public function testGetWithInvalidScriptExtension()
+    public function testGetWithInvalidScriptExtension(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\AssetNotFoundException::class);
+        $this->expectExceptionMessage('The script asset "assets/asset.ext" is not found');
+
         $this->adapter->getPath('assets/asset.ext', 'script');
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\AssetNotFoundException
-     * @expectedExceptionMessage The style asset "assets/asset.ext" is not found
-     */
-    public function testGetWithInvalidStyleExtension()
+    public function testGetWithInvalidStyleExtension(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\AssetNotFoundException::class);
+        $this->expectExceptionMessage('The style asset "assets/asset.ext" is not found');
+
         $this->adapter->getPath('assets/asset.ext', 'style');
     }
 
-    /**
-     * @expectedException \Fxp\Component\RequireAsset\Exception\InvalidArgumentException
-     * @expectedExceptionMessage The asset type is required for the asset "@webpack/asset_not_found"
-     */
-    public function testGetWithoutAsset()
+    public function testGetWithoutAsset(): void
     {
+        $this->expectException(\Fxp\Component\RequireAsset\Exception\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The asset type is required for the asset "@webpack/asset_not_found"');
+
         $asset = '@webpack/asset_not_found';
 
         $this->adapter->getPath($asset);

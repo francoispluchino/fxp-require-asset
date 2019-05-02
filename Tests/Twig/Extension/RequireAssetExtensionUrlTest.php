@@ -20,8 +20,10 @@ use PHPUnit\Framework\TestCase;
  * Abstract Asset Extension Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
+ *
+ * @internal
  */
-class RequireAssetExtensionUrlTest extends TestCase
+final class RequireAssetExtensionUrlTest extends TestCase
 {
     /**
      * @var RequireAssetExtension
@@ -29,7 +31,7 @@ class RequireAssetExtensionUrlTest extends TestCase
     protected $ext;
 
     /**
-     * @var RequireAssetManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|RequireAssetManagerInterface
      */
     protected $manager;
 
@@ -38,35 +40,38 @@ class RequireAssetExtensionUrlTest extends TestCase
      */
     protected $localeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->manager = $this->getMockBuilder(RequireAssetManagerInterface::class)->getMock();
         $this->ext = new RequireAssetExtension($this->manager);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->ext = null;
         $this->manager = null;
         $this->localeManager = null;
     }
 
-    public function testRequireAsset()
+    public function testRequireAsset(): void
     {
         $this->manager->expects($this->at(0))
             ->method('has')
             ->with('@webpack/asset')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $this->manager->expects($this->at(1))
             ->method('getPath')
             ->with('@webpack/asset')
-            ->willReturn('/assets/asset.js');
+            ->willReturn('/assets/asset.js')
+        ;
 
         $this->manager->expects($this->at(2))
             ->method('has')
             ->with('@webpack/asset2')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         $this->assertCount(1, $this->ext->getFunctions());
         $this->assertSame('/assets/asset.js', $this->ext->requireAsset('@webpack/asset'));

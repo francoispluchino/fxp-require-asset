@@ -28,14 +28,14 @@ abstract class BaseRequireTagRenderer implements RequireTagRendererInterface
     protected $renderedTags;
 
     /**
-     * @var LocaleManagerInterface|null
+     * @var null|LocaleManagerInterface
      */
     protected $localeManager;
 
     /**
      * Constructor.
      *
-     * @param LocaleManagerInterface|null $localeManager The require locale asset manager
+     * @param null|LocaleManagerInterface $localeManager The require locale asset manager
      */
     public function __construct(LocaleManagerInterface $localeManager = null)
     {
@@ -46,7 +46,7 @@ abstract class BaseRequireTagRenderer implements RequireTagRendererInterface
     /**
      * {@inheritdoc}
      */
-    public function reset()
+    public function reset(): void
     {
         $this->renderedTags = [];
     }
@@ -77,6 +77,6 @@ abstract class BaseRequireTagRenderer implements RequireTagRendererInterface
      */
     protected function canBeRendered($assetName, $type)
     {
-        return !\in_array($type.'::'.$assetName, $this->renderedTags);
+        return !\in_array($type.'::'.$assetName, $this->renderedTags, true);
     }
 }

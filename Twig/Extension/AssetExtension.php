@@ -33,7 +33,7 @@ use Fxp\Component\RequireAsset\Twig\TokenParser\RequireStyleTokenParser;
 class AssetExtension extends \Twig_Extension
 {
     /**
-     * @var AssetReplacementManagerInterface|null
+     * @var null|AssetReplacementManagerInterface
      */
     protected $replacementManager;
 
@@ -55,7 +55,7 @@ class AssetExtension extends \Twig_Extension
     /**
      * Constructor.
      *
-     * @param AssetReplacementManagerInterface|null $replacementManager The asset replacement manager
+     * @param null|AssetReplacementManagerInterface $replacementManager The asset replacement manager
      */
     public function __construct(AssetReplacementManagerInterface $replacementManager = null)
     {
@@ -84,14 +84,12 @@ class AssetExtension extends \Twig_Extension
      */
     public function getTokenParsers()
     {
-        $tokens = [
+        return [
             new InlineScriptTokenParser(\get_class($this)),
             new InlineStyleTokenParser(\get_class($this)),
             new RequireScriptTokenParser($this->replacementManager, \get_class($this)),
             new RequireStyleTokenParser($this->replacementManager, \get_class($this)),
         ];
-
-        return $tokens;
     }
 
     /**
@@ -156,18 +154,18 @@ class AssetExtension extends \Twig_Extension
      * @param string      $category The twig asset category
      * @param string      $type     The asset type
      * @param int         $lineno   The lineno
-     * @param string|null $name     The template logical name
-     * @param string|null $position The name of tag position in the twig template
-     *
-     * @return string
+     * @param null|string $name     The template logical name
+     * @param null|string $position The name of tag position in the twig template
      *
      * @throws AlreadyExistTagPositionException When tag position is already defined in template
+     *
+     * @return string
      */
     public function createTagPosition($category, $type, $lineno = -1, $name = null, $position = null)
     {
         $tag = $this->formatTagPosition($category, $type, $position);
 
-        if (\in_array($tag, $this->tagPositions)) {
+        if (\in_array($tag, $this->tagPositions, true)) {
             throw new AlreadyExistTagPositionException($category, $type, $position, $lineno, $name);
         }
 
@@ -187,7 +185,7 @@ class AssetExtension extends \Twig_Extension
      * @throws RequireTagException
      * @throws RuntimeTagRendererException
      */
-    public function renderTags($allPosition = true)
+    public function renderTags($allPosition = true): void
     {
         $output = ob_get_contents();
         $start = 0;
@@ -203,7 +201,7 @@ class AssetExtension extends \Twig_Extension
     /**
      * Reset tag positions and her contents.
      */
-    public function resetTagPosition()
+    public function resetTagPosition(): void
     {
         $this->contents = [];
         $this->tagPositions = [];
@@ -217,7 +215,7 @@ class AssetExtension extends \Twig_Extension
      * @throws RequireTagException
      * @throws RuntimeTagRendererException
      */
-    protected function renderContents($output, array $matches, &$start)
+    protected function renderContents($output, array $matches, &$start): void
     {
         foreach ($matches[0] as $i => $match) {
             $end = $match[1] - $start;
@@ -237,11 +235,11 @@ class AssetExtension extends \Twig_Extension
      * @throws RequireTagException
      * @throws RuntimeTagRendererException
      */
-    protected function doRenderTags($contentType)
+    protected function doRenderTags($contentType): void
     {
         if (isset($this->contents[$contentType])) {
             $tags = $this->contents[$contentType];
-            /* @var TagRendererInterface[] $renderers */
+            /** @var TagRendererInterface[] $renderers */
             $renderers = [];
             $rendererTags = [];
 
@@ -266,9 +264,9 @@ class AssetExtension extends \Twig_Extension
      *
      * @param TagInterface $tag The template tag
      *
-     * @return TagRendererInterface
-     *
      * @throws RuntimeTagRendererException When no template tag renderer has been found
+     *
+     * @return TagRendererInterface
      */
     protected function findRenderer(TagInterface $tag)
     {
@@ -305,9 +303,9 @@ class AssetExtension extends \Twig_Extension
      * @param TagRendererInterface $renderer The template tag renderer
      * @param TagInterface         $tag      The template tag
      *
-     * @return string The rendered tag
-     *
      * @throws RequireTagException
+     *
+     * @return string The rendered tag
      */
     protected function renderTag(TagRendererInterface $renderer, TagInterface $tag)
     {
@@ -317,6 +315,7 @@ class AssetExtension extends \Twig_Extension
             $content .= $renderer->render($tag);
         } catch (TagRendererExceptionInterface $e) {
             $tag = $e->getTag();
+
             throw new RequireTagException($e->getMessage(), $tag->getTemplateLine(), $tag->getTemplateName() ? new \Twig_Source('', $tag->getTemplateName()) : null, $e->getPrevious());
         }
 
@@ -330,7 +329,7 @@ class AssetExtension extends \Twig_Extension
      *
      * @throws MissingTagPositionException When the tag positions are not injected in the template
      */
-    protected function validateRenderTags($allPosition = true)
+    protected function validateRenderTags($allPosition = true): void
     {
         if ($allPosition && !empty($this->contents)) {
             $keys = array_keys($this->contents);
@@ -342,7 +341,7 @@ class AssetExtension extends \Twig_Extension
     /**
      * Reset all renderers.
      */
-    protected function resetRenderers()
+    protected function resetRenderers(): void
     {
         foreach ($this->getRenderers() as $renderer) {
             $renderer->reset();
@@ -354,7 +353,7 @@ class AssetExtension extends \Twig_Extension
      *
      * @param string      $category The template tag category
      * @param string      $type     The template tag type
-     * @param string|null $position The name of template tag position in the template
+     * @param null|string $position The name of template tag position in the template
      *
      * @return string The formatted tag position
      */

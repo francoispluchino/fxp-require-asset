@@ -27,11 +27,11 @@ abstract class InlineTagRendererUtils
      * @param array       $context  The twig context
      * @param array       $blocks   The twig blocks
      * @param int         $lineno   The twig lineno
-     * @param string|null $name     The twig template name
-     *
-     * @return string
+     * @param null|string $name     The twig template name
      *
      * @throws BodyTagRendererException
+     *
+     * @return string
      */
     public static function renderBody(array $callable, array $context, array $blocks, $lineno = -1, $name = null)
     {
@@ -39,7 +39,7 @@ abstract class InlineTagRendererUtils
             throw new BodyTagRendererException('The callable argument must be an array with Twig_Template instance and name function of the block to rendering', $lineno, $name ? new \Twig_Source('', $name) : null);
         }
 
-        /* @var \Twig_Template $template */
+        /** @var \Twig_Template $template */
         $template = $callable[0];
 
         return $template->renderBlock($callable[1], $context, $blocks);

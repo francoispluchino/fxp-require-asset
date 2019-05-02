@@ -28,15 +28,15 @@ abstract class AbstractRequireTokenParser extends AbstractTokenParser
     protected $extension;
 
     /**
-     * @var AssetReplacementManagerInterface|null
+     * @var null|AssetReplacementManagerInterface
      */
     protected $replacementManager;
 
     /**
      * Constructor.
      *
-     * @param AssetReplacementManagerInterface|null $replacementManager The asset replacement manager
-     * @param string|null                           $extension          The class name of twig extension
+     * @param null|AssetReplacementManagerInterface $replacementManager The asset replacement manager
+     * @param null|string                           $extension          The class name of twig extension
      */
     public function __construct(AssetReplacementManagerInterface $replacementManager = null, $extension = null)
     {
@@ -49,9 +49,9 @@ abstract class AbstractRequireTokenParser extends AbstractTokenParser
      *
      * @param \Twig_Token $token A Twig_Token instance
      *
-     * @return \Twig_Node A Twig_Node instance
-     *
      * @throws \Twig_Error_Syntax When the twig tag does not have at least one asset
+     *
+     * @return \Twig_Node A Twig_Node instance
      */
     public function parse(\Twig_Token $token)
     {

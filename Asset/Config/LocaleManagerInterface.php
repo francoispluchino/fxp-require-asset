@@ -54,7 +54,7 @@ interface LocaleManagerInterface
      * Check if the require localized asset exist.
      *
      * @param string      $asset  The require asset
-     * @param string|null $locale The locale
+     * @param null|string $locale The locale
      *
      * @return bool
      */
@@ -85,7 +85,7 @@ interface LocaleManagerInterface
      * Get the require localized asset.
      *
      * @param string      $asset  The require asset
-     * @param string|null $locale The locale
+     * @param null|string $locale The locale
      *
      * @return string[] Return the require localized assets
      */
@@ -110,7 +110,7 @@ interface LocaleManagerInterface
     /**
      * Get existing locale for all asset or a specific asset.
      *
-     * @param string|null $asset The require asset
+     * @param null|string $asset The require asset
      *
      * @return string[]
      */
