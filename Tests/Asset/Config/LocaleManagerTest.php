@@ -18,7 +18,6 @@ use PHPUnit\Framework\TestCase;
  * Require Locale Manager Tests.
  *
  * @author François Pluchino <francois.pluchino@gmail.com>
- * @group fxp
  */
 class LocaleManagerTest extends TestCase
 {
